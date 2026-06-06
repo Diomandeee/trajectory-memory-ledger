@@ -1,0 +1,32 @@
+{
+  "input_rows": 9,
+  "conditions": {
+    "full_ledger": {
+      "n": 3,
+      "task_pass_rate": 1.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 1.0,
+      "build_inclusion_rate": 0.6667,
+      "retry_loop_rate": 0.0,
+      "mean_reward_score": 0.7767
+    },
+    "random": {
+      "n": 3,
+      "task_pass_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 0.0,
+      "build_inclusion_rate": 0.3333,
+      "retry_loop_rate": 0.3333,
+      "mean_reward_score": 0.4733
+    },
+    "reward_selected": {
+      "n": 3,
+      "task_pass_rate": 1.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 0.6667,
+      "build_inclusion_rate": 0.3333,
+      "retry_loop_rate": 0.0,
+      "mean_reward_score": 0.7233
+    }
+  }
+}

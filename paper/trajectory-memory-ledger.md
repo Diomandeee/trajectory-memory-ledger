@@ -11,7 +11,7 @@ June 2026
 
 ## Abstract
 
-We present the Trajectory Memory Ledger, implemented in KARL, a schema-normalized experience replay system for improving AI coding agent performance through closed-loop feedback. The ledger records complete tool-use sequences during real coding sessions, normalizes them into an append-only schema, scores them using a six-signal composite reward function (outcome, process, efficiency, verification, consistency, and wasted motion), and uses the highest-scoring trajectories to generate advantage-weighted supervised fine-tuning data. Unlike approaches that rely on static benchmarks or human preference labels, the Trajectory Memory Ledger derives training signal from observable agent behavior and implicit user feedback. The current normalized deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps across 50+ active projects. From this store, KARL exports 3,678 ChatML training examples (3,310 train / 368 validation). We describe the system architecture, schema normalization, reward design, OAPL-Lite export, and entity bridge for performance-based skill decay.
+We present the Trajectory Memory Ledger, a schema-normalized experience replay system for improving AI coding agent performance through closed-loop feedback. The ledger records complete tool-use sequences during real coding sessions, normalizes them into an append-only schema, scores them using a six-signal composite reward function (outcome, process, efficiency, verification, consistency, and wasted motion), and uses the highest-scoring trajectories to generate advantage-weighted supervised fine-tuning data. Unlike approaches that rely on static benchmarks or human preference labels, the Trajectory Memory Ledger derives training signal from observable agent behavior and implicit user feedback. The current normalized originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps across 50+ active projects. From this store, the deployment exports 3,678 ChatML training examples (3,310 train / 368 validation). We describe the system architecture, schema normalization, reward design, OAPL-Lite export, Rust ledger daemon, and entity bridge for performance-based skill decay.
 
 ---
 
@@ -29,7 +29,7 @@ The Trajectory Memory Ledger addresses this gap with three contributions:
 
 3. **Advantage-Weighted Training Pipeline**: An OAPL-Lite approach that oversamples high-advantage trajectories up to 3x for LoRA fine-tuning, combined with a shadow routing system that learns when vector-based skill selection outperforms regex matching.
 
-KARL is the lightweight Python implementation of the ledger. It integrates with any agent framework supporting hook events and has been deployed across a five-machine mesh orchestrating 80+ operational skills, with batch backfill and live flow capture feeding one normalized trajectory store.
+The originating KARL deployment integrates the ledger with an agent framework supporting hook events and has been deployed across a five-machine mesh orchestrating 80+ operational skills, with batch backfill and live flow capture feeding one normalized trajectory store. The public reference artifact separates the live collection path into `trajectory-ledgerd`, a Rust daemon for durable ingestion, cursor state, file locking, schema-v2 normalization, score-at-emit reward calculation, and Prometheus metrics.
 
 ## 2. Related Work
 
@@ -395,7 +395,27 @@ The current normalized deployment store contains:
 - **Rust ledger daemon**: date-scoped cursor, locked JSONL append, score-at-emit, Prometheus text metrics
 - **Entity updates**: <1ms per flush (JSON read/write)
 
-### 8.3 Configuration
+### 8.3 Synthetic Daemon Benchmark
+
+We benchmarked `trajectory-ledgerd` with synthetic gateway events to measure artifact throughput and durability behavior. The benchmark generated 1,000 completed flows, 3 steps per flow, and 8,000 total event envelopes, then measured ingestion, duplicate skipping, date-scoped cursor rollover, append latency, and concurrent append safety.
+
+Environment: Apple M4, macOS 15.6.1, rustc 1.95.0, cargo 1.95.0.
+
+| Metric | Value |
+|--------|------:|
+| Event envelopes | 8,000 |
+| Ingest time | 6.287 s |
+| Events/sec | 1,272.385 |
+| Cards/sec | 159.048 |
+| Append latency mean | 3.627 ms |
+| Append latency p95 | 4.027 ms |
+| Duplicate reprocess skip | 1,000 duplicate cards skipped |
+| Cursor rollover | Passed (`seq` restarted at 1 on the next date) |
+| Concurrent append | 800/800 records, 800 unique IDs |
+
+This result supports the artifact claim that the daemon is fast enough for live trajectory collection and robust to the cursor failure mode observed in earlier live capture. It is not evidence of downstream model improvement; downstream task-performance evaluation remains a separate empirical gate.
+
+### 8.4 Configuration
 
 All 40+ parameters are configurable via environment variables with sensible defaults:
 
@@ -466,6 +486,8 @@ On the normalized exportable subset (5,805 records with at least two observed ev
 **Historical placeholder events**: Earlier logs capped detailed event payloads. Schema v2 preserves recovered `total_tools` by inserting explicit placeholders, but SFT export excludes those placeholders from plan text. Paper metrics therefore distinguish 67,409 observed events from 73,470 recovered tool steps.
 
 **Outcome sparsity in backfilled data**: Most historical records lack cross-turn correction/redo annotations, so outcome scores are often neutral. Live taps and future data should make this channel more informative.
+
+**Downstream model performance**: The current artifact includes a held-out agent evaluation harness, but the checked-in example rows are synthetic. We do not yet claim that a model trained or routed with ledger-selected data completes more coding tasks than a random-data or unscored baseline. The next experiment must compare random trajectories, reward-selected trajectories, and full-ledger export on the same held-out coding tasks.
 
 **Model capacity**: The current LoRA training uses a 1B parameter base model (gemma-3-1b-it-4bit). The fine-tuned model learns tool-use planning patterns but cannot replace the frontier model for actual code generation. It serves as a routing and planning advisor, not a replacement.
 

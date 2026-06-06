@@ -30,6 +30,7 @@ This repository contains:
 - `docs/reward-model.md`: six-signal reward model
 - `docs/architecture.md`: system architecture
 - `docs/metrics.md`: Prometheus metrics
+- `docs/evaluation.md`: benchmark results and downstream evaluation protocol
 - `examples/`: synthetic event and trajectory examples
 - `paper/trajectory-memory-ledger.md`: paper draft
 
@@ -46,7 +47,7 @@ cargo build --release
 ## Run One Ingestion Pass
 
 ```bash
-cargo run --release -- run \
+cargo run --release --bin trajectory-ledgerd -- run \
   --once \
   --date 2026-06-03 \
   --events-dir examples \
@@ -63,6 +64,39 @@ cat /tmp/trajectory-ledgerd.prom
 ```
 
 Run continuously by omitting `--once` and pointing `--events-dir` at a live gateway event directory.
+
+## Evaluation
+
+Run the daemon benchmark:
+
+```bash
+cargo run --release --bin daemon-bench -- \
+  --flows 1000 \
+  --steps 3 \
+  --concurrent-writers 8 \
+  --records-per-writer 100 \
+  --output benchmarks/daemon-benchmark-2026-06-03.json
+```
+
+Current checked-in result on Apple M4 / macOS 15.6.1 / rustc 1.95.0:
+
+- 8,000 synthetic event envelopes ingested in 6.287s
+- 1,272.385 events/sec
+- 159.048 trajectory cards/sec
+- append latency mean/p95: 3.627ms / 4.027ms
+- duplicate reprocess skip: 1,000 duplicate cards skipped
+- date-scoped cursor rollover: passed
+- concurrent append: 800/800 records, 800 unique IDs
+
+Run the agent-evaluation aggregation harness:
+
+```bash
+cargo run --bin agent-eval -- \
+  --input examples/evaluation/tool-plan-generations.jsonl \
+  --output benchmarks/agent-eval-example-2026-06-03.json
+```
+
+The checked-in `agent-eval` example is synthetic. It demonstrates the measurement protocol, not downstream model improvement. The next empirical gate is a held-out coding-agent benchmark comparing random trajectory selection, reward-selected trajectory selection, and the full normalized ledger export.
 
 ## Test
 
@@ -104,4 +138,3 @@ The Rust daemon makes the artifact reproducible. The next research step is stron
 ## License
 
 MIT
-

@@ -37,3 +37,11 @@ Python and notebooks should consume the normalized ledger for:
 
 This split keeps the operational collector reliable while leaving research tooling flexible.
 
+## Evaluation Tools
+
+The repository includes two Rust evaluation binaries:
+
+- `daemon-bench`: generates synthetic gateway events and measures ingestion throughput, append latency, duplicate skipping, cursor rollover, and concurrent append safety.
+- `agent-eval`: aggregates held-out tool-plan generations by condition. It is intended for downstream experiments comparing random trajectory selection, reward-selected trajectory selection, and the full normalized ledger export.
+
+The synthetic `agent-eval` example in `examples/evaluation/` verifies the protocol shape. It is not downstream model-performance evidence.

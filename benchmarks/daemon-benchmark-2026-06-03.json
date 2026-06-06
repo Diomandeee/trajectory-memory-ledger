@@ -1,0 +1,21 @@
+{
+  "benchmark": "trajectory-ledgerd-daemon-synthetic",
+  "flows": 1000,
+  "steps_per_flow": 3,
+  "events": 8000,
+  "ingest_ms": 6287.403,
+  "events_per_sec": 1272.385,
+  "records_per_sec": 159.048,
+  "append_latency_mean_ms": 3.627,
+  "append_latency_p95_ms": 4.027,
+  "duplicate_first_written": 0,
+  "duplicate_second_skipped": 1000,
+  "cursor_rollover_consumed": 4,
+  "cursor_rollover_ok": true,
+  "concurrent_writers": 8,
+  "concurrent_records_expected": 800,
+  "concurrent_records_written": 800,
+  "concurrent_unique_ids": 800,
+  "concurrent_append_ok": true,
+  "temp_dir": null
+}
