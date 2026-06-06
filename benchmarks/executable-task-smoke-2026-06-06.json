@@ -7,7 +7,7 @@
     "python-stdlib-smoke-v0"
   ],
   "source_artifacts": [
-    "checked synthetic smoke fixture"
+    "checked synthetic candidate fixture"
   ],
   "synthetic_rows": 9,
   "measures_executed_task_completion": true,
@@ -21,7 +21,7 @@
       "valid_tool_plan_rate": 1.0,
       "test_inclusion_rate": 1.0,
       "build_inclusion_rate": 0.0,
-      "mean_duration_ms": 76.0,
+      "mean_duration_ms": 58.6667,
       "failed_task_ids": [
         "py_unique_sorted"
       ]
@@ -34,7 +34,7 @@
       "valid_tool_plan_rate": 1.0,
       "test_inclusion_rate": 1.0,
       "build_inclusion_rate": 0.0,
-      "mean_duration_ms": 80.0,
+      "mean_duration_ms": 67.0,
       "failed_task_ids": [
         "py_add_ints",
         "py_slugify",
@@ -49,7 +49,7 @@
       "valid_tool_plan_rate": 1.0,
       "test_inclusion_rate": 1.0,
       "build_inclusion_rate": 0.0,
-      "mean_duration_ms": 73.0,
+      "mean_duration_ms": 57.6667,
       "failed_task_ids": []
     }
   },
@@ -60,7 +60,7 @@
       "passed": false,
       "exit_code": 1,
       "timed_out": false,
-      "duration_ms": 98,
+      "duration_ms": 75,
       "stdout_preview": "",
       "stderr_preview": "F\n======================================================================\nFAIL: test_add_handles_positive_and_negative_ints (test_math_tools.MathToolsTest)\n----------------------------------------------------------------------\nTraceback (mos",
       "workspace": null
@@ -71,7 +71,7 @@
       "passed": true,
       "exit_code": 0,
       "timed_out": false,
-      "duration_ms": 80,
+      "duration_ms": 59,
       "stdout_preview": "",
       "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
       "workspace": null
@@ -82,7 +82,7 @@
       "passed": true,
       "exit_code": 0,
       "timed_out": false,
-      "duration_ms": 73,
+      "duration_ms": 56,
       "stdout_preview": "",
       "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
       "workspace": null
@@ -93,7 +93,7 @@
       "passed": false,
       "exit_code": 1,
       "timed_out": false,
-      "duration_ms": 76,
+      "duration_ms": 61,
       "stdout_preview": "",
       "stderr_preview": "F\n======================================================================\nFAIL: test_slugify_normalizes_spacing_and_punctuation (test_text_tools.TextToolsTest)\n----------------------------------------------------------------------\nTraceback ",
       "workspace": null
@@ -104,7 +104,7 @@
       "passed": true,
       "exit_code": 0,
       "timed_out": false,
-      "duration_ms": 74,
+      "duration_ms": 58,
       "stdout_preview": "",
       "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
       "workspace": null
@@ -115,7 +115,7 @@
       "passed": true,
       "exit_code": 0,
       "timed_out": false,
-      "duration_ms": 76,
+      "duration_ms": 56,
       "stdout_preview": "",
       "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
       "workspace": null
@@ -126,7 +126,7 @@
       "passed": false,
       "exit_code": 1,
       "timed_out": false,
-      "duration_ms": 66,
+      "duration_ms": 65,
       "stdout_preview": "",
       "stderr_preview": "F\n======================================================================\nFAIL: test_unique_sorted_deduplicates_and_sorts (test_data_tools.DataToolsTest)\n----------------------------------------------------------------------\nTraceback (most ",
       "workspace": null
@@ -137,7 +137,7 @@
       "passed": true,
       "exit_code": 0,
       "timed_out": false,
-      "duration_ms": 65,
+      "duration_ms": 56,
       "stdout_preview": "",
       "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
       "workspace": null
@@ -148,7 +148,7 @@
       "passed": false,
       "exit_code": 1,
       "timed_out": false,
-      "duration_ms": 79,
+      "duration_ms": 64,
       "stdout_preview": "",
       "stderr_preview": "F\n======================================================================\nFAIL: test_unique_sorted_deduplicates_and_sorts (test_data_tools.DataToolsTest)\n----------------------------------------------------------------------\nTraceback (most ",
       "workspace": null

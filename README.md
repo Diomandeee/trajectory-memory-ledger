@@ -33,7 +33,9 @@ This repository contains:
 - `docs/evaluation.md`: benchmark results and downstream evaluation protocol
 - `examples/`: synthetic event and trajectory examples
 - `examples/evaluation/karl-v7-heldout-coding-agent-model-scores.jsonl`: privacy-preserving aggregate rows from a real held-out coding-agent model-quality benchmark
-- `examples/evaluation/executable-task-smoke.jsonl`: synthetic smoke rows for the executable task benchmark runner
+- `examples/evaluation/executable-taskset-python-stdlib-smoke.jsonl`: canonical executable smoke task specs
+- `examples/evaluation/executable-candidates-smoke.jsonl`: synthetic candidate/model-output rows for the executable smoke suite
+- `examples/evaluation/executable-task-smoke.jsonl`: materialized smoke rows for the executable task benchmark runner
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -124,12 +126,17 @@ Boundary: this measures model response quality on held-out coding-agent contexts
 Run the executable task benchmark smoke suite:
 
 ```bash
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-smoke.jsonl \
+  --candidates examples/evaluation/executable-candidates-smoke.jsonl \
+  --output examples/evaluation/executable-task-smoke.jsonl
+
 cargo run --bin executable-task-bench -- \
   --input examples/evaluation/executable-task-smoke.jsonl \
   --output benchmarks/executable-task-smoke-2026-06-06.json
 ```
 
-This runner materializes each candidate into an isolated temp workspace, runs its verifier command, captures pass/fail, timeout, duration, and output previews, then aggregates by condition. The checked smoke fixture is synthetic and exists to validate the execution path only. It is not model-lift evidence.
+The materializer keeps the held-out task set separate from condition-specific candidate files, which is the format needed for real random/reward/full-ledger model outputs. The executor then materializes each candidate into an isolated temp workspace, runs its verifier command, captures pass/fail, timeout, duration, and output previews, then aggregates by condition. The checked smoke fixture is synthetic and exists to validate the execution path only. It is not model-lift evidence.
 
 Smoke result:
 
@@ -173,7 +180,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and `executable-task-bench` provides the execution harness for the next gate. The next research step is running real model outputs through executable held-out tasks to quantify improvement from trajectory replay versus random or unscored data selection.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, while `materialize-executable-bench` and `executable-task-bench` provide the taskset/candidate workflow for the next gate. The next research step is running real model outputs through executable held-out tasks to quantify improvement from trajectory replay versus random or unscored data selection.
 
 ## License
 

@@ -438,9 +438,9 @@ The aggregate runner reports `GPT-5.4-mini` as best by mean score because four m
 
 ### 8.5 Executable Task Benchmark Runner
 
-To make the next empirical gate concrete, the artifact includes `executable-task-bench`, a runner that materializes each evaluated candidate into an isolated temporary workspace, writes setup and candidate files, executes a verifier command with a timeout, and aggregates executable pass/fail by condition. The runner rejects unsafe paths such as absolute paths and parent-directory traversal, records timeout and duration, and stores stdout/stderr previews for auditability.
+To make the next empirical gate concrete, the artifact includes `materialize-executable-bench` and `executable-task-bench`. The materializer joins canonical held-out task specs with condition-specific candidate or model-output rows, so the task fixtures are stored once and candidates can be regenerated independently. The executor then materializes each evaluated candidate into an isolated temporary workspace, writes setup and candidate files, executes a verifier command with a timeout, and aggregates executable pass/fail by condition. The runners reject unsafe paths such as absolute paths and parent-directory traversal, record timeout and duration, and store stdout/stderr previews for auditability.
 
-The checked smoke fixture uses 3 Python standard-library tasks across `random`, `reward_selected`, and `full_ledger` conditions. All 9 rows are marked synthetic. The smoke result is:
+The checked smoke fixture uses 3 canonical Python standard-library task specs and 9 candidate rows across `random`, `reward_selected`, and `full_ledger` conditions. All candidate rows are marked synthetic. The smoke result is:
 
 | Condition | Tasks | Passed | Pass rate |
 |-----------|------:|-------:|----------:|
@@ -448,7 +448,7 @@ The checked smoke fixture uses 3 Python standard-library tasks across `random`, 
 | `full_ledger` | 3 | 2 | 66.67% |
 | `random` | 3 | 0 | 0% |
 
-This proves the execution path and condition-aware aggregation work. It is not downstream model-lift evidence because the rows are synthetic smoke candidates rather than outputs from trained or routed models. The next required run is to feed real model outputs from random-selected, reward-selected, and full-ledger conditions through the same executable task set.
+This proves the materialization path, execution path, and condition-aware aggregation work. It is not downstream model-lift evidence because the rows are synthetic smoke candidates rather than outputs from trained or routed models. The next required run is to feed real model outputs from random-selected, reward-selected, and full-ledger conditions through the same executable task set.
 
 ### 8.6 Configuration
 

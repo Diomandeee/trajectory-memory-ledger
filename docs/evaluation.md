@@ -130,28 +130,44 @@ This is real held-out model-quality evidence over coding-agent contexts. It is n
 
 ## Executable Task Benchmark Runner
 
-`executable-task-bench` is the execution gate for downstream task-completion evidence. It takes JSONL rows, materializes each row into an isolated temp workspace, writes setup files and candidate files, runs a verifier command with a timeout, and aggregates pass/fail by condition.
+`materialize-executable-bench` and `executable-task-bench` are the execution gate for downstream task-completion evidence. The materializer joins canonical task specs with condition-specific candidate/model-output rows. The executor then materializes each joined row into an isolated temp workspace, writes setup files and candidate files, runs a verifier command with a timeout, and aggregates pass/fail by condition.
 
 Run the checked smoke suite:
 
 ```bash
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-smoke.jsonl \
+  --candidates examples/evaluation/executable-candidates-smoke.jsonl \
+  --output examples/evaluation/executable-task-smoke.jsonl
+
 cargo run --bin executable-task-bench -- \
   --input examples/evaluation/executable-task-smoke.jsonl \
   --output benchmarks/executable-task-smoke-2026-06-06.json
 ```
 
-Input row shape:
+Task spec row shape:
+
+```json
+{
+  "task_id": "py_add_ints",
+  "setup_files": {"tests/test_math_tools.py": "..."},
+  "verifier_command": "python3 -m unittest discover -s tests",
+  "timeout_ms": 5000,
+  "benchmark_kind": "executable-task-bench-smoke",
+  "task_set": "python-stdlib-smoke-v0"
+}
+```
+
+Candidate row shape:
 
 ```json
 {
   "condition": "reward_selected",
   "task_id": "py_add_ints",
-  "setup_files": {"tests/test_math_tools.py": "..."},
   "candidate_files": {"src/math_tools.py": "..."},
-  "verifier_command": "python3 -m unittest discover -s tests",
-  "timeout_ms": 5000,
   "generated_tools": ["Read", "Edit", "Bash"],
   "tests_included": true,
+  "source_artifact": "model-output-run.jsonl",
   "synthetic": true
 }
 ```
@@ -164,6 +180,7 @@ Safety and reproducibility properties:
 | Path safety | Absolute paths, parent directories, and non-normal path components are rejected |
 | Timeout | Hung verifier commands are killed and reported as timeouts |
 | Evidence | Report includes exit code, timeout flag, duration, stdout/stderr previews, and failed task ids |
+| Task/candidate split | Held-out test fixtures are stored once, separate from model candidate files |
 | Synthetic marking | Input rows can be marked `synthetic`; the checked smoke fixture marks every row synthetic |
 
 Checked smoke result:
