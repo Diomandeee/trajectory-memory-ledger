@@ -1,0 +1,157 @@
+{
+  "input_rows": 9,
+  "benchmark_kinds": [
+    "executable-task-bench-smoke"
+  ],
+  "task_sets": [
+    "python-stdlib-smoke-v0"
+  ],
+  "source_artifacts": [
+    "checked synthetic smoke fixture"
+  ],
+  "synthetic_rows": 9,
+  "measures_executed_task_completion": true,
+  "boundary": "Runs verifier commands in isolated temp workspaces and measures executable pass/fail. Synthetic smoke rows validate the harness only and must not be cited as model-lift evidence.",
+  "conditions": {
+    "full_ledger": {
+      "n": 3,
+      "passed": 2,
+      "task_pass_rate": 0.6667,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 1.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 76.0,
+      "failed_task_ids": [
+        "py_unique_sorted"
+      ]
+    },
+    "random": {
+      "n": 3,
+      "passed": 0,
+      "task_pass_rate": 0.0,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 1.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 80.0,
+      "failed_task_ids": [
+        "py_add_ints",
+        "py_slugify",
+        "py_unique_sorted"
+      ]
+    },
+    "reward_selected": {
+      "n": 3,
+      "passed": 3,
+      "task_pass_rate": 1.0,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 1.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 73.0,
+      "failed_task_ids": []
+    }
+  },
+  "row_results": [
+    {
+      "condition": "random",
+      "task_id": "py_add_ints",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 98,
+      "stdout_preview": "",
+      "stderr_preview": "F\n======================================================================\nFAIL: test_add_handles_positive_and_negative_ints (test_math_tools.MathToolsTest)\n----------------------------------------------------------------------\nTraceback (mos",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_add_ints",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 80,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_add_ints",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 73,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "random",
+      "task_id": "py_slugify",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 76,
+      "stdout_preview": "",
+      "stderr_preview": "F\n======================================================================\nFAIL: test_slugify_normalizes_spacing_and_punctuation (test_text_tools.TextToolsTest)\n----------------------------------------------------------------------\nTraceback ",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_slugify",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 74,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_slugify",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 76,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "random",
+      "task_id": "py_unique_sorted",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 66,
+      "stdout_preview": "",
+      "stderr_preview": "F\n======================================================================\nFAIL: test_unique_sorted_deduplicates_and_sorts (test_data_tools.DataToolsTest)\n----------------------------------------------------------------------\nTraceback (most ",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_unique_sorted",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 65,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_unique_sorted",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 79,
+      "stdout_preview": "",
+      "stderr_preview": "F\n======================================================================\nFAIL: test_unique_sorted_deduplicates_and_sorts (test_data_tools.DataToolsTest)\n----------------------------------------------------------------------\nTraceback (most ",
+      "workspace": null
+    }
+  ]
+}

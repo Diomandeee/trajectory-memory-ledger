@@ -5,7 +5,7 @@ Trajectory Memory Ledger currently has four levels of evidence:
 1. Artifact correctness: the Rust runtime builds, passes tests, passes clippy, performs one-shot ingestion, normalizes schema-v2 records, scores trajectories, handles `(date, seq)` cursor rollover, and appends under a file lock.
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
-4. Executed downstream task completion: not established yet. A same-task comparison of random trajectory selection, reward-selected trajectory selection, and full-ledger export still needs to be run before claiming SWE-style task-completion lift.
+4. Executed downstream task completion: the executable benchmark runner now exists and has a checked synthetic smoke report. Real same-task model-output evaluation across random trajectory selection, reward-selected trajectory selection, and full-ledger export still needs to be run before claiming SWE-style task-completion lift.
 
 ## Daemon Benchmark
 
@@ -127,6 +127,54 @@ Checked-in result:
 The aggregate report selects `GPT-5.4-mini` as `best_condition_by_mean_score` because four models tied at mean score 1.0000 and `GPT-5.4-mini` had the lowest mean latency among the tied models.
 
 This is real held-out model-quality evidence over coding-agent contexts. It is not evidence that the ledger's reward-selected trajectories improve executed coding-task success, because the benchmark does not run tests in target repositories and does not compare random versus reward-selected training data on the same executable task set.
+
+## Executable Task Benchmark Runner
+
+`executable-task-bench` is the execution gate for downstream task-completion evidence. It takes JSONL rows, materializes each row into an isolated temp workspace, writes setup files and candidate files, runs a verifier command with a timeout, and aggregates pass/fail by condition.
+
+Run the checked smoke suite:
+
+```bash
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-smoke.jsonl \
+  --output benchmarks/executable-task-smoke-2026-06-06.json
+```
+
+Input row shape:
+
+```json
+{
+  "condition": "reward_selected",
+  "task_id": "py_add_ints",
+  "setup_files": {"tests/test_math_tools.py": "..."},
+  "candidate_files": {"src/math_tools.py": "..."},
+  "verifier_command": "python3 -m unittest discover -s tests",
+  "timeout_ms": 5000,
+  "generated_tools": ["Read", "Edit", "Bash"],
+  "tests_included": true,
+  "synthetic": true
+}
+```
+
+Safety and reproducibility properties:
+
+| Property | Behavior |
+|---|---|
+| Workspace isolation | Each row runs in a fresh temp directory |
+| Path safety | Absolute paths, parent directories, and non-normal path components are rejected |
+| Timeout | Hung verifier commands are killed and reported as timeouts |
+| Evidence | Report includes exit code, timeout flag, duration, stdout/stderr previews, and failed task ids |
+| Synthetic marking | Input rows can be marked `synthetic`; the checked smoke fixture marks every row synthetic |
+
+Checked smoke result:
+
+| Condition | Tasks | Passed | Pass rate | Failed task ids |
+|---|---:|---:|---:|---|
+| `reward_selected` | 3 | 3 | 100% | none |
+| `full_ledger` | 3 | 2 | 66.67% | `py_unique_sorted` |
+| `random` | 3 | 0 | 0% | `py_add_ints`, `py_slugify`, `py_unique_sorted` |
+
+This report proves the executable benchmark path works: verifier commands run, failing candidates fail, passing candidates pass, and aggregation is condition-aware. It is intentionally not downstream model-lift evidence because all 9 checked rows are synthetic smoke rows.
 
 ## Required Downstream Experiment
 

@@ -436,7 +436,21 @@ The public artifact includes only aggregate rows derived from the real run; raw 
 
 The aggregate runner reports `GPT-5.4-mini` as best by mean score because four models tie at 1.0000 and `GPT-5.4-mini` is the fastest tied condition. This is a real downstream benchmark over coding-agent response quality, but it does not execute target repositories and does not compare ledger-selected training data against random or full-ledger baselines. It should therefore be read as model-quality evidence, not as proof of SWE-style task-completion lift from the ledger.
 
-### 8.5 Configuration
+### 8.5 Executable Task Benchmark Runner
+
+To make the next empirical gate concrete, the artifact includes `executable-task-bench`, a runner that materializes each evaluated candidate into an isolated temporary workspace, writes setup and candidate files, executes a verifier command with a timeout, and aggregates executable pass/fail by condition. The runner rejects unsafe paths such as absolute paths and parent-directory traversal, records timeout and duration, and stores stdout/stderr previews for auditability.
+
+The checked smoke fixture uses 3 Python standard-library tasks across `random`, `reward_selected`, and `full_ledger` conditions. All 9 rows are marked synthetic. The smoke result is:
+
+| Condition | Tasks | Passed | Pass rate |
+|-----------|------:|-------:|----------:|
+| `reward_selected` | 3 | 3 | 100% |
+| `full_ledger` | 3 | 2 | 66.67% |
+| `random` | 3 | 0 | 0% |
+
+This proves the execution path and condition-aware aggregation work. It is not downstream model-lift evidence because the rows are synthetic smoke candidates rather than outputs from trained or routed models. The next required run is to feed real model outputs from random-selected, reward-selected, and full-ledger conditions through the same executable task set.
+
+### 8.6 Configuration
 
 All 40+ parameters are configurable via environment variables with sensible defaults:
 
@@ -508,7 +522,7 @@ On the normalized exportable subset (5,805 records with at least two observed ev
 
 **Outcome sparsity in backfilled data**: Most historical records lack cross-turn correction/redo annotations, so outcome scores are often neutral. Live taps and future data should make this channel more informative.
 
-**Downstream model performance**: The current artifact now includes one real held-out coding-agent model-quality benchmark. It shows response-quality differences across model backends on 5 held-out session contexts, but it does not execute target repositories. We do not yet claim that a model trained or routed with ledger-selected data completes more coding tasks than a random-data or unscored baseline. The next experiment must compare random trajectories, reward-selected trajectories, and full-ledger export on the same executable held-out coding tasks.
+**Downstream model performance**: The current artifact now includes one real held-out coding-agent model-quality benchmark and an executable task benchmark runner with a checked synthetic smoke report. The model-quality benchmark shows response-quality differences across model backends on 5 held-out session contexts, but it does not execute target repositories. The executable smoke report proves the harness works, but all rows are synthetic. We do not yet claim that a model trained or routed with ledger-selected data completes more coding tasks than a random-data or unscored baseline. The next experiment must compare random trajectories, reward-selected trajectories, and full-ledger export on the same executable held-out coding tasks.
 
 **Model capacity**: The current LoRA training uses a 1B parameter base model (gemma-3-1b-it-4bit). The fine-tuned model learns tool-use planning patterns but cannot replace the frontier model for actual code generation. It serves as a routing and planning advisor, not a replacement.
 
@@ -516,7 +530,7 @@ On the normalized exportable subset (5,805 records with at least two observed ev
 
 The Trajectory Memory Ledger demonstrates that trajectory-based learning can turn ordinary coding-agent work into a reusable improvement signal. By recording what agents do, normalizing heterogeneous logs into one schema, scoring process quality, and exporting the best trajectories, the system creates a practical feedback loop for skill routing and tool-use planning.
 
-The normalized corpus now contains 7,468 scored trajectories and 67,409 observed tool events. The schema-v2 ablation sharpens the deployed reward design: verification is the most load-bearing ranking signal in the current corpus, while process, efficiency, and wasted motion provide secondary but meaningful ranking structure. Outcome remains under-instrumented in historical backfill data and should be interpreted cautiously until more live cross-turn annotations accumulate. A real held-out KARL V7 benchmark now adds model-quality evidence over 50 coding-agent context evaluations, while executable task-completion lift remains a future empirical gate.
+The normalized corpus now contains 7,468 scored trajectories and 67,409 observed tool events. The schema-v2 ablation sharpens the deployed reward design: verification is the most load-bearing ranking signal in the current corpus, while process, efficiency, and wasted motion provide secondary but meaningful ranking structure. Outcome remains under-instrumented in historical backfill data and should be interpreted cautiously until more live cross-turn annotations accumulate. A real held-out KARL V7 benchmark now adds model-quality evidence over 50 coding-agent context evaluations, and the executable benchmark runner makes the next task-completion gate runnable, while actual model-lift evidence remains a future empirical gate.
 
 The entity bridge extends this from session-level learning to skill-level intelligence, replacing time-based decay with performance-based adaptation. Skills that consistently produce poor trajectories lose confidence and routing weight, while skills that consistently succeed gain both.
 

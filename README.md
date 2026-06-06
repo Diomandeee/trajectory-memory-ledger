@@ -33,6 +33,7 @@ This repository contains:
 - `docs/evaluation.md`: benchmark results and downstream evaluation protocol
 - `examples/`: synthetic event and trajectory examples
 - `examples/evaluation/karl-v7-heldout-coding-agent-model-scores.jsonl`: privacy-preserving aggregate rows from a real held-out coding-agent model-quality benchmark
+- `examples/evaluation/executable-task-smoke.jsonl`: synthetic smoke rows for the executable task benchmark runner
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -120,6 +121,23 @@ Current result:
 
 Boundary: this measures model response quality on held-out coding-agent contexts. It does not execute repository tasks or prove that reward-selected trajectory training improves SWE-style task completion. The next empirical gate is still a same-task comparison of random trajectory selection, reward-selected trajectory selection, and the full normalized ledger export.
 
+Run the executable task benchmark smoke suite:
+
+```bash
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-smoke.jsonl \
+  --output benchmarks/executable-task-smoke-2026-06-06.json
+```
+
+This runner materializes each candidate into an isolated temp workspace, runs its verifier command, captures pass/fail, timeout, duration, and output previews, then aggregates by condition. The checked smoke fixture is synthetic and exists to validate the execution path only. It is not model-lift evidence.
+
+Smoke result:
+
+- `reward_selected`: 3/3 pass
+- `full_ledger`: 2/3 pass
+- `random`: 0/3 pass
+- synthetic rows: 9/9
+
 ## Test
 
 ```bash
@@ -155,7 +173,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts. The next research step is stronger downstream evaluation: train/evaluate agent models against executable held-out tasks and quantify improvement from trajectory replay versus random or unscored data selection.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and `executable-task-bench` provides the execution harness for the next gate. The next research step is running real model outputs through executable held-out tasks to quantify improvement from trajectory replay versus random or unscored data selection.
 
 ## License
 
