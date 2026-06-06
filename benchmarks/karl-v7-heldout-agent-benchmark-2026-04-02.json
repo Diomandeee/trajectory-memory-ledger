@@ -1,0 +1,148 @@
+{
+  "input_rows": 10,
+  "total_tasks": 50,
+  "benchmark_kinds": [
+    "karl-v7-heldout-coding-agent-model-quality"
+  ],
+  "task_sets": [
+    "karl-v7-5-session-contexts"
+  ],
+  "score_metrics": [
+    "karl.v7.style_validator.overall"
+  ],
+  "pass_thresholds": [
+    0.4
+  ],
+  "source_artifacts": [
+    "~/Desktop/karl/v7-model-benchmark.json"
+  ],
+  "source_generators": [
+    "~/Desktop/karl/karl/v7/model_benchmark.py"
+  ],
+  "raw_generations_included": false,
+  "measures_executed_task_completion": false,
+  "boundary": "Measures held-out model response quality on coding-agent session contexts; it does not execute repository tasks or measure SWE-style task completion.",
+  "best_condition_by_mean_score": "GPT-5.4-mini",
+  "conditions": {
+    "DeepSeek R1": {
+      "n_tasks": 5,
+      "passes": 5,
+      "quality_pass_rate": 1.0,
+      "mean_score": 1.0,
+      "mean_latency_s": 10.4395,
+      "min_score": 1.0,
+      "max_score": 1.0,
+      "model_ids": [
+        "deepseek-ai/DeepSeek-R1-0528"
+      ]
+    },
+    "DeepSeek V3.1": {
+      "n_tasks": 5,
+      "passes": 5,
+      "quality_pass_rate": 1.0,
+      "mean_score": 0.985,
+      "mean_latency_s": 2.7698,
+      "min_score": 0.925,
+      "max_score": 1.0,
+      "model_ids": [
+        "deepseek-ai/DeepSeek-V3.1"
+      ]
+    },
+    "GLM 4.7": {
+      "n_tasks": 5,
+      "passes": 5,
+      "quality_pass_rate": 1.0,
+      "mean_score": 0.985,
+      "mean_latency_s": 5.5894,
+      "min_score": 0.925,
+      "max_score": 1.0,
+      "model_ids": [
+        "zai-org/GLM-4.7"
+      ]
+    },
+    "GLM-5": {
+      "n_tasks": 5,
+      "passes": 4,
+      "quality_pass_rate": 0.8,
+      "mean_score": 0.8,
+      "mean_latency_s": 16.5684,
+      "min_score": 0.0,
+      "max_score": 1.0,
+      "model_ids": [
+        "zai-org/GLM-5"
+      ]
+    },
+    "GPT-5.4-mini": {
+      "n_tasks": 5,
+      "passes": 5,
+      "quality_pass_rate": 1.0,
+      "mean_score": 1.0,
+      "mean_latency_s": 1.5688,
+      "min_score": 1.0,
+      "max_score": 1.0,
+      "model_ids": [
+        "gpt-5.4-mini"
+      ]
+    },
+    "GPT-OSS 120B": {
+      "n_tasks": 5,
+      "passes": 5,
+      "quality_pass_rate": 1.0,
+      "mean_score": 1.0,
+      "mean_latency_s": 5.5191,
+      "min_score": 1.0,
+      "max_score": 1.0,
+      "model_ids": [
+        "openai/gpt-oss-120b"
+      ]
+    },
+    "GPT-OSS 20B": {
+      "n_tasks": 5,
+      "passes": 5,
+      "quality_pass_rate": 1.0,
+      "mean_score": 0.984,
+      "mean_latency_s": 4.4039,
+      "min_score": 0.92,
+      "max_score": 1.0,
+      "model_ids": [
+        "openai/gpt-oss-20b"
+      ]
+    },
+    "Kimi K2.5": {
+      "n_tasks": 5,
+      "passes": 2,
+      "quality_pass_rate": 0.4,
+      "mean_score": 0.385,
+      "mean_latency_s": 21.2216,
+      "min_score": 0.0,
+      "max_score": 1.0,
+      "model_ids": [
+        "moonshotai/Kimi-K2.5"
+      ]
+    },
+    "MiniMax M2.5": {
+      "n_tasks": 5,
+      "passes": 5,
+      "quality_pass_rate": 1.0,
+      "mean_score": 1.0,
+      "mean_latency_s": 7.0485,
+      "min_score": 1.0,
+      "max_score": 1.0,
+      "model_ids": [
+        "MiniMaxAI/MiniMax-M2.5"
+      ]
+    },
+    "Qwen3.5 397B": {
+      "n_tasks": 5,
+      "passes": 0,
+      "quality_pass_rate": 0.0,
+      "mean_score": 0.0,
+      "mean_latency_s": 25.4496,
+      "min_score": 0.0,
+      "max_score": 0.0,
+      "model_ids": [
+        "Qwen/Qwen3.5-397B-A17B"
+      ]
+    }
+  }
+}

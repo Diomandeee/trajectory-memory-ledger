@@ -11,7 +11,7 @@ June 2026
 
 ## Abstract
 
-We present the Trajectory Memory Ledger, a schema-normalized experience replay system for improving AI coding agent performance through closed-loop feedback. The ledger records complete tool-use sequences during real coding sessions, normalizes them into an append-only schema, scores them using a six-signal composite reward function (outcome, process, efficiency, verification, consistency, and wasted motion), and uses the highest-scoring trajectories to generate advantage-weighted supervised fine-tuning data. Unlike approaches that rely on static benchmarks or human preference labels, the Trajectory Memory Ledger derives training signal from observable agent behavior and implicit user feedback. The current normalized originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps across 50+ active projects. From this store, the deployment exports 3,678 ChatML training examples (3,310 train / 368 validation). We describe the system architecture, schema normalization, reward design, OAPL-Lite export, Rust ledger daemon, and entity bridge for performance-based skill decay.
+We present the Trajectory Memory Ledger, a schema-normalized experience replay system for improving AI coding agent performance through closed-loop feedback. The ledger records complete tool-use sequences during real coding sessions, normalizes them into an append-only schema, scores them using a six-signal composite reward function (outcome, process, efficiency, verification, consistency, and wasted motion), and uses the highest-scoring trajectories to generate advantage-weighted supervised fine-tuning data. Unlike approaches that rely on static benchmarks or human preference labels, the Trajectory Memory Ledger derives training signal from observable agent behavior and implicit user feedback. The current normalized originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps across 50+ active projects. From this store, the deployment exports 3,678 ChatML training examples (3,310 train / 368 validation). We also report a real held-out coding-agent model-quality benchmark over 10 model backends and 5 session contexts, where four models reach mean score 1.0000 and `GPT-5.4-mini` is the fastest tied condition at 1.5688s mean latency. We describe the system architecture, schema normalization, reward design, OAPL-Lite export, Rust ledger daemon, and entity bridge for performance-based skill decay.
 
 ---
 
@@ -415,7 +415,28 @@ Environment: Apple M4, macOS 15.6.1, rustc 1.95.0, cargo 1.95.0.
 
 This result supports the artifact claim that the daemon is fast enough for live trajectory collection and robust to the cursor failure mode observed in earlier live capture. It is not evidence of downstream model improvement; downstream task-performance evaluation remains a separate empirical gate.
 
-### 8.4 Configuration
+### 8.4 Held-Out Coding-Agent Model-Quality Benchmark
+
+We also ran a real held-out model-quality benchmark from the KARL V7 deployment. The benchmark used 5 coding-agent session contexts covering build, import repair, dashboard exploration, connection failure recovery, and closeout verification. Ten model backends received the same multi-chain prompt scaffold, and each generated response was scored by `karl.v7.style_validator.overall`. A response passes the quality gate when its score is at least 0.4.
+
+The public artifact includes only aggregate rows derived from the real run; raw private generations and prompts are intentionally excluded. The source artifact was `~/Desktop/karl/v7-model-benchmark.json`, generated on `2026-04-02` by `~/Desktop/karl/karl/v7/model_benchmark.py`.
+
+| Condition | Model id | Contexts | Quality pass | Mean score | Mean latency |
+|-----------|----------|---------:|-------------:|-----------:|-------------:|
+| GPT-5.4-mini | `gpt-5.4-mini` | 5 | 100% | 1.0000 | 1.5688s |
+| GPT-OSS 120B | `openai/gpt-oss-120b` | 5 | 100% | 1.0000 | 5.5191s |
+| MiniMax M2.5 | `MiniMaxAI/MiniMax-M2.5` | 5 | 100% | 1.0000 | 7.0485s |
+| DeepSeek R1 | `deepseek-ai/DeepSeek-R1-0528` | 5 | 100% | 1.0000 | 10.4395s |
+| DeepSeek V3.1 | `deepseek-ai/DeepSeek-V3.1` | 5 | 100% | 0.9850 | 2.7698s |
+| GLM 4.7 | `zai-org/GLM-4.7` | 5 | 100% | 0.9850 | 5.5894s |
+| GPT-OSS 20B | `openai/gpt-oss-20b` | 5 | 100% | 0.9840 | 4.4039s |
+| GLM-5 | `zai-org/GLM-5` | 5 | 80% | 0.8000 | 16.5684s |
+| Kimi K2.5 | `moonshotai/Kimi-K2.5` | 5 | 40% | 0.3850 | 21.2216s |
+| Qwen3.5 397B | `Qwen/Qwen3.5-397B-A17B` | 5 | 0% | 0.0000 | 25.4496s |
+
+The aggregate runner reports `GPT-5.4-mini` as best by mean score because four models tie at 1.0000 and `GPT-5.4-mini` is the fastest tied condition. This is a real downstream benchmark over coding-agent response quality, but it does not execute target repositories and does not compare ledger-selected training data against random or full-ledger baselines. It should therefore be read as model-quality evidence, not as proof of SWE-style task-completion lift from the ledger.
+
+### 8.5 Configuration
 
 All 40+ parameters are configurable via environment variables with sensible defaults:
 
@@ -487,7 +508,7 @@ On the normalized exportable subset (5,805 records with at least two observed ev
 
 **Outcome sparsity in backfilled data**: Most historical records lack cross-turn correction/redo annotations, so outcome scores are often neutral. Live taps and future data should make this channel more informative.
 
-**Downstream model performance**: The current artifact includes a held-out agent evaluation harness, but the checked-in example rows are synthetic. We do not yet claim that a model trained or routed with ledger-selected data completes more coding tasks than a random-data or unscored baseline. The next experiment must compare random trajectories, reward-selected trajectories, and full-ledger export on the same held-out coding tasks.
+**Downstream model performance**: The current artifact now includes one real held-out coding-agent model-quality benchmark. It shows response-quality differences across model backends on 5 held-out session contexts, but it does not execute target repositories. We do not yet claim that a model trained or routed with ledger-selected data completes more coding tasks than a random-data or unscored baseline. The next experiment must compare random trajectories, reward-selected trajectories, and full-ledger export on the same executable held-out coding tasks.
 
 **Model capacity**: The current LoRA training uses a 1B parameter base model (gemma-3-1b-it-4bit). The fine-tuned model learns tool-use planning patterns but cannot replace the frontier model for actual code generation. It serves as a routing and planning advisor, not a replacement.
 
@@ -495,7 +516,7 @@ On the normalized exportable subset (5,805 records with at least two observed ev
 
 The Trajectory Memory Ledger demonstrates that trajectory-based learning can turn ordinary coding-agent work into a reusable improvement signal. By recording what agents do, normalizing heterogeneous logs into one schema, scoring process quality, and exporting the best trajectories, the system creates a practical feedback loop for skill routing and tool-use planning.
 
-The normalized corpus now contains 7,468 scored trajectories and 67,409 observed tool events. The schema-v2 ablation sharpens the deployed reward design: verification is the most load-bearing ranking signal in the current corpus, while process, efficiency, and wasted motion provide secondary but meaningful ranking structure. Outcome remains under-instrumented in historical backfill data and should be interpreted cautiously until more live cross-turn annotations accumulate.
+The normalized corpus now contains 7,468 scored trajectories and 67,409 observed tool events. The schema-v2 ablation sharpens the deployed reward design: verification is the most load-bearing ranking signal in the current corpus, while process, efficiency, and wasted motion provide secondary but meaningful ranking structure. Outcome remains under-instrumented in historical backfill data and should be interpreted cautiously until more live cross-turn annotations accumulate. A real held-out KARL V7 benchmark now adds model-quality evidence over 50 coding-agent context evaluations, while executable task-completion lift remains a future empirical gate.
 
 The entity bridge extends this from session-level learning to skill-level intelligence, replacing time-based decay with performance-based adaptation. Skills that consistently produce poor trajectories lose confidence and routing weight, while skills that consistently succeed gain both.
 

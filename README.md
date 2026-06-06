@@ -32,6 +32,7 @@ This repository contains:
 - `docs/metrics.md`: Prometheus metrics
 - `docs/evaluation.md`: benchmark results and downstream evaluation protocol
 - `examples/`: synthetic event and trajectory examples
+- `examples/evaluation/karl-v7-heldout-coding-agent-model-scores.jsonl`: privacy-preserving aggregate rows from a real held-out coding-agent model-quality benchmark
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -96,7 +97,28 @@ cargo run --bin agent-eval -- \
   --output benchmarks/agent-eval-example-2026-06-03.json
 ```
 
-The checked-in `agent-eval` example is synthetic. It demonstrates the measurement protocol, not downstream model improvement. The next empirical gate is a held-out coding-agent benchmark comparing random trajectory selection, reward-selected trajectory selection, and the full normalized ledger export.
+The checked-in `agent-eval` example is synthetic. It demonstrates the tool-plan aggregation protocol, not downstream model improvement.
+
+Run the real held-out coding-agent model-quality benchmark:
+
+```bash
+cargo run --bin heldout-agent-bench -- \
+  --input examples/evaluation/karl-v7-heldout-coding-agent-model-scores.jsonl \
+  --output benchmarks/karl-v7-heldout-agent-benchmark-2026-04-02.json
+```
+
+This benchmark aggregates the real KARL V7 model run from `2026-04-02`: 10 models x 5 held-out coding-agent session contexts, scored by `karl.v7.style_validator.overall` with pass threshold `0.4`. Raw private generations are intentionally not included.
+
+Current result:
+
+- total evaluated contexts: 50
+- score metric: `karl.v7.style_validator.overall`
+- best by mean score with latency tie-break: `GPT-5.4-mini`
+- 1.0 mean score / 100% quality pass: `GPT-5.4-mini`, `GPT-OSS 120B`, `MiniMax M2.5`, `DeepSeek R1`
+- fastest 1.0-score model: `GPT-5.4-mini` at 1.5688s mean latency
+- lowest result: `Qwen3.5 397B`, 0.0 mean score / 0% quality pass
+
+Boundary: this measures model response quality on held-out coding-agent contexts. It does not execute repository tasks or prove that reward-selected trajectory training improves SWE-style task completion. The next empirical gate is still a same-task comparison of random trajectory selection, reward-selected trajectory selection, and the full normalized ledger export.
 
 ## Test
 
@@ -133,7 +155,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The next research step is stronger downstream evaluation: train/evaluate agent models against held-out tasks and quantify improvement from trajectory replay versus random or unscored data selection.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts. The next research step is stronger downstream evaluation: train/evaluate agent models against executable held-out tasks and quantify improvement from trajectory replay versus random or unscored data selection.
 
 ## License
 
