@@ -14,7 +14,7 @@ Coding agents generate a continuous stream of operational experience: prompts, f
 
 This paper presents the public reference artifact and the current evaluation evidence. The Rust daemon, `trajectory-ledgerd`, ingests gateway events, tracks date-scoped cursors, normalizes schema-v2 trajectory cards, scores records at emit time, appends under a file lock, and exports Prometheus metrics. On the checked synthetic daemon benchmark, it ingests 8,000 event envelopes in 6.287 seconds, reaching 1,272.385 events/sec and 159.048 trajectory cards/sec with p95 append latency of 4.027 ms. The originating private deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML training examples.
 
-The current empirical evidence supports three claims: the artifact is operationally reproducible, the reward model selects cleaner trajectories than random sampling, and a real held-out coding-agent model-quality benchmark can be reproduced from aggregate rows in the repository. The strongest checked held-out result evaluates 10 model conditions over 5 coding-agent session contexts each, with `GPT-5.4-mini` selected as the best tied condition by mean score and latency. The repository also includes an executable task benchmark runner and a synthetic smoke report. That smoke report proves the execution harness works, but it is not evidence of downstream model-lift. A real same-task executable comparison of random trajectory selection, reward-selected trajectory selection, and full-ledger export remains the next required empirical gate.
+The current empirical evidence supports four claims: the artifact is operationally reproducible, the reward model selects cleaner trajectories than random sampling, a real held-out coding-agent model-quality benchmark can be reproduced from aggregate rows in the repository, and real model-output candidates can be evaluated on executable held-out tasks. The strongest checked held-out model-quality result evaluates 10 model conditions over 5 coding-agent session contexts each, with `GPT-5.4-mini` selected as the best tied condition by mean score and latency. The new executable benchmark evaluates Claude Sonnet and Gemini 2.5 Flash outputs over a six-task Python stdlib held-out set, with hidden verifier tests and `synthetic_rows=0`. Claude Sonnet saturates the benchmark at 6/6 for all context conditions. Gemini 2.5 Flash reaches 5/6 for `random`, 5/6 for `reward_selected`, and 4/6 for `full_ledger`. These are real executable performance results, but they do not yet prove trained reward-selected trajectory lift over random selection.
 
 ---
 
@@ -27,10 +27,12 @@ The current empirical evidence supports three claims: the artifact is operationa
 | Reward selection chooses cleaner trajectories than random sampling | Supported | Top-35 reward-selected mean reward 0.7734 vs random-35 mean reward 0.6771, Cohen's d 2.7159 | This is selection-quality evidence, not model improvement by itself |
 | Reward components are interpretable and ablatable | Supported | Leave-one-out ablation over 7,468 scored trajectories, verification is most load-bearing with rank correlation 0.5666 when removed | Historical outcome annotations are sparse, so outcome defaults often dominate less than desired |
 | Held-out coding-agent model-quality evaluation is real | Proven for response-quality scoring | 10 model conditions, 5 held-out coding-agent contexts each, 50 total scored contexts | Does not execute repository tasks or measure SWE task completion |
-| Executable benchmark runner works | Proven for harness mechanics | 3 Python stdlib tasks x 3 conditions, isolated temp workspaces, verifier commands, pass/fail aggregation | Rows are synthetic smoke candidates |
-| Reward-selected trajectory data improves executable coding-task completion | Not proven yet | Runner and materializer now exist | Requires real model outputs across random, reward-selected, and full-ledger conditions |
+| Executable benchmark runner works | Proven for harness mechanics | 3 Python stdlib smoke tasks x 3 conditions, isolated temp workspaces, verifier commands, pass/fail aggregation | Smoke rows are synthetic |
+| Real executable model-output evaluation | Proven for prompt-conditioned model outputs | Claude Sonnet and Gemini 2.5 Flash, 6 held-out tasks x 3 context conditions each, 36 non-synthetic rows total | Measures executable pass/fail for generated candidates |
+| Reward-selected context improves over full-ledger context | Partially supported | Gemini 2.5 Flash: `reward_selected` 5/6 vs `full_ledger` 4/6 | Single backend and small task set |
+| Reward-selected trajectory data improves executable coding-task completion over random | Not proven yet | Gemini 2.5 Flash ties `random` at 5/6; Claude Sonnet saturates all conditions at 6/6 | Requires harder tasks and/or trained adapter evaluation |
 
-The short answer: performance and evaluation are proven for the artifact/runtime and for held-out model-quality scoring. The stronger claim, that ledger-selected training data improves real executable coding-task completion, is not proven yet.
+The short answer: performance and evaluation are now proven for the artifact/runtime, held-out model-quality scoring, and real executable model-output measurement. The stronger claim, that ledger-selected training data improves real executable coding-task completion over random selection, is not proven yet.
 
 ---
 
@@ -229,9 +231,9 @@ The current evaluation has four layers:
 1. Artifact correctness and performance.
 2. Reward-selection quality.
 3. Held-out coding-agent model-quality scoring.
-4. Executable task-completion harness validation.
+4. Real executable model-output task-completion measurement.
 
-Only the first three are real evidence for current paper claims. The fourth proves benchmark mechanics, not model-lift.
+All four layers now contain checked evidence. The fourth layer proves real executable model-output measurement, not trained model-lift.
 
 ### 7.1 Runtime Performance
 
@@ -398,23 +400,59 @@ The smoke report proves:
 
 It does not prove model-lift. All 9 checked rows are synthetic candidate rows. They exist to validate mechanics before running real model outputs.
 
+### 7.6 Real Executable Model-Output Benchmark
+
+The non-synthetic executable benchmark uses six held-out Python standard-library tasks. Public task prompts are stored separately from hidden verifier tests. The generator sends only the public prompts and condition-specific trajectory context to the model backend. The hidden verifier tests are introduced later by `materialize-executable-bench` and executed by `executable-task-bench` in isolated temporary workspaces.
+
+The three context conditions are:
+
+| Condition | Prompt context |
+|---|---|
+| `random` | Six randomly sampled trajectory summaries from the private KARL trajectory store |
+| `reward_selected` | Six high-reward trajectory summaries from the same store |
+| `full_ledger` | Six mixed trajectory summaries spanning low, medium, and high reward records |
+
+The held-out task set contains:
+
+| Task id | Behavior |
+|---|---|
+| `py_parse_duration` | Parse h/m/s duration strings and reject malformed inputs |
+| `py_merge_intervals` | Merge overlapping or adjacent intervals |
+| `py_topological_sort` | Return deterministic lexical topological order and reject cycles |
+| `py_group_by_key` | Group dictionaries by key while preserving order and missing-key behavior |
+| `py_chunked` | Chunk list or generator input into tuples |
+| `py_redact_secrets` | Redact API keys, bearer tokens, and password assignments |
+
+Checked reports:
+
+| Backend | Condition | Rows | Passed | Pass rate | Failed task ids |
+|---|---|---:|---:|---:|---|
+| Claude Sonnet | `random` | 6 | 6 | 100% | none |
+| Claude Sonnet | `reward_selected` | 6 | 6 | 100% | none |
+| Claude Sonnet | `full_ledger` | 6 | 6 | 100% | none |
+| Gemini 2.5 Flash | `random` | 6 | 5 | 83.33% | `py_parse_duration` |
+| Gemini 2.5 Flash | `reward_selected` | 6 | 5 | 83.33% | `py_chunked` |
+| Gemini 2.5 Flash | `full_ledger` | 6 | 4 | 66.67% | `py_parse_duration`, `py_chunked` |
+
+Both executable reports have `synthetic_rows=0` and `measures_executed_task_completion=true`. This proves that the artifact can evaluate real model-generated source files on hidden executable tasks. The result is useful but bounded. Claude Sonnet saturates the task set, so it cannot separate context conditions. Gemini 2.5 Flash shows a real difference between `reward_selected` and `full_ledger`, but `reward_selected` ties `random`. Therefore this benchmark establishes real executable performance measurement and a baseline for future comparisons, but it does not yet establish reward-selected lift over random.
+
 ---
 
 ## 8. Discussion
 
-Trajectory Memory Ledger is best understood as an artifact and systems paper at the current stage. The runtime and data pipeline are implemented. The scoring model has interpretable selection and ablation evidence. The held-out model-quality benchmark is real and reproducible from aggregate rows. The executable task-completion path is implemented, but it has not yet been fed real model outputs from controlled training or routing conditions.
+Trajectory Memory Ledger is best understood as an artifact and systems paper at the current stage. The runtime and data pipeline are implemented. The scoring model has interpretable selection and ablation evidence. The held-out model-quality benchmark is real and reproducible from aggregate rows. The executable task-completion path has now been fed real prompt-conditioned model outputs, producing checked non-synthetic pass/fail reports.
 
 The strongest empirical result inside the reward model is the verification signal. Removing verification changes the top-ranked set more than removing any other component. This matches the practical coding-agent intuition: the best sessions do not merely edit code, they close the loop with tests, builds, or inspection.
 
 The weakest current empirical signal is outcome. In live future data, user corrections and redo requests should be highly valuable. In the historical backfill, those annotations are sparse, so outcome often defaults to neutral. This makes outcome underrepresented in current ablations.
 
-The most important research boundary is downstream task completion. The repository now has the machinery needed for this evaluation, but the checked report is intentionally synthetic. The honest claim is not "ledger training improves coding agents" yet. The honest claim is "the ledger records, scores, exports, and evaluates the data needed to test that hypothesis, and the first artifact and model-quality evaluations pass."
+The most important research boundary is training lift. The repository now has real executable model-output results, but those results are prompt-conditioned rather than trained-adapter results. The honest claim is not "ledger training improves coding agents" yet. The honest claim is "the ledger records, scores, exports, and evaluates the data needed to test that hypothesis, and the first real executable model-output evaluations now run."
 
 ---
 
-## 9. Required Downstream Experiment
+## 9. Required Training-Lift Experiment
 
-The next empirical gate is a real executable held-out coding-agent evaluation. The same held-out task set should be evaluated under at least three conditions:
+The next empirical gate is a trained or adapter-conditioned executable held-out coding-agent evaluation. The same held-out task set should be evaluated under at least three conditions:
 
 | Condition | Description |
 |---|---|
@@ -436,7 +474,7 @@ Minimum metrics:
 | `retry_loop_rate` | Fraction of plans with repeated low-value loops |
 | `mean_duration_ms` | Verifier runtime cost |
 
-Only after this experiment passes should the paper claim downstream executable task-performance lift from trajectory replay.
+Only after this experiment shows `reward_selected` outperforming `random` on executable held-out tasks should the paper claim downstream executable task-performance lift from trajectory replay. The current real model-output reports prove executable measurement and provide baseline results, not training-lift proof.
 
 ---
 
@@ -452,9 +490,9 @@ Only after this experiment passes should the paper claim downstream executable t
 
 **Outcome sparsity.** Historical backfill records often lack cross-turn correction labels, so outcome contributes less ranking signal than it should in future live data.
 
-**Synthetic executable candidates.** The executable benchmark smoke suite is synthetic. It validates the runner, not the research hypothesis.
+**Synthetic executable candidates.** The executable benchmark smoke suite is synthetic. It validates the runner, not the research hypothesis. The separate Claude Sonnet and Gemini 2.5 Flash reports are non-synthetic and should be cited for real model-output performance instead.
 
-**Training-lift not yet measured.** The current artifact exports SFT-ready examples, but a controlled fine-tuning or conditioning experiment has not yet been evaluated on executable held-out tasks.
+**Training-lift not yet measured.** The current artifact exports SFT-ready examples and includes prompt-conditioned executable model-output reports. A controlled fine-tuning or adapter-conditioned experiment has not yet demonstrated reward-selected lift over random on executable held-out tasks.
 
 ---
 
@@ -512,13 +550,37 @@ cargo run --bin executable-task-bench -- \
   --output benchmarks/executable-task-smoke-2026-06-06.json
 ```
 
+Run a real executable model-output benchmark:
+
+```bash
+python3 scripts/generate_executable_candidates_cli.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --trajectory-store "$KARL_TRAJECTORY_STORE" \
+  --output examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --raw-dir /tmp/tml-real-model-output-2026-06-07 \
+  --report benchmarks/executable-candidate-generation-claude-sonnet-2026-06-07.json \
+  --backend claude \
+  --model sonnet \
+  --max-budget-usd 2.00
+
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --candidates examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --output examples/evaluation/executable-task-claude-sonnet-karl-context-2026-06-07.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --output benchmarks/executable-task-claude-sonnet-karl-context-2026-06-07.json \
+  --require-real
+```
+
 ---
 
 ## 12. Conclusion
 
-Trajectory Memory Ledger shows that coding-agent experience can be recorded, normalized, scored, and reused as a durable improvement substrate. The public artifact proves the runtime path: ingestion, cursor safety, schema normalization, reward scoring, locked append, metrics, tests, and benchmarked throughput. The deployment evidence shows a meaningful private corpus of scored trajectories and exported training examples. The reward analysis supports the selection logic, especially the importance of verification behavior. The held-out KARL V7 benchmark adds real model-quality evidence across 50 coding-agent context evaluations.
+Trajectory Memory Ledger shows that coding-agent experience can be recorded, normalized, scored, and reused as a durable improvement substrate. The public artifact proves the runtime path: ingestion, cursor safety, schema normalization, reward scoring, locked append, metrics, tests, and benchmarked throughput. The deployment evidence shows a meaningful private corpus of scored trajectories and exported training examples. The reward analysis supports the selection logic, especially the importance of verification behavior. The held-out KARL V7 benchmark adds real model-quality evidence across 50 coding-agent context evaluations. The new executable reports add real model-output task-completion evidence across 36 non-synthetic candidate rows.
 
-The remaining research step is clear: run real model outputs through executable held-out coding tasks under random, reward-selected, and full-ledger conditions. Until that gate passes, this work should be claimed as a reproducible trajectory-ledger artifact with real model-quality evaluation, not as completed proof of executable coding-agent performance lift.
+The remaining research step is clear: run trained or adapter-conditioned models through executable held-out coding tasks under random, reward-selected, and full-ledger conditions. Until that gate passes, this work should be claimed as a reproducible trajectory-ledger artifact with real model-quality evaluation and real executable model-output baseline results, not as completed proof of trained reward-selected task-completion lift.
 
 ---
 

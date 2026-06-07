@@ -36,6 +36,10 @@ This repository contains:
 - `examples/evaluation/executable-taskset-python-stdlib-smoke.jsonl`: canonical executable smoke task specs
 - `examples/evaluation/executable-candidates-smoke.jsonl`: synthetic candidate/model-output rows for the executable smoke suite
 - `examples/evaluation/executable-task-smoke.jsonl`: materialized smoke rows for the executable task benchmark runner
+- `examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl`: hidden-test executable held-out task specs
+- `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl`: public prompts used for real model-output generation
+- `examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl`: non-synthetic Claude Sonnet candidate rows
+- `examples/evaluation/executable-candidates-gemini-flash-karl-context-2026-06-07.jsonl`: non-synthetic Gemini 2.5 Flash candidate rows
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -145,6 +149,38 @@ Smoke result:
 - `random`: 0/3 pass
 - synthetic rows: 9/9
 
+Run the real executable model-output benchmark:
+
+```bash
+python3 scripts/generate_executable_candidates_cli.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --trajectory-store "$KARL_TRAJECTORY_STORE" \
+  --output examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --raw-dir /tmp/tml-real-model-output-2026-06-07 \
+  --report benchmarks/executable-candidate-generation-claude-sonnet-2026-06-07.json \
+  --backend claude \
+  --model sonnet \
+  --max-budget-usd 2.00
+
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --candidates examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --output examples/evaluation/executable-task-claude-sonnet-karl-context-2026-06-07.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --output benchmarks/executable-task-claude-sonnet-karl-context-2026-06-07.json \
+  --require-real
+```
+
+Real non-synthetic result on the six-task Python stdlib held-out set:
+
+- Claude Sonnet: `random` 6/6, `reward_selected` 6/6, `full_ledger` 6/6
+- Gemini 2.5 Flash: `random` 5/6, `reward_selected` 5/6, `full_ledger` 4/6
+- synthetic rows: 0/36 across the two real reports
+
+Boundary: this proves executable model-output measurement. It does not prove trained reward-selected trajectory lift over random, because Claude saturated the benchmark and Gemini tied `reward_selected` with `random` while beating `full_ledger`.
+
 ## Test
 
 ```bash
@@ -180,7 +216,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, while `materialize-executable-bench` and `executable-task-bench` provide the taskset/candidate workflow for the next gate. The next research step is running real model outputs through executable held-out tasks to quantify improvement from trajectory replay versus random or unscored data selection.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The next research step is a trained or adapter-conditioned run that can test whether reward-selected trajectory data improves executable held-out task pass rate over random selection.
 
 ## License
 

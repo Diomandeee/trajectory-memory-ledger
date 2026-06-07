@@ -5,7 +5,7 @@ Trajectory Memory Ledger currently has four levels of evidence:
 1. Artifact correctness: the Rust runtime builds, passes tests, passes clippy, performs one-shot ingestion, normalizes schema-v2 records, scores trajectories, handles `(date, seq)` cursor rollover, and appends under a file lock.
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
-4. Executed downstream task completion: the executable benchmark runner now exists and has a checked synthetic smoke report. Real same-task model-output evaluation across random trajectory selection, reward-selected trajectory selection, and full-ledger export still needs to be run before claiming SWE-style task-completion lift.
+4. Executed downstream task completion: the executable benchmark runner now has both a checked synthetic smoke report and real non-synthetic model-output reports over a six-task held-out Python stdlib task set. These results prove executable performance measurement. They do not yet prove trained reward-selected trajectory lift, because the current real runs are prompt-conditioned model-output evaluations, not fine-tuned adapter evaluations.
 
 ## Daemon Benchmark
 
@@ -193,9 +193,72 @@ Checked smoke result:
 
 This report proves the executable benchmark path works: verifier commands run, failing candidates fail, passing candidates pass, and aggregation is condition-aware. It is intentionally not downstream model-lift evidence because all 9 checked rows are synthetic smoke rows.
 
-## Required Downstream Experiment
+## Real Model-Output Executable Benchmark
 
-The next empirical gate is an executable held-out coding-agent evaluation with the same task set across three ledger-data conditions:
+The first non-synthetic executable benchmark uses the held-out task set in `examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl` and public task prompts in `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl`. Public prompts were sent to real model CLIs with trajectory context built from the private KARL trajectory store. Hidden verifier tests were not included in the prompts.
+
+Candidate generation:
+
+```bash
+python3 scripts/generate_executable_candidates_cli.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --trajectory-store "$KARL_TRAJECTORY_STORE" \
+  --output examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --raw-dir /tmp/tml-real-model-output-2026-06-07 \
+  --report benchmarks/executable-candidate-generation-claude-sonnet-2026-06-07.json \
+  --backend claude \
+  --model sonnet \
+  --max-budget-usd 2.00
+```
+
+Materialization and execution:
+
+```bash
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --candidates examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --output examples/evaluation/executable-task-claude-sonnet-karl-context-2026-06-07.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-claude-sonnet-karl-context-2026-06-07.jsonl \
+  --output benchmarks/executable-task-claude-sonnet-karl-context-2026-06-07.json \
+  --require-real
+```
+
+The same protocol was run for `gemini-2.5-flash`. Both reports have `synthetic_rows=0` and `measures_executed_task_completion=true`.
+
+Held-out task set:
+
+| Task id | Target behavior |
+|---|---|
+| `py_parse_duration` | Parse h/m/s duration strings into seconds and reject malformed input |
+| `py_merge_intervals` | Merge overlapping or adjacent intervals |
+| `py_topological_sort` | Deterministic topological sort with cycle rejection |
+| `py_group_by_key` | Group dictionaries by key while preserving order and missing-key behavior |
+| `py_chunked` | Chunk list or generator input into tuples |
+| `py_redact_secrets` | Redact obvious API keys, bearer tokens, and password assignments |
+
+Real executable result:
+
+| Backend | Condition | Rows | Passed | Pass rate | Failed task ids |
+|---|---|---:|---:|---:|---|
+| Claude Sonnet | `random` | 6 | 6 | 100% | none |
+| Claude Sonnet | `reward_selected` | 6 | 6 | 100% | none |
+| Claude Sonnet | `full_ledger` | 6 | 6 | 100% | none |
+| Gemini 2.5 Flash | `random` | 6 | 5 | 83.33% | `py_parse_duration` |
+| Gemini 2.5 Flash | `reward_selected` | 6 | 5 | 83.33% | `py_chunked` |
+| Gemini 2.5 Flash | `full_ledger` | 6 | 4 | 66.67% | `py_parse_duration`, `py_chunked` |
+
+Interpretation:
+
+- This is real executable task-completion evidence because generated candidate files were run against hidden verifier tests in isolated workspaces.
+- Claude Sonnet saturated this six-task benchmark, so it provides no condition separation.
+- Gemini 2.5 Flash produced a discriminative result: `reward_selected` tied `random` at 5/6 and exceeded `full_ledger` at 4/6.
+- This does not prove that reward-selected trajectory training improves task completion over random selection. It proves a real prompt-conditioned executable evaluation path and shows that the current v0 task set is too small/easy to establish reward-selected lift over random.
+
+## Required Training-Lift Experiment
+
+The next empirical gate is a trained or adapter-conditioned executable held-out coding-agent evaluation with the same task set across three ledger-data conditions:
 
 | Condition | Description |
 |---|---|
@@ -214,4 +277,4 @@ Recommended metrics:
 | `retry_loop_rate` | Plan repeats the same tool pattern excessively |
 | `mean_reward_score` | Reward model score on held-out generated plans |
 
-Only after this experiment should the paper claim downstream executed task-performance lift from trajectory replay.
+Only after a trained or adapter-conditioned run shows `reward_selected` outperforming `random` on executable held-out tasks should the paper claim downstream task-performance lift from trajectory replay. The current real model-output reports prove executable measurement and provide baseline results, not training-lift proof.

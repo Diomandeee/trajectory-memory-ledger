@@ -1,0 +1,24 @@
+{
+  "backend": "gemini",
+  "conditions": {
+    "full_ledger": {
+      "raw_response": "/tmp/tml-real-model-output-gemini-flash-2026-06-07/full_ledger.raw.txt",
+      "rows": 6
+    },
+    "random": {
+      "raw_response": "/tmp/tml-real-model-output-gemini-flash-2026-06-07/random.raw.txt",
+      "rows": 6
+    },
+    "reward_selected": {
+      "raw_response": "/tmp/tml-real-model-output-gemini-flash-2026-06-07/reward_selected.raw.txt",
+      "rows": 6
+    }
+  },
+  "generator": "generate_executable_candidates_cli.py",
+  "model": "gemini-2.5-flash",
+  "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl",
+  "raw_dir": "/tmp/tml-real-model-output-gemini-flash-2026-06-07",
+  "seed": 42,
+  "trajectory_store": "private-local-trajectory-store",
+  "trajectory_store_private": true
+}

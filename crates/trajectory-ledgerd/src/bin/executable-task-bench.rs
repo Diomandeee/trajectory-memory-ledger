@@ -24,6 +24,10 @@ struct Args {
     /// Keep per-row workspaces instead of deleting them.
     #[arg(long)]
     keep_workspaces: bool,
+
+    /// Fail if any input row is marked synthetic.
+    #[arg(long)]
+    require_real: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -106,7 +110,7 @@ struct ExecutableBenchReport {
 
 fn main() -> Result<()> {
     let args = Args::parse();
-    let report = run_benchmark(&args.input, args.keep_workspaces)?;
+    let report = run_benchmark(&args.input, args.keep_workspaces, args.require_real)?;
     let rendered = serde_json::to_string_pretty(&report)?;
     println!("{rendered}");
     if let Some(output) = args.output {
@@ -118,7 +122,11 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn run_benchmark(input: &Path, keep_workspaces: bool) -> Result<ExecutableBenchReport> {
+fn run_benchmark(
+    input: &Path,
+    keep_workspaces: bool,
+    require_real: bool,
+) -> Result<ExecutableBenchReport> {
     let file = fs::File::open(input)
         .with_context(|| format!("open executable benchmark input {}", input.display()))?;
     let mut by_condition: BTreeMap<String, Accumulator> = BTreeMap::new();
@@ -194,6 +202,9 @@ fn run_benchmark(input: &Path, keep_workspaces: bool) -> Result<ExecutableBenchR
     if row_results.is_empty() {
         bail!("executable benchmark input contained no rows");
     }
+    if require_real && synthetic_rows > 0 {
+        bail!("--require-real was set but input contained {synthetic_rows} synthetic row(s)");
+    }
 
     let conditions = by_condition
         .into_iter()
@@ -216,6 +227,12 @@ fn run_benchmark(input: &Path, keep_workspaces: bool) -> Result<ExecutableBenchR
         })
         .collect();
 
+    let boundary = if synthetic_rows == 0 {
+        "Runs verifier commands in isolated temp workspaces and measures executable pass/fail. This report has synthetic_rows=0, so task pass rates are executable results for the supplied candidate/model-output rows."
+    } else {
+        "Runs verifier commands in isolated temp workspaces and measures executable pass/fail. Synthetic smoke rows validate the harness only and must not be cited as model-lift evidence."
+    };
+
     Ok(ExecutableBenchReport {
         input_rows: row_results.len(),
         benchmark_kinds,
@@ -223,8 +240,7 @@ fn run_benchmark(input: &Path, keep_workspaces: bool) -> Result<ExecutableBenchR
         source_artifacts,
         synthetic_rows,
         measures_executed_task_completion: true,
-        boundary: "Runs verifier commands in isolated temp workspaces and measures executable pass/fail. Synthetic smoke rows validate the harness only and must not be cited as model-lift evidence."
-            .to_string(),
+        boundary: boundary.to_string(),
         conditions,
         row_results,
     })
