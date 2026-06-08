@@ -278,3 +278,39 @@ Recommended metrics:
 | `mean_reward_score` | Reward model score on held-out generated plans |
 
 Only after a trained or adapter-conditioned run shows `reward_selected` outperforming `random` on executable held-out tasks should the paper claim downstream task-performance lift from trajectory replay. The current real model-output reports prove executable measurement and provide baseline results, not training-lift proof.
+
+## Training-Lift Preflight
+
+The repository now includes a preflight script for the controlled adapter experiment:
+
+```bash
+python3 scripts/prepare_training_lift_experiment.py \
+  --trajectory-store "$KARL_TRAJECTORY_STORE" \
+  --heldout-public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --heldout-task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --output-dir output/private-training-lift-2026-06-08 \
+  --report benchmarks/training-lift-preflight-2026-06-08.json \
+  --sample-size 96 \
+  --probe-remote \
+  --remote-host mac5
+```
+
+The script writes private train/validation JSONL files under ignored `output/private-*` paths and writes only aggregate hashes/statistics to the checked report. The `2026-06-08` checked report has status `blocked_remote_training_unreachable`.
+
+| Condition | Selected records | Train | Validation | Mean reward | Mean advantage |
+|---|---:|---:|---:|---:|---:|
+| `random` | 96 | 86 | 10 | 0.6750 | 0.7333 |
+| `reward_selected` | 96 | 86 | 10 | 0.7408 | 1.6182 |
+| `full_ledger` | 96 | 86 | 10 | 0.6787 | 0.8774 |
+
+Additional preflight facts:
+
+| Field | Value |
+|---|---:|
+| Eligible private records after filters | 2,920 |
+| Held-out leakage-risk exclusions | 2,138 |
+| Missing prompt exclusions | 749 |
+| Too-few-tool exclusions | 1,663 |
+| Remote trainer probe | `mac5` SSH failed with timeout |
+
+This is stronger than a plan because the three condition splits now exist locally with stable SHA-256 hashes in the report. It is still not task-performance lift evidence. The next measurable step is to train one adapter per condition, generate candidate files from each adapter for the same held-out task ids, and run `executable-task-bench --require-real` on those rows.

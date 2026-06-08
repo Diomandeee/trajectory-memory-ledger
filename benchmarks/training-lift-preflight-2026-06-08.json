@@ -1,0 +1,136 @@
+{
+  "claim_boundary": "This preflight prepares controlled random/reward_selected/full_ledger training splits and checks trainer reachability. It does not train adapters, generate post-training candidates, or prove reward-selected task-completion lift.",
+  "created_at": "2026-06-08T16:39:22.223901+00:00",
+  "experiment_status": "blocked_remote_training_unreachable",
+  "heldout_task_refs": {
+    "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl",
+    "task_specs": "examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl"
+  },
+  "next_adapter_commands": {
+    "full_ledger": "python3 -m mlx_lm lora --model mlx-community/gemma-3-1b-it-4bit --data output/private-training-lift-2026-06-08/full_ledger --train --adapter-path output/private-adapters/full_ledger --iters 500 --batch-size 1 --num-layers 4 --max-seq-length 256 --learning-rate 1e-5",
+    "random": "python3 -m mlx_lm lora --model mlx-community/gemma-3-1b-it-4bit --data output/private-training-lift-2026-06-08/random --train --adapter-path output/private-adapters/random --iters 500 --batch-size 1 --num-layers 4 --max-seq-length 256 --learning-rate 1e-5",
+    "reward_selected": "python3 -m mlx_lm lora --model mlx-community/gemma-3-1b-it-4bit --data output/private-training-lift-2026-06-08/reward_selected --train --adapter-path output/private-adapters/reward_selected --iters 500 --batch-size 1 --num-layers 4 --max-seq-length 256 --learning-rate 1e-5"
+  },
+  "private_output_dir": "output/private-training-lift-2026-06-08",
+  "private_outputs_written": true,
+  "private_trajectory_store": "private-local-trajectory-store",
+  "private_trajectory_store_path_recorded": false,
+  "remote_preflight": {
+    "exit_code": 255,
+    "remote_host": "mac5",
+    "status": "ssh_failed",
+    "stderr_preview": "ssh: connect to host [REDACTED_IP] port 22: Operation timed out",
+    "training_reachable": false
+  },
+  "schema": "trajectory-memory-ledger.training_lift_preflight.v1",
+  "selection": {
+    "conditions": {
+      "full_ledger": {
+        "advantage": {
+          "max": 3.344,
+          "mean": 0.8774,
+          "min": -2.4578
+        },
+        "condition": "full_ledger",
+        "domain_count": 15,
+        "domain_histogram_hash": "81169dd215e0ce750e3a52f2b00638ad19171a94957e69397a25c224fa8f346d",
+        "private_files": {
+          "manifest": "output/private-training-lift-2026-06-08/full_ledger/manifest.json",
+          "train": "output/private-training-lift-2026-06-08/full_ledger/train.jsonl",
+          "valid": "output/private-training-lift-2026-06-08/full_ledger/valid.jsonl"
+        },
+        "record_count": 96,
+        "record_id_hash": "d24944c94f5ca60e37f017c60fa9f8813c0b1dfd6956f98a475ada22d4f21d28",
+        "reward": {
+          "max": 0.8165,
+          "mean": 0.6787,
+          "min": 0.4666
+        },
+        "total_tools": {
+          "max": 39.0,
+          "mean": 10.1042,
+          "min": 2.0
+        },
+        "train_rows": 86,
+        "train_sha256": "286c5c430ad27341d1e07ac5c82ad1aa1655c074174a46ab4b1f4e05d6f78916",
+        "valid_rows": 10,
+        "valid_sha256": "b86995c32fee3abbcc10bb6d9858a99c647a52bdadb6e882069ae420a84ad7b6"
+      },
+      "random": {
+        "advantage": {
+          "max": 2.169,
+          "mean": 0.7333,
+          "min": -2.1061
+        },
+        "condition": "random",
+        "domain_count": 19,
+        "domain_histogram_hash": "587f0c9b5e3a749ccd84ddee612bc93c0a9782a091b6d3a2d6de3266a1ebcf00",
+        "private_files": {
+          "manifest": "output/private-training-lift-2026-06-08/random/manifest.json",
+          "train": "output/private-training-lift-2026-06-08/random/train.jsonl",
+          "valid": "output/private-training-lift-2026-06-08/random/valid.jsonl"
+        },
+        "record_count": 96,
+        "record_id_hash": "719ead19e26a9f2771c1bcaf2a10b05a5ebf4f326669bcb7b54172ca391defac",
+        "reward": {
+          "max": 0.7358,
+          "mean": 0.675,
+          "min": 0.5651
+        },
+        "total_tools": {
+          "max": 50.0,
+          "mean": 9.2292,
+          "min": 2.0
+        },
+        "train_rows": 86,
+        "train_sha256": "ed5d26b4f0eb067101dce20157ea0bef7de6a306d2b6a950908976dbf0b78bec",
+        "valid_rows": 10,
+        "valid_sha256": "7f2d887954063ba401078cad38309f3589853cb903b764a392cca55dd117a1e7"
+      },
+      "reward_selected": {
+        "advantage": {
+          "max": 3.344,
+          "mean": 1.6182,
+          "min": 0.2341
+        },
+        "condition": "reward_selected",
+        "domain_count": 10,
+        "domain_histogram_hash": "0dd11865c89d89296bd98b4532d3da3ab008d85abd403289a49c2fda5669a068",
+        "private_files": {
+          "manifest": "output/private-training-lift-2026-06-08/reward_selected/manifest.json",
+          "train": "output/private-training-lift-2026-06-08/reward_selected/train.jsonl",
+          "valid": "output/private-training-lift-2026-06-08/reward_selected/valid.jsonl"
+        },
+        "record_count": 96,
+        "record_id_hash": "7a8c03d8a0e0ecb94065adbda7bfade3333deef4cf750cd7bdcb51767a43fb7c",
+        "reward": {
+          "max": 0.8165,
+          "mean": 0.7408,
+          "min": 0.7341
+        },
+        "total_tools": {
+          "max": 50.0,
+          "mean": 13.7083,
+          "min": 3.0
+        },
+        "train_rows": 86,
+        "train_sha256": "a7be7ed73a0d36b225ff5acf84b5d31d4934c3dd150cd97b5a86427c78af6203",
+        "valid_rows": 10,
+        "valid_sha256": "4549bb137f37d0b928337db60dbc88e70407e7efece0f750504f584794d06be6"
+      }
+    },
+    "eligible_records": 2920,
+    "excluded": {
+      "empty_plan": 0,
+      "heldout_leakage_risk": 2138,
+      "json_decode": 0,
+      "missing_prompt": 749,
+      "missing_reward": 0,
+      "too_few_tools": 1663
+    },
+    "min_tools": 2,
+    "sample_size_per_condition": 96,
+    "seed": 42,
+    "valid_ratio": 0.1
+  }
+}

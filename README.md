@@ -181,6 +181,29 @@ Real non-synthetic result on the six-task Python stdlib held-out set:
 
 Boundary: this proves executable model-output measurement. It does not prove trained reward-selected trajectory lift over random, because Claude saturated the benchmark and Gemini tied `reward_selected` with `random` while beating `full_ledger`.
 
+Prepare the controlled training-lift gate:
+
+```bash
+python3 scripts/prepare_training_lift_experiment.py \
+  --trajectory-store "$KARL_TRAJECTORY_STORE" \
+  --heldout-public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --heldout-task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --output-dir output/private-training-lift-2026-06-08 \
+  --report benchmarks/training-lift-preflight-2026-06-08.json \
+  --sample-size 96 \
+  --probe-remote \
+  --remote-host mac5
+```
+
+Checked preflight result:
+
+- private random/reward-selected/full-ledger train/valid splits were generated locally
+- each condition has 96 selected records, split 86 train / 10 validation
+- mean reward: `random` 0.6750, `reward_selected` 0.7408, `full_ledger` 0.6787
+- remote trainer status: blocked, `mac5` SSH timed out
+
+Boundary: this prepares the controlled adapter experiment and records the real blocker. It still does not train adapters or prove task-completion lift.
+
 ## Test
 
 ```bash
@@ -216,7 +239,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The next research step is a trained or adapter-conditioned run that can test whether reward-selected trajectory data improves executable held-out task pass rate over random selection.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift preflight now prepares controlled private splits and records that remote adapter training is blocked on `mac5` reachability. The next research step is to run those adapters once the trainer is reachable, then evaluate them on the same executable held-out task set.
 
 ## License
 

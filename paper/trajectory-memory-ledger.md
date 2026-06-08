@@ -476,6 +476,22 @@ Minimum metrics:
 
 Only after this experiment shows `reward_selected` outperforming `random` on executable held-out tasks should the paper claim downstream executable task-performance lift from trajectory replay. The current real model-output reports prove executable measurement and provide baseline results, not training-lift proof.
 
+### 9.1 Training-Lift Preflight
+
+The artifact now includes a concrete preflight for the training-lift experiment. Running `scripts/prepare_training_lift_experiment.py` against the private KARL trajectory store creates three private train/validation splits under ignored `output/private-*` paths and writes the public-safe aggregate report `benchmarks/training-lift-preflight-2026-06-08.json`. The script records only counts, means, hashes, and remote trainer reachability. It does not write raw private prompts or tool plans into the repository.
+
+The checked preflight selected 96 records per condition, split into 86 train rows and 10 validation rows. The resulting condition statistics were:
+
+| Condition | Mean reward | Mean advantage |
+|---|---:|---:|
+| `random` | 0.6750 | 0.7333 |
+| `reward_selected` | 0.7408 | 1.6182 |
+| `full_ledger` | 0.6787 | 0.8774 |
+
+The preflight found 2,920 eligible private records after minimum-tool, prompt, plan, and held-out leakage filters. It also recorded 2,138 held-out leakage-risk exclusions, 749 missing-prompt exclusions, and 1,663 too-few-tool exclusions. The remote trainer probe did not pass: `mac5` SSH timed out, so the report status is `blocked_remote_training_unreachable`.
+
+This result narrows the remaining gap. The controlled random, reward-selected, and full-ledger training splits now exist and are hash-addressed, but no adapter has been trained from them yet. Therefore the paper still must not claim trained reward-selected task-completion lift. The next valid claim boundary is: once `mac5` or another MLX trainer is reachable, train one adapter per condition, generate held-out executable candidates from those adapters, and run the existing executable benchmark with `--require-real`.
+
 ---
 
 ## 10. Threats to Validity
