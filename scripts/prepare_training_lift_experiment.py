@@ -79,7 +79,16 @@ def main() -> int:
         "status": "not_requested",
         "remote_host": args.remote_host,
     }
-    status = derive_status(condition_reports, remote_preflight, args.probe_remote)
+    local_preflight = probe_local(args.min_free_disk_gb) if args.probe_local else {
+        "status": "not_requested",
+    }
+    status = derive_status(
+        condition_reports=condition_reports,
+        remote_preflight=remote_preflight,
+        local_preflight=local_preflight,
+        probe_remote_requested=args.probe_remote,
+        probe_local_requested=args.probe_local,
+    )
 
     report = {
         "schema": "trajectory-memory-ledger.training_lift_preflight.v1",
@@ -103,7 +112,8 @@ def main() -> int:
             "conditions": condition_reports,
         },
         "remote_preflight": remote_preflight,
-        "next_adapter_commands": build_next_commands(output_dir, args.base_model),
+        "local_preflight": local_preflight,
+        "next_adapter_commands": build_next_commands(output_dir, args.base_model, local_preflight),
         "claim_boundary": (
             "This preflight prepares controlled random/reward_selected/full_ledger training splits "
             "and checks trainer reachability. It does not train adapters, generate post-training "
@@ -133,6 +143,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--remote-host", default="mac5")
     parser.add_argument("--remote-timeout-s", type=int, default=3)
     parser.add_argument("--probe-remote", action="store_true")
+    parser.add_argument("--probe-local", action="store_true")
+    parser.add_argument("--min-free-disk-gb", type=float, default=4.0)
     return parser.parse_args()
 
 
@@ -412,22 +424,131 @@ def sanitize_remote_text(text: str) -> str:
     return re.sub(r"\b(?:\d{1,3}\.){3}\d{1,3}\b", "[REDACTED_IP]", text)
 
 
-def derive_status(condition_reports: dict[str, Any], remote_preflight: dict[str, Any], probe_remote_requested: bool) -> str:
+def probe_local(min_free_disk_gb: float) -> dict[str, Any]:
+    python = run_command(["python3", "-c", "import sys; print(sys.executable)"], timeout_s=5)
+    plain_import = run_command(
+        ["python3", "-c", "import mlx, mlx_lm; print('mlx_lm_ready')"],
+        timeout_s=10,
+    )
+    workaround_import = run_command(
+        ["python3", "-c", "import mlx, mlx_lm; print('mlx_lm_ready')"],
+        timeout_s=10,
+        extra_env={"KMP_DUPLICATE_LIB_OK": "TRUE"},
+    )
+    help_check = run_command(
+        ["python3", "-m", "mlx_lm", "lora", "--help"],
+        timeout_s=10,
+        extra_env={"KMP_DUPLICATE_LIB_OK": "TRUE"},
+    )
+    disk = run_command(["df", "-k", "/"], timeout_s=5)
+    memory = run_command(["sysctl", "-n", "hw.memsize"], timeout_s=5)
+
+    free_disk_gb = parse_df_free_gb(disk.get("stdout", ""))
+    memory_gb = parse_memory_gb(memory.get("stdout", ""))
+    mlx_plain_ready = plain_import["exit_code"] == 0
+    mlx_workaround_ready = workaround_import["exit_code"] == 0 and help_check["exit_code"] == 0
+    enough_disk = free_disk_gb is not None and free_disk_gb >= min_free_disk_gb
+
+    if mlx_plain_ready and enough_disk:
+        status = "ready"
+    elif mlx_workaround_ready and enough_disk:
+        status = "ready_with_openmp_workaround"
+    elif not enough_disk:
+        status = "blocked_low_disk"
+    else:
+        status = "blocked_local_mlx_unavailable"
+
+    return {
+        "status": status,
+        "training_reachable": status in {"ready", "ready_with_openmp_workaround"},
+        "python": python.get("stdout", "").strip(),
+        "mlx_plain_import": summarize_command(plain_import),
+        "mlx_workaround_import": summarize_command(workaround_import),
+        "mlx_lm_help": summarize_command(help_check),
+        "requires_env": {"KMP_DUPLICATE_LIB_OK": "TRUE"} if status == "ready_with_openmp_workaround" else {},
+        "free_disk_gb": free_disk_gb,
+        "min_free_disk_gb": min_free_disk_gb,
+        "memory_gb": memory_gb,
+    }
+
+
+def run_command(command: list[str], timeout_s: int, extra_env: dict[str, str] | None = None) -> dict[str, Any]:
+    env = None
+    if extra_env:
+        import os
+
+        env = {**os.environ, **extra_env}
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout_s, env=env)
+    except subprocess.TimeoutExpired:
+        return {"exit_code": -1, "status": "timeout", "stdout": "", "stderr": "timeout"}
+    return {
+        "exit_code": result.returncode,
+        "status": "ok" if result.returncode == 0 else "failed",
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+    }
+
+
+def summarize_command(result: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "exit_code": result.get("exit_code"),
+        "status": result.get("status"),
+        "stdout_preview": result.get("stdout", "").strip()[:300],
+        "stderr_preview": sanitize_remote_text(result.get("stderr", "").strip())[:300],
+    }
+
+
+def parse_df_free_gb(stdout: str) -> float | None:
+    lines = [line for line in stdout.splitlines() if line.strip()]
+    if len(lines) < 2:
+        return None
+    parts = lines[-1].split()
+    if len(parts) < 4:
+        return None
+    try:
+        free_kb = float(parts[3])
+    except ValueError:
+        return None
+    return round(free_kb / (1024 * 1024), 2)
+
+
+def parse_memory_gb(stdout: str) -> float | None:
+    try:
+        return round(float(stdout.strip()) / (1024**3), 2)
+    except ValueError:
+        return None
+
+
+def derive_status(
+    condition_reports: dict[str, Any],
+    remote_preflight: dict[str, Any],
+    local_preflight: dict[str, Any],
+    probe_remote_requested: bool,
+    probe_local_requested: bool,
+) -> str:
     if set(condition_reports) != set(CONDITIONS):
         return "incomplete_condition_exports"
+    if probe_local_requested and local_preflight.get("training_reachable"):
+        return "ready_for_local_adapter_training"
     if not probe_remote_requested:
-        return "data_ready_remote_not_checked"
+        return "data_ready_trainer_not_checked"
     if remote_preflight.get("status") == "ready":
         return "ready_for_adapter_training"
+    if probe_local_requested:
+        return str(local_preflight.get("status", "blocked_local_trainer"))
     return "blocked_remote_training_unreachable"
 
 
-def build_next_commands(output_dir: Path, base_model: str) -> dict[str, str]:
+def build_next_commands(output_dir: Path, base_model: str, local_preflight: dict[str, Any]) -> dict[str, str]:
+    env_prefix = ""
+    if local_preflight.get("requires_env", {}).get("KMP_DUPLICATE_LIB_OK"):
+        env_prefix = "KMP_DUPLICATE_LIB_OK=TRUE "
     commands = {}
     for condition in CONDITIONS:
         condition_dir = output_dir / condition
         commands[condition] = (
-            "python3 -m mlx_lm lora "
+            f"{env_prefix}python3 -m mlx_lm lora "
             f"--model {base_model} "
             f"--data {condition_dir} "
             "--train "

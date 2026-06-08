@@ -314,3 +314,30 @@ Additional preflight facts:
 | Remote trainer probe | `mac5` SSH failed with timeout |
 
 This is stronger than a plan because the three condition splits now exist locally with stable SHA-256 hashes in the report. It is still not task-performance lift evidence. The next measurable step is to train one adapter per condition, generate candidate files from each adapter for the same held-out task ids, and run `executable-task-bench --require-real` on those rows.
+
+Because `mac5` is not currently available, a second local preflight was run:
+
+```bash
+python3 scripts/prepare_training_lift_experiment.py \
+  --trajectory-store "$KARL_TRAJECTORY_STORE" \
+  --heldout-public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --heldout-task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --output-dir output/private-training-lift-2026-06-08 \
+  --report benchmarks/training-lift-local-preflight-2026-06-08.json \
+  --sample-size 96 \
+  --probe-local
+```
+
+Local preflight result:
+
+| Field | Value |
+|---|---|
+| Status | `ready_for_local_adapter_training` |
+| Python | `/opt/homebrew/opt/python@3.14/bin/python3.14` |
+| MLX plain import | Fails with duplicate OpenMP runtime |
+| MLX workaround import | Passes with `KMP_DUPLICATE_LIB_OK=TRUE` |
+| `mlx_lm` help check | Passes |
+| Memory | 16.0 GB |
+| Free disk | 6.97 GB |
+
+This means the adapter experiment can proceed without Mac5, but the local run should stay conservative: use the checked small base model command, keep `KMP_DUPLICATE_LIB_OK=TRUE`, and keep adapter outputs under ignored `output/private-adapters/`.

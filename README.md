@@ -201,8 +201,10 @@ Checked preflight result:
 - each condition has 96 selected records, split 86 train / 10 validation
 - mean reward: `random` 0.6750, `reward_selected` 0.7408, `full_ledger` 0.6787
 - remote trainer status: blocked, `mac5` SSH timed out
+- Mac5-free local trainer status: ready with `KMP_DUPLICATE_LIB_OK=TRUE`
+- local trainer resources: 16 GB memory, 6.97 GB free disk at preflight time
 
-Boundary: this prepares the controlled adapter experiment and records the real blocker. It still does not train adapters or prove task-completion lift.
+Boundary: this prepares the controlled adapter experiment and records the real blockers/options. It still does not train adapters or prove task-completion lift. Since `mac5` is unavailable, the next viable path is local MLX LoRA on this Mac with the small 1B 4-bit base model and ignored private adapter outputs.
 
 ## Test
 

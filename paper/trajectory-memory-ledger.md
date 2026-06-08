@@ -492,6 +492,10 @@ The preflight found 2,920 eligible private records after minimum-tool, prompt, p
 
 This result narrows the remaining gap. The controlled random, reward-selected, and full-ledger training splits now exist and are hash-addressed, but no adapter has been trained from them yet. Therefore the paper still must not claim trained reward-selected task-completion lift. The next valid claim boundary is: once `mac5` or another MLX trainer is reachable, train one adapter per condition, generate held-out executable candidates from those adapters, and run the existing executable benchmark with `--require-real`.
 
+After `mac5` was confirmed unavailable, the same preflight was extended with a local-trainer probe. The local Mac has 16.0 GB memory and 6.97 GB free disk at preflight time. Plain MLX import fails in the Homebrew Python environment because of a duplicate OpenMP runtime, but `mlx_lm` imports and prints help successfully with `KMP_DUPLICATE_LIB_OK=TRUE`. The resulting local preflight status is `ready_for_local_adapter_training`.
+
+This creates a Mac5-free path: run three local MLX LoRA jobs, one per condition, using the private split directories and writing adapters under ignored `output/private-adapters/`. This path is resource-constrained and uses a workaround for the local Python environment, but it is sufficient to proceed without remote compute. It still does not change the paper claim until the adapters are trained and evaluated on the executable held-out tasks.
+
 ---
 
 ## 10. Threats to Validity
