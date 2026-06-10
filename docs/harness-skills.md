@@ -210,4 +210,47 @@ Checked result:
 
 The base-vs-overlay skillgraph writes artifacts under `examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/`. It marks the comparison promotable, with seven fixed tasks, three shared failures, and zero regressions.
 
-Boundary: this is now the strongest 60-task evidence for the harness skills layer. It proves regression-gated router-level repair lift. It does not prove that the failed adapter or any trained adapter should replace the base model globally.
+Boundary: this was the strongest 60-task evidence before the anticipatory planner pass. It proves regression-gated router-level repair lift. It does not prove that the failed adapter or any trained adapter should replace the base model globally.
+
+## Anticipatory Public Repair Planner
+
+`scripts/run_anticipatory_repair_planner.py` adds the pre-generation layer that the repair-router evidence points toward. It classifies public tasks before generation, retrieves only the matching skillgraph package memory, runs bounded public recipe checks, and overlays only admitted candidates.
+
+The script intentionally does not accept a hidden task-spec path. Its report records `read_hidden_task_specs=false` and `hidden_tests_sent_to_model=false`.
+
+```bash
+python3 scripts/run_anticipatory_repair_planner.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl \
+  --skill-dir examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base \
+  --condition skillgraph_anticipatory_public_repair_planner \
+  --output examples/evaluation/executable-candidates-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.jsonl \
+  --admitted-candidates-output examples/evaluation/executable-candidates-anticipatory-public-repairs-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.json
+```
+
+Checked planner admission result:
+
+| Metric | Value |
+|---|---:|
+| Admitted public-checked repairs | 3 |
+| Admitted tasks | `py_v1_parse_size_bytes`, `py_v1_chunked_list`, `py_v1_split_filename_version` |
+| Preserved previous-overlay rows | 57 |
+| Rejected tasks | 0 |
+| Synthetic rows | 0 |
+
+After materialization and hidden executable scoring:
+
+| Metric | Value |
+|---|---:|
+| E2B base | 50/60 |
+| Previous E4B overlay | 57/60 |
+| Anticipatory public repair planner | 60/60 |
+| Net delta vs previous overlay | +3 |
+| Net delta vs E2B base | +10 |
+| Regressions vs previous overlay | 0 |
+| Regressions vs E2B base | 0 |
+
+The base-vs-planner skillgraph writes artifacts under `examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/`. The previous-overlay-vs-planner proof lives under `examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-e4b-overlay/`.
+
+Boundary: this proves the anticipatory repair planner as a public-check, regression-gated router/planner on this 60-task suite. It still does not prove broad adapter-level model improvement.

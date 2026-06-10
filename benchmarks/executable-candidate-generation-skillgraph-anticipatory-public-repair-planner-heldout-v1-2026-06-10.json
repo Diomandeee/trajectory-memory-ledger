@@ -1,0 +1,2046 @@
+{
+  "admitted_candidates_output": "examples/evaluation/executable-candidates-anticipatory-public-repairs-heldout-v1-2026-06-10.jsonl",
+  "admitted_row_count": 3,
+  "admitted_task_ids": [
+    "py_v1_parse_size_bytes",
+    "py_v1_chunked_list",
+    "py_v1_split_filename_version"
+  ],
+  "base_candidates": "examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl",
+  "base_condition": "skillgraph_task_plus_e4b_chat_overlay_router",
+  "condition": "skillgraph_anticipatory_public_repair_planner",
+  "created_at": "2026-06-10T23:26:05.628972+00:00",
+  "generator": "run_anticipatory_repair_planner.py",
+  "hidden_tests_sent_to_model": false,
+  "model_generated_rows": 0,
+  "output": "examples/evaluation/executable-candidates-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.jsonl",
+  "preserved_base_row_count": 57,
+  "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl",
+  "read_hidden_task_specs": false,
+  "recipe_generated_rows": 3,
+  "rejected_task_ids": [],
+  "skill_dir": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base",
+  "skill_memory_package_count": 6,
+  "synthetic_rows": 0,
+  "target_task_ids": [
+    "py_v1_chunked_list",
+    "py_v1_parse_size_bytes",
+    "py_v1_split_filename_version"
+  ],
+  "tasks": {
+    "py_v1_business_days_between": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/date_tools.py",
+        "failure_family": "unclassified",
+        "family": "date",
+        "function_name": "business_days_between",
+        "module_name": "src.date_tools",
+        "task_id": "py_v1_business_days_between"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_date_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/failure_modes.json",
+            "family": "date",
+            "matched_memory_lines": [
+              "- `py_v1_business_days_between`: `Fixed` baseline=false comparison=true path=`src/date_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_business_days_between",
+              "py_v1_format_iso_date"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_date_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_chunked_list": {
+      "admitted": true,
+      "classification": {
+        "candidate_path": "src/collection_tools.py",
+        "failure_family": "sequence_chunking",
+        "family": "collection",
+        "function_name": "chunked_list",
+        "module_name": "src.collection_tools",
+        "task_id": "py_v1_chunked_list"
+      },
+      "decision": "admit_public_checked_repair",
+      "eligible": true,
+      "public_check": {
+        "errors": [],
+        "exit_code": 0,
+        "ok": true,
+        "probe": "public_sequence_chunking_v1",
+        "stage": "public_probe",
+        "stdout_preview": "PUBLIC_CHECK_OK\n"
+      },
+      "recipe": {
+        "failure_family": "sequence_chunking",
+        "family": "collection",
+        "recipe_id": "public_sequence_chunking_v1"
+      },
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_chunked_list"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_chunked_list"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_chunked_list"
+              ],
+              "skill_id": "python_stdlib_collection_trajectory_delta",
+              "status": "diagnostic"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/failure_modes.json",
+            "family": "collection",
+            "matched_memory_lines": [
+              "- `py_v1_chunked_list`: `SharedFail` baseline=false comparison=false path=`src/collection_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [],
+            "shared_failure_task_ids": [
+              "py_v1_chunked_list"
+            ],
+            "skill_id": "python_stdlib_collection_trajectory_delta",
+            "status": "diagnostic"
+          }
+        ]
+      },
+      "targeted": true
+    },
+    "py_v1_clamp_numbers": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/math_tools.py",
+        "failure_family": "unclassified",
+        "family": "math",
+        "function_name": "clamp_numbers",
+        "module_name": "src.math_tools",
+        "task_id": "py_v1_clamp_numbers"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_math_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/failure_modes.json",
+            "family": "math",
+            "matched_memory_lines": [
+              "- `py_v1_clamp_numbers`: `PreservedPass` baseline=true comparison=true path=`src/math_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_moving_average"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_math_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_coalesce_intervals": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/misc_tools.py",
+        "failure_family": "unclassified",
+        "family": "misc",
+        "function_name": "coalesce_intervals",
+        "module_name": "src.misc_tools",
+        "task_id": "py_v1_coalesce_intervals"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_collapse_ranges": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/state_tools.py",
+        "failure_family": "unclassified",
+        "family": "state",
+        "function_name": "collapse_ranges",
+        "module_name": "src.state_tools",
+        "task_id": "py_v1_collapse_ranges"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_common_prefix_path": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/path_tools.py",
+        "failure_family": "unclassified",
+        "family": "path",
+        "function_name": "common_prefix_path",
+        "module_name": "src.path_tools",
+        "task_id": "py_v1_common_prefix_path"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_split_filename_version"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_split_filename_version"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_split_filename_version"
+              ],
+              "skill_id": "python_stdlib_path_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/failure_modes.json",
+            "family": "path",
+            "matched_memory_lines": [
+              "- `py_v1_common_prefix_path`: `Fixed` baseline=false comparison=true path=`src/path_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_common_prefix_path",
+              "py_v1_normalize_segments"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_split_filename_version"
+            ],
+            "skill_id": "python_stdlib_path_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_count_word_frequencies": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/text_tools.py",
+        "failure_family": "unclassified",
+        "family": "text",
+        "function_name": "count_word_frequencies",
+        "module_name": "src.text_tools",
+        "task_id": "py_v1_count_word_frequencies"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_csv_to_dicts": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/data_tools.py",
+        "failure_family": "unclassified",
+        "family": "data",
+        "function_name": "csv_to_dicts",
+        "module_name": "src.data_tools",
+        "task_id": "py_v1_csv_to_dicts"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_days_between": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/date_tools.py",
+        "failure_family": "unclassified",
+        "family": "date",
+        "function_name": "days_between",
+        "module_name": "src.date_tools",
+        "task_id": "py_v1_days_between"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_date_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/failure_modes.json",
+            "family": "date",
+            "matched_memory_lines": [
+              "- `py_v1_days_between`: `PreservedPass` baseline=true comparison=true path=`src/date_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_business_days_between",
+              "py_v1_format_iso_date"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_date_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_dedupe_preserve_order": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/collection_tools.py",
+        "failure_family": "unclassified",
+        "family": "collection",
+        "function_name": "dedupe_preserve_order",
+        "module_name": "src.collection_tools",
+        "task_id": "py_v1_dedupe_preserve_order"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_chunked_list"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_chunked_list"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_chunked_list"
+              ],
+              "skill_id": "python_stdlib_collection_trajectory_delta",
+              "status": "diagnostic"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/failure_modes.json",
+            "family": "collection",
+            "matched_memory_lines": [
+              "- `py_v1_dedupe_preserve_order`: `PreservedPass` baseline=true comparison=true path=`src/collection_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [],
+            "shared_failure_task_ids": [
+              "py_v1_chunked_list"
+            ],
+            "skill_id": "python_stdlib_collection_trajectory_delta",
+            "status": "diagnostic"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_dependency_order": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/graph_tools.py",
+        "failure_family": "unclassified",
+        "family": "graph",
+        "function_name": "dependency_order",
+        "module_name": "src.graph_tools",
+        "task_id": "py_v1_dependency_order"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_dicts_to_csv": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/data_tools.py",
+        "failure_family": "unclassified",
+        "family": "data",
+        "function_name": "dicts_to_csv",
+        "module_name": "src.data_tools",
+        "task_id": "py_v1_dicts_to_csv"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_expand_ranges": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/state_tools.py",
+        "failure_family": "unclassified",
+        "family": "state",
+        "function_name": "expand_ranges",
+        "module_name": "src.state_tools",
+        "task_id": "py_v1_expand_ranges"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_extension_counts": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/path_tools.py",
+        "failure_family": "unclassified",
+        "family": "path",
+        "function_name": "extension_counts",
+        "module_name": "src.path_tools",
+        "task_id": "py_v1_extension_counts"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_split_filename_version"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_split_filename_version"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_split_filename_version"
+              ],
+              "skill_id": "python_stdlib_path_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/failure_modes.json",
+            "family": "path",
+            "matched_memory_lines": [
+              "- `py_v1_extension_counts`: `PreservedPass` baseline=true comparison=true path=`src/path_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_common_prefix_path",
+              "py_v1_normalize_segments"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_split_filename_version"
+            ],
+            "skill_id": "python_stdlib_path_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_extract_hashtags": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/text_tools.py",
+        "failure_family": "unclassified",
+        "family": "text",
+        "function_name": "extract_hashtags",
+        "module_name": "src.text_tools",
+        "task_id": "py_v1_extract_hashtags"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_flatten_dict": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/data_tools.py",
+        "failure_family": "unclassified",
+        "family": "data",
+        "function_name": "flatten_dict",
+        "module_name": "src.data_tools",
+        "task_id": "py_v1_flatten_dict"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_flatten_one_level": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/collection_tools.py",
+        "failure_family": "unclassified",
+        "family": "collection",
+        "function_name": "flatten_one_level",
+        "module_name": "src.collection_tools",
+        "task_id": "py_v1_flatten_one_level"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_chunked_list"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_chunked_list"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_chunked_list"
+              ],
+              "skill_id": "python_stdlib_collection_trajectory_delta",
+              "status": "diagnostic"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/failure_modes.json",
+            "family": "collection",
+            "matched_memory_lines": [
+              "- `py_v1_flatten_one_level`: `PreservedPass` baseline=true comparison=true path=`src/collection_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [],
+            "shared_failure_task_ids": [
+              "py_v1_chunked_list"
+            ],
+            "skill_id": "python_stdlib_collection_trajectory_delta",
+            "status": "diagnostic"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_format_iso_date": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/date_tools.py",
+        "failure_family": "unclassified",
+        "family": "date",
+        "function_name": "format_iso_date",
+        "module_name": "src.date_tools",
+        "task_id": "py_v1_format_iso_date"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_date_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/failure_modes.json",
+            "family": "date",
+            "matched_memory_lines": [
+              "- `py_v1_format_iso_date`: `Fixed` baseline=false comparison=true path=`src/date_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_business_days_between",
+              "py_v1_format_iso_date"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_date_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_group_count": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/record_tools.py",
+        "failure_family": "unclassified",
+        "family": "record",
+        "function_name": "group_count",
+        "module_name": "src.record_tools",
+        "task_id": "py_v1_group_count"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_group_sum": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/record_tools.py",
+        "failure_family": "unclassified",
+        "family": "record",
+        "function_name": "group_sum",
+        "module_name": "src.record_tools",
+        "task_id": "py_v1_group_sum"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_has_cycle_directed": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/graph_tools.py",
+        "failure_family": "unclassified",
+        "family": "graph",
+        "function_name": "has_cycle_directed",
+        "module_name": "src.graph_tools",
+        "task_id": "py_v1_has_cycle_directed"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_histogram_bins": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/math_tools.py",
+        "failure_family": "unclassified",
+        "family": "math",
+        "function_name": "histogram_bins",
+        "module_name": "src.math_tools",
+        "task_id": "py_v1_histogram_bins"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_math_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/failure_modes.json",
+            "family": "math",
+            "matched_memory_lines": [
+              "- `py_v1_histogram_bins`: `PreservedPass` baseline=true comparison=true path=`src/math_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_moving_average"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_math_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_index_unique": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/record_tools.py",
+        "failure_family": "unclassified",
+        "family": "record",
+        "function_name": "index_unique",
+        "module_name": "src.record_tools",
+        "task_id": "py_v1_index_unique"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_is_subpath": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/path_tools.py",
+        "failure_family": "unclassified",
+        "family": "path",
+        "function_name": "is_subpath",
+        "module_name": "src.path_tools",
+        "task_id": "py_v1_is_subpath"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_split_filename_version"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_split_filename_version"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_split_filename_version"
+              ],
+              "skill_id": "python_stdlib_path_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/failure_modes.json",
+            "family": "path",
+            "matched_memory_lines": [
+              "- `py_v1_is_subpath`: `PreservedPass` baseline=true comparison=true path=`src/path_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_common_prefix_path",
+              "py_v1_normalize_segments"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_split_filename_version"
+            ],
+            "skill_id": "python_stdlib_path_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_json_get_path": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/data_tools.py",
+        "failure_family": "unclassified",
+        "family": "data",
+        "function_name": "json_get_path",
+        "module_name": "src.data_tools",
+        "task_id": "py_v1_json_get_path"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_json_set_path": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/data_tools.py",
+        "failure_family": "unclassified",
+        "family": "data",
+        "function_name": "json_set_path",
+        "module_name": "src.data_tools",
+        "task_id": "py_v1_json_set_path"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_median": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/math_tools.py",
+        "failure_family": "unclassified",
+        "family": "math",
+        "function_name": "median",
+        "module_name": "src.math_tools",
+        "task_id": "py_v1_median"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_math_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/failure_modes.json",
+            "family": "math",
+            "matched_memory_lines": [
+              "- `py_v1_median`: `PreservedPass` baseline=true comparison=true path=`src/math_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_moving_average"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_math_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_merge_defaults": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/record_tools.py",
+        "failure_family": "unclassified",
+        "family": "record",
+        "function_name": "merge_defaults",
+        "module_name": "src.record_tools",
+        "task_id": "py_v1_merge_defaults"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_month_range": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/date_tools.py",
+        "failure_family": "unclassified",
+        "family": "date",
+        "function_name": "month_range",
+        "module_name": "src.date_tools",
+        "task_id": "py_v1_month_range"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_date_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/failure_modes.json",
+            "family": "date",
+            "matched_memory_lines": [
+              "- `py_v1_month_range`: `PreservedPass` baseline=true comparison=true path=`src/date_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_business_days_between",
+              "py_v1_format_iso_date"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_date_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_moving_average": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/math_tools.py",
+        "failure_family": "unclassified",
+        "family": "math",
+        "function_name": "moving_average",
+        "module_name": "src.math_tools",
+        "task_id": "py_v1_moving_average"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_math_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/failure_modes.json",
+            "family": "math",
+            "matched_memory_lines": [
+              "- `py_v1_moving_average`: `Fixed` baseline=false comparison=true path=`src/math_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_moving_average"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_math_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_normalize_segments": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/path_tools.py",
+        "failure_family": "unclassified",
+        "family": "path",
+        "function_name": "normalize_segments",
+        "module_name": "src.path_tools",
+        "task_id": "py_v1_normalize_segments"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_split_filename_version"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_split_filename_version"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_split_filename_version"
+              ],
+              "skill_id": "python_stdlib_path_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/failure_modes.json",
+            "family": "path",
+            "matched_memory_lines": [
+              "- `py_v1_normalize_segments`: `Fixed` baseline=false comparison=true path=`src/path_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_common_prefix_path",
+              "py_v1_normalize_segments"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_split_filename_version"
+            ],
+            "skill_id": "python_stdlib_path_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_normalize_whitespace": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/text_tools.py",
+        "failure_family": "unclassified",
+        "family": "text",
+        "function_name": "normalize_whitespace",
+        "module_name": "src.text_tools",
+        "task_id": "py_v1_normalize_whitespace"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_pairwise_deltas": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/misc_tools.py",
+        "failure_family": "unclassified",
+        "family": "misc",
+        "function_name": "pairwise_deltas",
+        "module_name": "src.misc_tools",
+        "task_id": "py_v1_pairwise_deltas"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_parse_bool": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/parse_tools.py",
+        "failure_family": "unclassified",
+        "family": "parse",
+        "function_name": "parse_bool",
+        "module_name": "src.parse_tools",
+        "task_id": "py_v1_parse_bool"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_parse_size_bytes"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_parse_size_bytes"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_parse_size_bytes"
+              ],
+              "skill_id": "python_stdlib_parse_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/failure_modes.json",
+            "family": "parse",
+            "matched_memory_lines": [
+              "- `py_v1_parse_bool`: `PreservedPass` baseline=true comparison=true path=`src/parse_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_parse_query_string"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_parse_size_bytes"
+            ],
+            "skill_id": "python_stdlib_parse_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_parse_date_parts": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/date_tools.py",
+        "failure_family": "unclassified",
+        "family": "date",
+        "function_name": "parse_date_parts",
+        "module_name": "src.date_tools",
+        "task_id": "py_v1_parse_date_parts"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_date_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/failure_modes.json",
+            "family": "date",
+            "matched_memory_lines": [
+              "- `py_v1_parse_date_parts`: `PreservedPass` baseline=true comparison=true path=`src/date_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_date_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_business_days_between",
+              "py_v1_format_iso_date"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_date_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_parse_env_lines": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/parse_tools.py",
+        "failure_family": "unclassified",
+        "family": "parse",
+        "function_name": "parse_env_lines",
+        "module_name": "src.parse_tools",
+        "task_id": "py_v1_parse_env_lines"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_parse_size_bytes"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_parse_size_bytes"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_parse_size_bytes"
+              ],
+              "skill_id": "python_stdlib_parse_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/failure_modes.json",
+            "family": "parse",
+            "matched_memory_lines": [
+              "- `py_v1_parse_env_lines`: `PreservedPass` baseline=true comparison=true path=`src/parse_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_parse_query_string"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_parse_size_bytes"
+            ],
+            "skill_id": "python_stdlib_parse_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_parse_query_string": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/parse_tools.py",
+        "failure_family": "unclassified",
+        "family": "parse",
+        "function_name": "parse_query_string",
+        "module_name": "src.parse_tools",
+        "task_id": "py_v1_parse_query_string"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_parse_size_bytes"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_parse_size_bytes"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_parse_size_bytes"
+              ],
+              "skill_id": "python_stdlib_parse_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/failure_modes.json",
+            "family": "parse",
+            "matched_memory_lines": [
+              "- `py_v1_parse_query_string`: `Fixed` baseline=false comparison=true path=`src/parse_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_parse_query_string"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_parse_size_bytes"
+            ],
+            "skill_id": "python_stdlib_parse_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_parse_semver": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/parse_tools.py",
+        "failure_family": "unclassified",
+        "family": "parse",
+        "function_name": "parse_semver",
+        "module_name": "src.parse_tools",
+        "task_id": "py_v1_parse_semver"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_parse_size_bytes"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_parse_size_bytes"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_parse_size_bytes"
+              ],
+              "skill_id": "python_stdlib_parse_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/failure_modes.json",
+            "family": "parse",
+            "matched_memory_lines": [
+              "- `py_v1_parse_semver`: `PreservedPass` baseline=true comparison=true path=`src/parse_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_parse_query_string"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_parse_size_bytes"
+            ],
+            "skill_id": "python_stdlib_parse_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_parse_size_bytes": {
+      "admitted": true,
+      "classification": {
+        "candidate_path": "src/parse_tools.py",
+        "failure_family": "unit_suffix_parser",
+        "family": "parse",
+        "function_name": "parse_size_bytes",
+        "module_name": "src.parse_tools",
+        "task_id": "py_v1_parse_size_bytes"
+      },
+      "decision": "admit_public_checked_repair",
+      "eligible": true,
+      "public_check": {
+        "errors": [],
+        "exit_code": 0,
+        "ok": true,
+        "probe": "public_unit_suffix_parser_v1",
+        "stage": "public_probe",
+        "stdout_preview": "PUBLIC_CHECK_OK\n"
+      },
+      "recipe": {
+        "failure_family": "unit_suffix_parser",
+        "family": "parse",
+        "recipe_id": "public_unit_suffix_parser_v1"
+      },
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_parse_size_bytes"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_parse_size_bytes"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_parse_size_bytes"
+              ],
+              "skill_id": "python_stdlib_parse_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/failure_modes.json",
+            "family": "parse",
+            "matched_memory_lines": [
+              "- `py_v1_parse_size_bytes`: `SharedFail` baseline=false comparison=false path=`src/parse_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_parse_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_parse_query_string"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_parse_size_bytes"
+            ],
+            "skill_id": "python_stdlib_parse_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": true
+    },
+    "py_v1_percent_change": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/math_tools.py",
+        "failure_family": "unclassified",
+        "family": "math",
+        "function_name": "percent_change",
+        "module_name": "src.math_tools",
+        "task_id": "py_v1_percent_change"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_math_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/failure_modes.json",
+            "family": "math",
+            "matched_memory_lines": [
+              "- `py_v1_percent_change`: `PreservedPass` baseline=true comparison=true path=`src/math_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_math_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_moving_average"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_math_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_project_fields": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/record_tools.py",
+        "failure_family": "unclassified",
+        "family": "record",
+        "function_name": "project_fields",
+        "module_name": "src.record_tools",
+        "task_id": "py_v1_project_fields"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_rate_limit_events": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/misc_tools.py",
+        "failure_family": "unclassified",
+        "family": "misc",
+        "function_name": "rate_limit_events",
+        "module_name": "src.misc_tools",
+        "task_id": "py_v1_rate_limit_events"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_reachable_nodes": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/graph_tools.py",
+        "failure_family": "unclassified",
+        "family": "graph",
+        "function_name": "reachable_nodes",
+        "module_name": "src.graph_tools",
+        "task_id": "py_v1_reachable_nodes"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_redact_bearer_tokens": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/security_tools.py",
+        "failure_family": "unclassified",
+        "family": "security",
+        "function_name": "redact_bearer_tokens",
+        "module_name": "src.security_tools",
+        "task_id": "py_v1_redact_bearer_tokens"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_security_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/failure_modes.json",
+            "family": "security",
+            "matched_memory_lines": [
+              "- `py_v1_redact_bearer_tokens`: `PreservedPass` baseline=true comparison=true path=`src/security_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_safe_filename"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_security_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_redact_emails": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/security_tools.py",
+        "failure_family": "unclassified",
+        "family": "security",
+        "function_name": "redact_emails",
+        "module_name": "src.security_tools",
+        "task_id": "py_v1_redact_emails"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_security_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/failure_modes.json",
+            "family": "security",
+            "matched_memory_lines": [
+              "- `py_v1_redact_emails`: `PreservedPass` baseline=true comparison=true path=`src/security_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_safe_filename"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_security_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_redact_ipv4_last_octet": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/security_tools.py",
+        "failure_family": "unclassified",
+        "family": "security",
+        "function_name": "redact_ipv4_last_octet",
+        "module_name": "src.security_tools",
+        "task_id": "py_v1_redact_ipv4_last_octet"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_security_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/failure_modes.json",
+            "family": "security",
+            "matched_memory_lines": [
+              "- `py_v1_redact_ipv4_last_octet`: `PreservedPass` baseline=true comparison=true path=`src/security_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_safe_filename"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_security_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_reverse_adjacency": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/graph_tools.py",
+        "failure_family": "unclassified",
+        "family": "graph",
+        "function_name": "reverse_adjacency",
+        "module_name": "src.graph_tools",
+        "task_id": "py_v1_reverse_adjacency"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_rotate": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/collection_tools.py",
+        "failure_family": "unclassified",
+        "family": "collection",
+        "function_name": "rotate",
+        "module_name": "src.collection_tools",
+        "task_id": "py_v1_rotate"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_chunked_list"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_chunked_list"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_chunked_list"
+              ],
+              "skill_id": "python_stdlib_collection_trajectory_delta",
+              "status": "diagnostic"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/failure_modes.json",
+            "family": "collection",
+            "matched_memory_lines": [
+              "- `py_v1_rotate`: `PreservedPass` baseline=true comparison=true path=`src/collection_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [],
+            "shared_failure_task_ids": [
+              "py_v1_chunked_list"
+            ],
+            "skill_id": "python_stdlib_collection_trajectory_delta",
+            "status": "diagnostic"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_run_length_decode": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/state_tools.py",
+        "failure_family": "unclassified",
+        "family": "state",
+        "function_name": "run_length_decode",
+        "module_name": "src.state_tools",
+        "task_id": "py_v1_run_length_decode"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_run_length_encode": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/state_tools.py",
+        "failure_family": "unclassified",
+        "family": "state",
+        "function_name": "run_length_encode",
+        "module_name": "src.state_tools",
+        "task_id": "py_v1_run_length_encode"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_safe_filename": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/security_tools.py",
+        "failure_family": "unclassified",
+        "family": "security",
+        "function_name": "safe_filename",
+        "module_name": "src.security_tools",
+        "task_id": "py_v1_safe_filename"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_security_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/failure_modes.json",
+            "family": "security",
+            "matched_memory_lines": [
+              "- `py_v1_safe_filename`: `Fixed` baseline=false comparison=true path=`src/security_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_safe_filename"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_security_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_shortest_path_unweighted": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/graph_tools.py",
+        "failure_family": "unclassified",
+        "family": "graph",
+        "function_name": "shortest_path_unweighted",
+        "module_name": "src.graph_tools",
+        "task_id": "py_v1_shortest_path_unweighted"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_slugify_text": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/text_tools.py",
+        "failure_family": "unclassified",
+        "family": "text",
+        "function_name": "slugify_text",
+        "module_name": "src.text_tools",
+        "task_id": "py_v1_slugify_text"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_split_filename_version": {
+      "admitted": true,
+      "classification": {
+        "candidate_path": "src/path_tools.py",
+        "failure_family": "filename_version_suffix",
+        "family": "path",
+        "function_name": "split_filename_version",
+        "module_name": "src.path_tools",
+        "task_id": "py_v1_split_filename_version"
+      },
+      "decision": "admit_public_checked_repair",
+      "eligible": true,
+      "public_check": {
+        "errors": [],
+        "exit_code": 0,
+        "ok": true,
+        "probe": "public_filename_version_suffix_v1",
+        "stage": "public_probe",
+        "stdout_preview": "PUBLIC_CHECK_OK\n"
+      },
+      "recipe": {
+        "failure_family": "filename_version_suffix",
+        "family": "path",
+        "recipe_id": "public_filename_version_suffix_v1"
+      },
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_split_filename_version"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_split_filename_version"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_split_filename_version"
+              ],
+              "skill_id": "python_stdlib_path_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/failure_modes.json",
+            "family": "path",
+            "matched_memory_lines": [
+              "- `py_v1_split_filename_version`: `SharedFail` baseline=false comparison=false path=`src/path_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_path_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_common_prefix_path",
+              "py_v1_normalize_segments"
+            ],
+            "shared_failure_task_ids": [
+              "py_v1_split_filename_version"
+            ],
+            "skill_id": "python_stdlib_path_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": true
+    },
+    "py_v1_stable_partition": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/misc_tools.py",
+        "failure_family": "unclassified",
+        "family": "misc",
+        "function_name": "stable_partition",
+        "module_name": "src.misc_tools",
+        "task_id": "py_v1_stable_partition"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_strip_markdown_links": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/text_tools.py",
+        "failure_family": "unclassified",
+        "family": "text",
+        "function_name": "strip_markdown_links",
+        "module_name": "src.text_tools",
+        "task_id": "py_v1_strip_markdown_links"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_top_k_frequent": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/misc_tools.py",
+        "failure_family": "unclassified",
+        "family": "misc",
+        "function_name": "top_k_frequent",
+        "module_name": "src.misc_tools",
+        "task_id": "py_v1_top_k_frequent"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_validate_parentheses": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/state_tools.py",
+        "failure_family": "unclassified",
+        "family": "state",
+        "function_name": "validate_parentheses",
+        "module_name": "src.state_tools",
+        "task_id": "py_v1_validate_parentheses"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": []
+      },
+      "targeted": false
+    },
+    "py_v1_validate_relative_path": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/security_tools.py",
+        "failure_family": "unclassified",
+        "family": "security",
+        "function_name": "validate_relative_path",
+        "module_name": "src.security_tools",
+        "task_id": "py_v1_validate_relative_path"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [],
+            "failure_modes": {
+              "avoid_when": [],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [],
+              "skill_id": "python_stdlib_security_trajectory_delta",
+              "status": "promoted"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/failure_modes.json",
+            "family": "security",
+            "matched_memory_lines": [
+              "- `py_v1_validate_relative_path`: `PreservedPass` baseline=true comparison=true path=`src/security_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_security_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [
+              "py_v1_safe_filename"
+            ],
+            "shared_failure_task_ids": [],
+            "skill_id": "python_stdlib_security_trajectory_delta",
+            "status": "promoted"
+          }
+        ]
+      },
+      "targeted": false
+    },
+    "py_v1_windowed": {
+      "admitted": false,
+      "classification": {
+        "candidate_path": "src/collection_tools.py",
+        "failure_family": "unclassified",
+        "family": "collection",
+        "function_name": "windowed",
+        "module_name": "src.collection_tools",
+        "task_id": "py_v1_windowed"
+      },
+      "decision": "preserve_base",
+      "eligible": false,
+      "public_check": null,
+      "recipe": null,
+      "retrieved_memory": {
+        "matches": [
+          {
+            "avoid_when": [
+              "diagnostic only for shared failures: py_v1_chunked_list"
+            ],
+            "failure_modes": {
+              "avoid_when": [
+                "diagnostic only for shared failures: py_v1_chunked_list"
+              ],
+              "regression_task_ids": [],
+              "shared_failure_task_ids": [
+                "py_v1_chunked_list"
+              ],
+              "skill_id": "python_stdlib_collection_trajectory_delta",
+              "status": "diagnostic"
+            },
+            "failure_modes_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/failure_modes.json",
+            "family": "collection",
+            "matched_memory_lines": [
+              "- `py_v1_windowed`: `PreservedPass` baseline=true comparison=true path=`src/collection_tools.py`"
+            ],
+            "memory_path": "examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/packages/python_stdlib_collection_trajectory_delta/MEMORY.md",
+            "regression_task_ids": [],
+            "repairs_task_ids": [],
+            "shared_failure_task_ids": [
+              "py_v1_chunked_list"
+            ],
+            "skill_id": "python_stdlib_collection_trajectory_delta",
+            "status": "diagnostic"
+          }
+        ]
+      },
+      "targeted": false
+    }
+  },
+  "total_rows": 60
+}

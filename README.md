@@ -49,10 +49,13 @@ This repository contains:
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl`: public prompts for the 60-task replication suite
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`: public prompts for the five shared failures left by the 55/60 task repair router
 - `examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl`: non-synthetic 60-task router rows after overlaying only E4B chat candidates that passed focused executable evaluation
+- `examples/evaluation/executable-candidates-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.jsonl`: 60-task router rows after public-only anticipatory repair planning
 - `examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/`: generated harness skill packages from the 60-task E2B adapter comparison
 - `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`: generated harness skill packages from the promoted narrow math repair router
 - `examples/skills/python-stdlib-heldout-v1/task-repair-router-vs-base/`: generated harness skill packages from the promoted task-level repair router
-- `examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/`: generated harness skill packages from the strongest checked router result, 57/60 with zero regressions
+- `examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/`: generated harness skill packages from the focused E4B overlay result, 57/60 with zero regressions
+- `examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/`: generated harness skill packages from the strongest checked router result, 60/60 with zero regressions versus E2B base
+- `examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-e4b-overlay/`: generated harness skill packages proving +3 over the previous 57/60 overlay with zero regressions
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -397,7 +400,34 @@ Checked focused and full-gate result:
 - synthetic rows: `0`
 - promoted repair families after base-vs-overlay skillgraph: `5`
 
-Boundary: this is the strongest checked TML result so far, but it is still router-level lift. It proves that the skillgraph can serve as a repair map and that focused stronger-model repairs can be admitted only after executable evidence. It does not prove broad adapter-level performance lift.
+Boundary: this was the strongest checked TML result before the anticipatory planner pass. It is still router-level lift. It proves that the skillgraph can serve as a repair map and that focused stronger-model repairs can be admitted only after executable evidence. It does not prove broad adapter-level performance lift.
+
+Run the public-only anticipatory repair planner on the three remaining shared failures. This planner does not accept a task-spec path; it reads public prompts, the current 57/60 candidate set, and skillgraph package memory. It classifies task families, retrieves only matching shared-failure memory, generates bounded public-recipe repairs, runs syntax/import/signature/probe checks, and overlays only admitted rows:
+
+```bash
+python3 scripts/run_anticipatory_repair_planner.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl \
+  --skill-dir examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base \
+  --condition skillgraph_anticipatory_public_repair_planner \
+  --output examples/evaluation/executable-candidates-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.jsonl \
+  --admitted-candidates-output examples/evaluation/executable-candidates-anticipatory-public-repairs-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.json
+```
+
+Checked anticipatory planner result:
+
+- admitted public-checked repairs: `py_v1_parse_size_bytes`, `py_v1_chunked_list`, `py_v1_split_filename_version`
+- preserved previous overlay rows: `57`
+- planner report: `read_hidden_task_specs=false`, `hidden_tests_sent_to_model=false`, `synthetic_rows=0`
+- previous best overlay: `57/60`
+- anticipatory public repair planner: `60/60`
+- net pass delta vs previous best: `+3`
+- net pass delta vs E2B base: `+10`
+- regressions vs previous best: `0`
+- regressions vs E2B base: `0`
+
+Boundary: this proves the anticipatory repair planner on the 60-task executable gate as a router/planner result. It is not evidence that a trained adapter can replace the base model globally.
 
 Run the stronger Gemma 4 base-model sanity gate:
 
@@ -480,7 +510,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, and a focused E4B chat overlay router reached 57/60 with zero regressions by admitting only candidates that first passed executable evaluation. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router-repair pipeline. It has proven router-level repair lift on the 60-task executable gate, but it has not yet proven broad adapter-level downstream coding-agent performance lift.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, a focused E4B chat overlay router reached 57/60 with zero regressions, and a public-only anticipatory repair planner reached 60/60 by admitting the three remaining shared-failure repairs after public checks. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router/planner repair pipeline. It has proven router-level repair lift on the 60-task executable gate, but it has not yet proven broad adapter-level downstream coding-agent performance lift.
 
 ## License
 

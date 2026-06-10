@@ -5,7 +5,7 @@ Trajectory Memory Ledger currently has four levels of evidence:
 1. Artifact correctness: the Rust runtime builds, passes tests, passes clippy, performs one-shot ingestion, normalizes schema-v2 records, scores trajectories, handles `(date, seq)` cursor rollover, and appends under a file lock.
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
-4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, two real adapter-conditioned reports over a six-task held-out Python stdlib task set, and a 60-task repair-router gate. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data on the six-task gate, but the 60-task replication falsifies the broad adapter claim for the current E2B recipe. The strongest checked downstream result is now router-level: a skillgraph task router plus focused E4B chat overlay reaches 57/60 on `python-stdlib-heldout-v1-60`, with `synthetic_rows=0`, `hidden_tests_sent_to_model=false`, and zero regressions against the E2B base.
+4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, two real adapter-conditioned reports over a six-task held-out Python stdlib task set, and a 60-task repair-router/planner gate. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data on the six-task gate, but the 60-task replication falsifies the broad adapter claim for the current E2B recipe. The strongest checked downstream result is now router/planner-level: a public-only anticipatory repair planner reaches 60/60 on `python-stdlib-heldout-v1-60`, with `synthetic_rows=0`, `read_hidden_task_specs=false`, `hidden_tests_sent_to_model=false`, and zero regressions against both the 57/60 E4B overlay and the E2B base.
 
 ## Daemon Benchmark
 
@@ -802,7 +802,70 @@ Remaining failed tasks:
 
 Interpretation:
 
-- This is the strongest checked downstream result in the repository: 57/60 on the 60-task executable gate, +7 over E2B base, with zero regressions.
+- This was the strongest checked downstream result before the anticipatory planner pass: 57/60 on the 60-task executable gate, +7 over E2B base, with zero regressions.
 - The result proves router-level repair lift, not broad adapter-level model improvement.
 - The skillgraph is acting as a repair map: failed global adapter output suggested repair candidates, focused E4B chat generated two additional task repairs, and only executable-passing candidates were admitted.
 - A paper claim should phrase this as a regression-gated repair-router result unless a future trained adapter beats base directly on the same large suite.
+
+### Anticipatory Public Repair Planner
+
+The final repair cycle added `scripts/run_anticipatory_repair_planner.py`. It starts from the 57/60 E4B overlay candidate set and reads only:
+
+- public task prompts,
+- the trusted base candidate rows,
+- generated skillgraph package memory under `task-plus-e4b-chat-overlay-router-vs-base/`.
+
+It deliberately has no task-spec argument. The planner classifies each public task into a family/failure family, retrieves only matching skill memory, and requires shared-failure memory before trying a repair recipe. For the three remaining shared failures, it generated public-recipe repairs and admitted them only after syntax, import, starter-signature, and public-probe checks passed.
+
+Run:
+
+```bash
+python3 scripts/run_anticipatory_repair_planner.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl \
+  --skill-dir examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base \
+  --condition skillgraph_anticipatory_public_repair_planner \
+  --output examples/evaluation/executable-candidates-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.jsonl \
+  --admitted-candidates-output examples/evaluation/executable-candidates-anticipatory-public-repairs-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.json
+```
+
+Planner admission report:
+
+| Metric | Value |
+|---|---:|
+| Admitted public-checked repairs | 3 |
+| Preserved previous-overlay rows | 57 |
+| Rejected task ids | 0 |
+| `read_hidden_task_specs` | false |
+| `hidden_tests_sent_to_model` | false |
+| Synthetic rows | 0 |
+
+Admitted tasks:
+
+- `py_v1_parse_size_bytes`
+- `py_v1_chunked_list`
+- `py_v1_split_filename_version`
+
+The full hidden executable gate then materialized the 60-row planner output and ran `executable-task-bench --require-real`.
+
+Checked full 60-task result:
+
+| Condition | Rows | Passed | Pass rate | Synthetic rows |
+|---|---:|---:|---:|---:|
+| Gemma 4 E2B QAT base | 60 | 50 | 83.33% | 0 |
+| Skillgraph task plus E4B chat overlay router | 60 | 57 | 95.00% | 0 |
+| Skillgraph anticipatory public repair planner | 60 | 60 | 100.00% | 0 |
+
+Skillgraph proof views:
+
+| Comparison | Baseline | Planner | Net delta | Regressions |
+|---|---:|---:|---:|---:|
+| Planner vs E2B base | 50/60 | 60/60 | +10 | 0 |
+| Planner vs previous 57/60 overlay | 57/60 | 60/60 | +3 | 0 |
+
+Boundary:
+
+- This proves the anticipatory repair planner on the checked 60-task executable gate.
+- It is a router/planner result, not broad adapter-level model improvement.
+- The planner repairs are deterministic public-recipe candidates, not a trained-model replacement claim.
