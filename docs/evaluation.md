@@ -5,7 +5,7 @@ Trajectory Memory Ledger currently has four levels of evidence:
 1. Artifact correctness: the Rust runtime builds, passes tests, passes clippy, performs one-shot ingestion, normalizes schema-v2 records, scores trajectories, handles `(date, seq)` cursor rollover, and appends under a file lock.
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
-4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, and two real adapter-conditioned reports over a six-task held-out Python stdlib task set. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data: `reward_selected` scores 5/6, `random` scores 3/6, and `full_ledger` scores 2/6 with `synthetic_rows=0` and `hidden_tests_sent_to_model=false`. This is a real downstream lift signal on the small executable gate; the next validity step is replication on a larger task set and stronger model tier.
+4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, two real adapter-conditioned reports over a six-task held-out Python stdlib task set, and a 60-task repair-router gate. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data on the six-task gate, but the 60-task replication falsifies the broad adapter claim for the current E2B recipe. The strongest checked downstream result is now router-level: a skillgraph task router plus focused E4B chat overlay reaches 57/60 on `python-stdlib-heldout-v1-60`, with `synthetic_rows=0`, `hidden_tests_sent_to_model=false`, and zero regressions against the E2B base.
 
 ## Daemon Benchmark
 
@@ -529,7 +529,7 @@ Checked 60-task result:
 Interpretation:
 
 - The larger suite falsifies the broad version of the six-task lift claim for the current E2B adapter recipe.
-- Current evidence does not prove that TML improves downstream coding-agent task completion.
+- This adapter comparison does not prove that TML improves downstream coding-agent task completion by replacing the base model.
 - The executable evaluation path is stronger after this run: oracle validation, non-synthetic model rows, hidden-test execution, and base/adapted comparisons all work on a 60-task suite.
 - Validation loss and small-suite lift are not enough. Future claims need larger-suite downstream pass-rate lift.
 
@@ -706,3 +706,103 @@ Interpretation:
 - It is router-level lift, not adapter-level lift: 55 base rows are preserved and only five adapter repair rows are used.
 - It is stronger evidence for the repair-map architecture than the failed global adapter comparison.
 - The next experiment should attack the five shared failures with a stronger model/recipe, then require the same hidden 60-task no-regression gate before adding more active skills.
+
+### Focused E4B Chat Overlay Router
+
+The next repair cycle used the skillgraph as a repair map rather than a proof artifact. It generated candidates only for the five shared failures left by the 55/60 task-level repair router:
+
+- `py_v1_parse_size_bytes`
+- `py_v1_chunked_list`
+- `py_v1_common_prefix_path`
+- `py_v1_normalize_segments`
+- `py_v1_split_filename_version`
+
+The focused public prompt subset is checked in at `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`. Candidate generation used `scripts/generate_executable_candidates_mlx_lm.py` with the in-process MLX-LM API, a Gemma chat template, `mlx-community/gemma-4-E4B-it-qat-4bit`, 512 generation tokens, and one public-only repair attempt. A Python 3.12 virtual environment on Mac5 was required because the default Python 3.9 MLX stack could not load Gemma 4 model types. The 12B local directory still failed under the updated stack because `gemma4_unified` was unsupported, so the checked stronger recipe is E4B chat, not 12B.
+
+Run shape:
+
+```bash
+python3 scripts/generate_executable_candidates_mlx_lm.py \
+  --backend api \
+  --chat-template \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl \
+  --model ~/Desktop/tml-gemma4-models/gemma-4-E4B-it-qat-4bit \
+  --condition gemma4_e4b_lm_chat_shared_failure_focus_512_v1 \
+  --output examples/evaluation/executable-candidates-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.jsonl \
+  --raw-dir output/private-generation-raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10 \
+  --report benchmarks/executable-candidate-generation-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.json \
+  --max-tokens 512 \
+  --repair-attempts 1 \
+  --prompt-format raw-python
+```
+
+Focused hidden-test result:
+
+| Condition | Rows | Passed | Pass rate | Synthetic rows |
+|---|---:|---:|---:|---:|
+| Gemma 4 E4B chat shared-failure focus | 5 | 2 | 40.00% | 0 |
+
+Passed focused repairs:
+
+- `py_v1_common_prefix_path`
+- `py_v1_normalize_segments`
+
+Rejected focused repairs:
+
+- `py_v1_parse_size_bytes`
+- `py_v1_chunked_list`
+- `py_v1_split_filename_version`
+
+`scripts/apply_passed_candidate_overlay_router.py` then started from the 55/60 task repair router and overlaid only focused candidates that passed the focused executable report. It preserved every other base/router row.
+
+```bash
+python3 scripts/apply_passed_candidate_overlay_router.py \
+  --base-candidates examples/evaluation/executable-candidates-skillgraph-task-repair-router-heldout-v1-2026-06-10.jsonl \
+  --repair-candidates examples/evaluation/executable-candidates-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.jsonl \
+  --repair-report benchmarks/executable-task-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.json \
+  --condition skillgraph_task_plus_e4b_chat_overlay_router \
+  --output examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.json
+```
+
+Full 60-task result:
+
+| Condition | Rows | Passed | Pass rate | Synthetic rows |
+|---|---:|---:|---:|---:|
+| Gemma 4 E2B QAT base | 60 | 50 | 83.33% | 0 |
+| Skillgraph task repair router | 60 | 55 | 91.67% | 0 |
+| Skillgraph task plus E4B chat overlay router | 60 | 57 | 95.00% | 0 |
+
+Base-vs-overlay `skillgraph-evolve` result:
+
+| Metric | Value |
+|---|---:|
+| Net pass delta vs E2B base | +7 |
+| Fixed tasks | 7 |
+| Regressed tasks | 0 |
+| Shared failures | 3 |
+| Promoted skills | 5 |
+| Diagnostic skills | 1 |
+
+Fixed tasks:
+
+- `py_v1_business_days_between`
+- `py_v1_common_prefix_path`
+- `py_v1_format_iso_date`
+- `py_v1_moving_average`
+- `py_v1_normalize_segments`
+- `py_v1_parse_query_string`
+- `py_v1_safe_filename`
+
+Remaining failed tasks:
+
+- `py_v1_parse_size_bytes`
+- `py_v1_chunked_list`
+- `py_v1_split_filename_version`
+
+Interpretation:
+
+- This is the strongest checked downstream result in the repository: 57/60 on the 60-task executable gate, +7 over E2B base, with zero regressions.
+- The result proves router-level repair lift, not broad adapter-level model improvement.
+- The skillgraph is acting as a repair map: failed global adapter output suggested repair candidates, focused E4B chat generated two additional task repairs, and only executable-passing candidates were admitted.
+- A paper claim should phrase this as a regression-gated repair-router result unless a future trained adapter beats base directly on the same large suite.

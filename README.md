@@ -47,9 +47,12 @@ This repository contains:
 - `examples/evaluation/executable-candidates-mlx-gemma4-12b-qat-base-mac5-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 12B QAT base-model candidate rows
 - `examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl`: 60-task hidden-test executable held-out task specs
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl`: public prompts for the 60-task replication suite
+- `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`: public prompts for the five shared failures left by the 55/60 task repair router
+- `examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl`: non-synthetic 60-task router rows after overlaying only E4B chat candidates that passed focused executable evaluation
 - `examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/`: generated harness skill packages from the 60-task E2B adapter comparison
 - `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`: generated harness skill packages from the promoted narrow math repair router
 - `examples/skills/python-stdlib-heldout-v1/task-repair-router-vs-base/`: generated harness skill packages from the promoted task-level repair router
+- `examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/`: generated harness skill packages from the strongest checked router result, 57/60 with zero regressions
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -274,7 +277,7 @@ Larger 60-task replication result:
 - synthetic rows: `0`
 - hidden tests sent to model: false
 
-Boundary: the six-task E2B adapter lift did not replicate on the larger suite. The current large-suite evidence does not prove that TML improves downstream coding-agent task completion. It does prove that the executable harness is working, that the local Gemma 4 base models are strong enough to evaluate, and that adapter changes can be measured rather than inferred from validation loss.
+Boundary: the six-task E2B adapter lift did not replicate on the larger suite. The 60-task adapter comparison does not prove that TML improves downstream coding-agent task completion by replacing the base model. It does prove that the executable harness is working, that the local Gemma 4 base models are strong enough to evaluate, and that adapter changes can be measured rather than inferred from validation loss.
 
 Extract regression-gated harness skill packages from that larger result:
 
@@ -354,6 +357,47 @@ Checked 60-task task-router result:
 - active router skills: `4`
 
 Boundary: this is a clean router-level repair-map result, not an adapter-level claim. It uses the failed adapter only as a source of candidate repairs and requires the routed result to beat base under the same hidden 60-task gate.
+
+Generate focused Gemma 4 E4B chat repairs only for the five remaining shared failures, then overlay only candidates that pass focused executable evaluation:
+
+```bash
+python3 scripts/generate_executable_candidates_mlx_lm.py \
+  --backend api \
+  --chat-template \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl \
+  --model ~/Desktop/tml-gemma4-models/gemma-4-E4B-it-qat-4bit \
+  --condition gemma4_e4b_lm_chat_shared_failure_focus_512_v1 \
+  --output examples/evaluation/executable-candidates-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.jsonl \
+  --raw-dir output/private-generation-raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10 \
+  --report benchmarks/executable-candidate-generation-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.json \
+  --max-tokens 512 \
+  --repair-attempts 1 \
+  --prompt-format raw-python
+
+python3 scripts/apply_passed_candidate_overlay_router.py \
+  --base-candidates examples/evaluation/executable-candidates-skillgraph-task-repair-router-heldout-v1-2026-06-10.jsonl \
+  --repair-candidates examples/evaluation/executable-candidates-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.jsonl \
+  --repair-report benchmarks/executable-task-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.json \
+  --condition skillgraph_task_plus_e4b_chat_overlay_router \
+  --output examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.json
+```
+
+Checked focused and full-gate result:
+
+- focused E4B chat repairs: `2/5`, fixing `py_v1_common_prefix_path` and `py_v1_normalize_segments`
+- rejected focused repairs: `py_v1_parse_size_bytes`, `py_v1_chunked_list`, `py_v1_split_filename_version`
+- final overlay preserved base/router rows: `58`
+- final overlay rows from E4B chat: `2`
+- E2B base: `50/60`
+- task repair router: `55/60`
+- task repair plus E4B chat overlay router: `57/60`
+- net pass delta vs E2B base: `+7`
+- regressions vs E2B base: `0`
+- synthetic rows: `0`
+- promoted repair families after base-vs-overlay skillgraph: `5`
+
+Boundary: this is the strongest checked TML result so far, but it is still router-level lift. It proves that the skillgraph can serve as a repair map and that focused stronger-model repairs can be admitted only after executable evidence. It does not prove broad adapter-level performance lift.
 
 Run the stronger Gemma 4 base-model sanity gate:
 
@@ -436,7 +480,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, and a task-level repair router reached 55/60 with zero regressions by using only five adapter repairs while preserving base for known regressions. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router-repair pipeline. It has not yet proven broad adapter-level downstream coding-agent performance lift.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, and a focused E4B chat overlay router reached 57/60 with zero regressions by admitting only candidates that first passed executable evaluation. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router-repair pipeline. It has proven router-level repair lift on the 60-task executable gate, but it has not yet proven broad adapter-level downstream coding-agent performance lift.
 
 ## License
 

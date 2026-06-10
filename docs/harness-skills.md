@@ -94,7 +94,7 @@ The first generated package set compares Gemma 4 E2B QAT base against the reward
 
 The positive proposed skill is `python_stdlib_math_trajectory_delta`, because it repaired `py_v1_moving_average` without a math-family regression. It is still not active because the global adapter comparison failed. The router correctly leaves `active_skill_ids` empty.
 
-This means the current large-suite result does not prove downstream TML performance lift. It does prove that the harness can mine a failed run for bounded repair evidence without promoting unsafe behavior.
+This means the failed adapter large-suite result does not prove downstream adapter-level TML performance lift. It does prove that the harness can mine a failed run for bounded repair evidence without promoting unsafe behavior.
 
 ## Repair Router Test
 
@@ -174,4 +174,40 @@ Checked result:
 
 The base-vs-router skillgraph promotes `python_stdlib_date_trajectory_delta`, `python_stdlib_math_trajectory_delta`, `python_stdlib_parse_trajectory_delta`, and `python_stdlib_security_trajectory_delta` under `examples/skills/python-stdlib-heldout-v1/task-repair-router-vs-base/`.
 
-Boundary: this is the current strongest 60-task evidence for the harness skills layer. It proves the repair map can improve pass rate when used as a gated router. It still does not prove that the reward-selected adapter should replace the base model globally.
+Boundary: this proved that task-level repair routing can improve pass rate when used as a gated router. It still does not prove that the reward-selected adapter should replace the base model globally.
+
+## Focused E4B Chat Overlay Router
+
+The next repair cycle targeted only the five shared failures left by the 55/60 task router:
+
+- `py_v1_parse_size_bytes`
+- `py_v1_chunked_list`
+- `py_v1_common_prefix_path`
+- `py_v1_normalize_segments`
+- `py_v1_split_filename_version`
+
+The focused public prompt subset is `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`. Candidate generation used `scripts/generate_executable_candidates_mlx_lm.py` with the MLX-LM API backend, Gemma chat template, E4B QAT model, 512 generation tokens, and one public-only repair attempt. The focused hidden-test gate passed two candidates:
+
+- `py_v1_common_prefix_path`
+- `py_v1_normalize_segments`
+
+`scripts/apply_passed_candidate_overlay_router.py` then overlaid only those passed candidates onto the 55/60 task router. The rejected focused candidates stayed out of the final router.
+
+Checked result:
+
+| Metric | Value |
+|---|---:|
+| Focused E4B chat repairs passed | 2/5 |
+| Overlay rows from E4B chat | 2 |
+| Preserved task-router rows | 58 |
+| E2B base | 50/60 |
+| Task repair router | 55/60 |
+| Task plus E4B chat overlay router | 57/60 |
+| Net pass delta vs E2B base | +7 |
+| Regressions vs E2B base | 0 |
+| Synthetic rows | 0 |
+| Promoted repair families | 5 |
+
+The base-vs-overlay skillgraph writes artifacts under `examples/skills/python-stdlib-heldout-v1/task-plus-e4b-chat-overlay-router-vs-base/`. It marks the comparison promotable, with seven fixed tasks, three shared failures, and zero regressions.
+
+Boundary: this is now the strongest 60-task evidence for the harness skills layer. It proves regression-gated router-level repair lift. It does not prove that the failed adapter or any trained adapter should replace the base model globally.

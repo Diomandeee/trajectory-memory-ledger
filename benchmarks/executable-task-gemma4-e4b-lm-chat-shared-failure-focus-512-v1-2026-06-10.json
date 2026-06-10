@@ -1,0 +1,89 @@
+{
+  "input_rows": 5,
+  "benchmark_kinds": [
+    "executable-task-bench-real-model-output"
+  ],
+  "task_sets": [
+    "python-stdlib-heldout-v1-60"
+  ],
+  "source_artifacts": [
+    "mlx-lm:/Users/mohameddiomande/Desktop/tml-gemma4-models/gemma-4-E4B-it-qat-4bit:base"
+  ],
+  "synthetic_rows": 0,
+  "measures_executed_task_completion": true,
+  "boundary": "Runs verifier commands in isolated temp workspaces and measures executable pass/fail. This report has synthetic_rows=0, so task pass rates are executable results for the supplied candidate/model-output rows.",
+  "conditions": {
+    "gemma4_e4b_lm_chat_shared_failure_focus_512_v1": {
+      "n": 5,
+      "passed": 2,
+      "task_pass_rate": 0.4,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 0.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 241.2,
+      "failed_task_ids": [
+        "py_v1_parse_size_bytes",
+        "py_v1_chunked_list",
+        "py_v1_split_filename_version"
+      ]
+    }
+  },
+  "row_results": [
+    {
+      "condition": "gemma4_e4b_lm_chat_shared_failure_focus_512_v1",
+      "task_id": "py_v1_parse_size_bytes",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 193,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_behavior (test_py_v1_parse_size_bytes.ParseSizeBytesTest)\n----------------------------------------------------------------------\nTraceback (most recent cal",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e4b_lm_chat_shared_failure_focus_512_v1",
+      "task_id": "py_v1_chunked_list",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 311,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_behavior (test_py_v1_chunked_list.ChunkedListTest)\n----------------------------------------------------------------------\nTraceback (most recent call last)",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e4b_lm_chat_shared_failure_focus_512_v1",
+      "task_id": "py_v1_common_prefix_path",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 233,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e4b_lm_chat_shared_failure_focus_512_v1",
+      "task_id": "py_v1_normalize_segments",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 266,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e4b_lm_chat_shared_failure_focus_512_v1",
+      "task_id": "py_v1_split_filename_version",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 203,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_behavior (test_py_v1_split_filename_version.SplitFilenameVersionTest)\n----------------------------------------------------------------------\nTraceback (mos",
+      "workspace": null
+    }
+  ]
+}

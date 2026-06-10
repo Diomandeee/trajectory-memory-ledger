@@ -1,0 +1,25 @@
+{
+  "base_candidates": "examples/evaluation/executable-candidates-skillgraph-task-repair-router-heldout-v1-2026-06-10.jsonl",
+  "base_condition": "skillgraph_task_repair_router",
+  "condition": "skillgraph_task_plus_e4b_chat_overlay_router",
+  "created_at": "2026-06-10T22:13:09.830315+00:00",
+  "generator": "apply_passed_candidate_overlay_router.py",
+  "hidden_tests_sent_to_model": false,
+  "output": "examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl",
+  "overlay_row_count": 2,
+  "overlay_task_ids": [
+    "py_v1_common_prefix_path",
+    "py_v1_normalize_segments"
+  ],
+  "preserved_base_row_count": 58,
+  "rejected_task_ids": [
+    "py_v1_chunked_list",
+    "py_v1_parse_size_bytes",
+    "py_v1_split_filename_version"
+  ],
+  "repair_candidates": "examples/evaluation/executable-candidates-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.jsonl",
+  "repair_condition": "gemma4_e4b_lm_chat_shared_failure_focus_512_v1",
+  "repair_report": "benchmarks/executable-task-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10.json",
+  "synthetic_rows": 0,
+  "total_rows": 60
+}

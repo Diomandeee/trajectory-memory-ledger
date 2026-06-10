@@ -1,0 +1,137 @@
+{
+  "backend": "mlx_lm.generate api",
+  "condition": "gemma4_e4b_lm_chat_shared_failure_focus_512_v1",
+  "created_at": "2026-06-10T22:10:34.052042+00:00",
+  "generation": {
+    "backend_mode": "api",
+    "chat_template": true,
+    "env": {},
+    "extra_eos_token": [
+      "<end_of_turn>",
+      "<start_of_turn>",
+      "<turn|>"
+    ],
+    "max_tokens": 512,
+    "prompt_format": "raw-python",
+    "repair_attempts": 1,
+    "seed": 42,
+    "temp": 0.0,
+    "timeout_s": 900,
+    "top_p": 1.0
+  },
+  "generator": "generate_executable_candidates_mlx_lm.py",
+  "hidden_tests_sent_to_model": false,
+  "model": "/Users/mohameddiomande/Desktop/tml-gemma4-models/gemma-4-E4B-it-qat-4bit",
+  "model_path_recorded": false,
+  "public_tasks": "executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl",
+  "raw_dir": "raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10",
+  "synthetic_rows": 0,
+  "tasks": {
+    "py_v1_chunked_list": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10/gemma4_e4b_lm_chat_shared_failure_focus_512_v1/py_v1_chunked_list/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/collection_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_v1_common_prefix_path": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10/gemma4_e4b_lm_chat_shared_failure_focus_512_v1/py_v1_common_prefix_path/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/path_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_v1_normalize_segments": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10/gemma4_e4b_lm_chat_shared_failure_focus_512_v1/py_v1_normalize_segments/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/path_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_v1_parse_size_bytes": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [
+              "src/parse_tools.py: SyntaxError line 53: expected an indented block after 'else' statement on line 51"
+            ],
+            "ok": false
+          },
+          "raw_response": "raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10/gemma4_e4b_lm_chat_shared_failure_focus_512_v1/py_v1_parse_size_bytes/attempt-0.raw.txt"
+        },
+        {
+          "attempt": 1,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10/gemma4_e4b_lm_chat_shared_failure_focus_512_v1/py_v1_parse_size_bytes/attempt-1.raw.txt"
+        }
+      ],
+      "candidate_path": "src/parse_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_v1_split_filename_version": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "raw-gemma4-e4b-lm-chat-shared-failure-focus-512-v1-2026-06-10/gemma4_e4b_lm_chat_shared_failure_focus_512_v1/py_v1_split_filename_version/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/path_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    }
+  }
+}
