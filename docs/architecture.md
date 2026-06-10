@@ -60,3 +60,5 @@ The synthetic `agent-eval` example in `examples/evaluation/` verifies the protoc
 - `packages/<skill_id>/{SKILL.md,MEMORY.md,tests.jsonl,failure_modes.json,skill.json}`
 
 The routing rule is conservative: only `promoted` skills can be auto-injected. `proposed` skills need a clean follow-up regression gate, `quarantined` skills are repair evidence, and `diagnostic` packages record persistent failures. This lets a failed adapter run improve the next harness iteration without poisoning automatic routing.
+
+`scripts/apply_skillgraph_repair_router.py` is the first repair executor. It creates a candidate set by preserving baseline rows and swapping in comparison rows only for repaired task ids from explicitly allowed skill statuses. The resulting candidates still go through `materialize-executable-bench` and `executable-task-bench`; a repair becomes active only after a base-vs-router `skillgraph-evolve` run passes the same no-regression gate.

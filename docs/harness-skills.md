@@ -95,3 +95,49 @@ The first generated package set compares Gemma 4 E2B QAT base against the reward
 The positive proposed skill is `python_stdlib_math_trajectory_delta`, because it repaired `py_v1_moving_average` without a math-family regression. It is still not active because the global adapter comparison failed. The router correctly leaves `active_skill_ids` empty.
 
 This means the current large-suite result does not prove downstream TML performance lift. It does prove that the harness can mine a failed run for bounded repair evidence without promoting unsafe behavior.
+
+## Repair Router Test
+
+The next step is to test a proposed skill without adopting the failed adapter globally. `apply_skillgraph_repair_router.py` starts from the base candidate rows and swaps in comparison rows only for repaired task ids from allowed skill statuses.
+
+```bash
+python3 scripts/apply_skillgraph_repair_router.py \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
+  --allow-status proposed \
+  --condition skillgraph_math_repair_router \
+  --output examples/evaluation/executable-candidates-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-math-repair-router-heldout-v1-2026-06-10.json
+```
+
+Then materialize and execute the normal hidden-test gate:
+
+```bash
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl \
+  --candidates examples/evaluation/executable-candidates-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl \
+  --output benchmarks/executable-task-skillgraph-math-repair-router-heldout-v1-2026-06-10.json \
+  --require-real
+```
+
+Checked result:
+
+| Metric | Value |
+|---|---:|
+| Preserved base rows | 59 |
+| Routed repair rows | 1 |
+| Routed task | `py_v1_moving_average` |
+| E2B base | 50/60 |
+| Math repair router | 51/60 |
+| Net pass delta | +1 |
+| Regressions vs base | 0 |
+| Synthetic rows | 0 |
+
+Running `skillgraph-evolve` on base vs the repair-router report promotes `python_stdlib_math_trajectory_delta` and writes active router artifacts under `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`.
+
+Boundary: this is a real narrow router lift on the 60-task executable gate. It is not a broad claim that the reward-selected adapter should replace the base model.

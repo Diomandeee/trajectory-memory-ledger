@@ -585,3 +585,65 @@ Interpretation:
 - `python_stdlib_math_trajectory_delta` is only `proposed`, not active, because it repaired `py_v1_moving_average` but the global gate failed.
 - Families with regressions are quarantined and should be used as repair targets, not automatic prompts.
 - This is harness improvement, not downstream performance proof.
+
+### Narrow Math Repair Router
+
+The proposed math package can be tested without adopting the failed adapter globally. `scripts/apply_skillgraph_repair_router.py` builds a new candidate set from:
+
+- the E2B base candidate rows for all tasks by default
+- the reward-selected adapter candidate row only for repaired task ids claimed by allowed skill statuses
+
+Run:
+
+```bash
+python3 scripts/apply_skillgraph_repair_router.py \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
+  --allow-status proposed \
+  --condition skillgraph_math_repair_router \
+  --output examples/evaluation/executable-candidates-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-math-repair-router-heldout-v1-2026-06-10.json
+```
+
+The generated router report has `hidden_tests_sent_to_model=false`, `synthetic_rows=0`, `preserved_base_row_count=59`, `routed_row_count=1`, and `routed_task_ids=["py_v1_moving_average"]`.
+
+Materialization and execution:
+
+```bash
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl \
+  --candidates examples/evaluation/executable-candidates-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-skillgraph-math-repair-router-heldout-v1-2026-06-10.jsonl \
+  --output benchmarks/executable-task-skillgraph-math-repair-router-heldout-v1-2026-06-10.json \
+  --require-real
+```
+
+Checked executable result:
+
+| Condition | Rows | Passed | Pass rate | Synthetic rows |
+|---|---:|---:|---:|---:|
+| Gemma 4 E2B QAT base | 60 | 50 | 83.33% | 0 |
+| Skillgraph math repair router | 60 | 51 | 85.00% | 0 |
+
+Base-vs-router `skillgraph-evolve` result:
+
+| Metric | Value |
+|---|---:|
+| Net pass delta | +1 |
+| Fixed tasks | 1 |
+| Regressed tasks | 0 |
+| Promoted skills | 1 |
+| Active router skills | 1 |
+
+The active skill is `python_stdlib_math_trajectory_delta`, and the promoted artifacts live under `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`.
+
+Interpretation:
+
+- This is the first clean 60-task lift from the harness skills layer.
+- The lift is narrow and router-level, not adapter-level: the base model remains responsible for 59/60 rows.
+- The result supports the strategy "use the skillgraph as a repair map, not as proof."
+- The next repair cycle should target another non-regressing family or train a stronger model/adapter recipe, then require the same base-vs-router gate before promotion.
