@@ -1,0 +1,24 @@
+{
+  "schema": "trajectory-memory-ledger.local_training_compatibility.v1",
+  "created_at": "2026-06-10T08:04:33Z",
+  "benchmark_kind": "local-lora-training-compatibility-smoke",
+  "trainer_host": "mac5",
+  "trainer_backend": "python -m mlx_lm lora",
+  "base_model": "mlx-community/gemma-4-12B-it-qat-4bit",
+  "base_model_path_recorded": false,
+  "training_settings": {
+    "iters": 2,
+    "batch_size": 1,
+    "num_layers": 4,
+    "max_seq_length": 4096,
+    "learning_rate": "1e-5",
+    "grad_checkpoint": true,
+    "clear_cache_threshold": 0.0
+  },
+  "result": {
+    "status": "blocked_by_trainer_model_support",
+    "error_class": "ValueError",
+    "stderr_summary": "ModuleNotFoundError: No module named 'mlx_lm.models.gemma4_unified'; Model type gemma4_unified not supported."
+  },
+  "interpretation": "Gemma 4 12B QAT inference works through MLX-VLM and reaches 5/6 on the executable base-model benchmark, but local MLX-LM LoRA training is currently blocked for the 12B unified architecture. The local training lane therefore moved to Gemma 4 E2B while E4B compatibility is tested separately."
+}

@@ -14,7 +14,7 @@ Coding agents generate a continuous stream of operational experience: prompts, f
 
 This paper presents the public reference artifact and the current evaluation evidence. The Rust daemon, `trajectory-ledgerd`, ingests gateway events, tracks date-scoped cursors, normalizes schema-v2 trajectory cards, scores records at emit time, appends under a file lock, and exports Prometheus metrics. On the checked synthetic daemon benchmark, it ingests 8,000 event envelopes in 6.287 seconds, reaching 1,272.385 events/sec and 159.048 trajectory cards/sec with p95 append latency of 4.027 ms. The originating private deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML training examples.
 
-The current empirical evidence supports five measured claims and one important negative boundary: the artifact is operationally reproducible, the reward model selects cleaner trajectories than random sampling, a real held-out coding-agent model-quality benchmark can be reproduced from aggregate rows in the repository, real model-output candidates can be evaluated on executable held-out tasks, and reward-selected private training data gives the best small-adapter validation loss. The strongest checked held-out model-quality result evaluates 10 model conditions over 5 coding-agent session contexts each, with `GPT-5.4-mini` selected as the best tied condition by mean score and latency. The prompt-conditioned executable benchmark evaluates Claude Sonnet and Gemini 2.5 Flash outputs over a six-task Python stdlib held-out set, with hidden verifier tests and `synthetic_rows=0`. Claude Sonnet saturates the benchmark at 6/6 for all context conditions. Gemini 2.5 Flash reaches 5/6 for `random`, 5/6 for `reward_selected`, and 4/6 for `full_ledger`. The trained-adapter gate then trains three MLX LoRA adapters with `mlx-community/gemma-3-1b-it-4bit`: `reward_selected` achieves the best validation loss at 1.484 versus `full_ledger` at 1.843 and `random` at 2.031, but all three adapters score 0/6 on the same executable held-out tasks. Stronger local base-model sanity runs reach 3/6 with `mlx-community/gemma-4-E2B-it-qat-4bit` and 5/6 with `mlx-community/gemma-4-12B-it-qat-4bit` on that same held-out executable set before ledger fine-tuning. Therefore the artifact now proves adapter training and executable adapter evaluation, but it still does not prove downstream reward-selected task-completion lift over random selection.
+The current empirical evidence supports six measured claims and one scope boundary: the artifact is operationally reproducible, the reward model selects cleaner trajectories than random sampling, a real held-out coding-agent model-quality benchmark can be reproduced from aggregate rows in the repository, real model-output candidates can be evaluated on executable held-out tasks, stronger Gemma 4 local base models produce nonzero executable scores, and a larger Gemma 4 E2B adapter run shows a reward-selected downstream lift signal on the small executable gate. The strongest checked held-out model-quality result evaluates 10 model conditions over 5 coding-agent session contexts each, with `GPT-5.4-mini` selected as the best tied condition by mean score and latency. The prompt-conditioned executable benchmark evaluates Claude Sonnet and Gemini 2.5 Flash outputs over a six-task Python stdlib held-out set, with hidden verifier tests and `synthetic_rows=0`. Claude Sonnet saturates the benchmark at 6/6 for all context conditions. Gemini 2.5 Flash reaches 5/6 for `random`, 5/6 for `reward_selected`, and 4/6 for `full_ledger`. The first trained-adapter gate, using `mlx-community/gemma-3-1b-it-4bit`, is negative at 0/6 for all conditions despite better validation loss for `reward_selected`. The stronger Gemma 4 E2B adapter gate trains matched 512-row private splits with 4096-token context and scores `random` 3/6, `reward_selected` 5/6, and `full_ledger` 2/6 on the same hidden executable tasks. Therefore the artifact now has a positive downstream lift signal for reward-selected trajectory data, while the scope remains small: six tasks are enough to falsify the all-zero concern, not enough for a broad SWE-style performance claim.
 
 ---
 
@@ -32,9 +32,9 @@ The current empirical evidence supports five measured claims and one important n
 | Reward-selected context improves over full-ledger context | Partially supported | Gemini 2.5 Flash: `reward_selected` 5/6 vs `full_ledger` 4/6 | Single backend and small task set |
 | Reward-selected training data improves adapter validation loss over random | Supported for the private split | Mac5 MLX LoRA run: `reward_selected` validation loss 1.484 vs `random` 2.031, a 26.93% reduction | Validation loss is not executable task completion |
 | Stronger local base-model sanity is non-zero | Supported | Gemma 4 E2B QAT base: 3/6; Gemma 4 12B QAT base: 5/6 on the same hidden-test executable task set | Not ledger-trained, not evidence of reward-selected lift |
-| Reward-selected trajectory data improves executable coding-task completion over random | Not proven; current adapter run is negative | Mac5 adapter-conditioned executable benchmark: `random` 0/6, `reward_selected` 0/6, `full_ledger` 0/6 | Requires stronger training/generation setup and a larger or harder task set |
+| Reward-selected trajectory data improves executable coding-task completion over random | Supported on the small Gemma 4 E2B adapter gate | Gemma 4 E2B 512-row/4096-token adapters: `reward_selected` 5/6 vs `random` 3/6 and `full_ledger` 2/6 | Six tasks are a positive lift signal, not a broad SWE-style benchmark |
 
-The short answer: performance and evaluation are now proven for the artifact/runtime, held-out model-quality scoring, real executable model-output measurement, and the mechanics of training/evaluating adapters from controlled private splits. The stronger claim, that ledger-selected training data improves real executable coding-task completion over random selection, is not proven; the first adapter-conditioned executable result is negative. The local all-zero result should be interpreted narrowly as a weak Gemma 3 1B adapter/training-recipe failure, not as proof that the executable task set or the ledger hypothesis is dead; Gemma 4 12B QAT solves 5/6 before any ledger fine-tuning.
+The short answer: performance and evaluation are now proven for the artifact/runtime, held-out model-quality scoring, real executable model-output measurement, and the mechanics of training/evaluating adapters from controlled private splits. The all-zero result was narrow: a weak Gemma 3 1B/256-token adapter recipe. The corrected Gemma 4 E2B/512-row/4096-token adapter gate gives the first positive downstream lift signal, with `reward_selected` beating `random` by two hidden executable tasks. The remaining caveat is scale: this is a six-task proof signal that needs replication on E4B/12B-class training and a larger held-out task suite.
 
 ---
 
@@ -437,8 +437,11 @@ Checked reports:
 | Gemini 2.5 Flash | `full_ledger` | 6 | 4 | 66.67% | `py_parse_duration`, `py_chunked` |
 | Gemma 4 E2B QAT base | `gemma4_e2b_qat_base` | 6 | 3 | 50.00% | `py_topological_sort`, `py_chunked`, `py_redact_secrets` |
 | Gemma 4 12B QAT base | `gemma4_12b_qat_base` | 6 | 5 | 83.33% | `py_redact_secrets` |
+| Gemma 4 E2B adapter | `random` | 6 | 3 | 50.00% | `py_parse_duration`, `py_chunked`, `py_redact_secrets` |
+| Gemma 4 E2B adapter | `reward_selected` | 6 | 5 | 83.33% | `py_chunked` |
+| Gemma 4 E2B adapter | `full_ledger` | 6 | 2 | 33.33% | `py_parse_duration`, `py_topological_sort`, `py_group_by_key`, `py_chunked` |
 
-These executable reports have `synthetic_rows=0` and `measures_executed_task_completion=true`. This proves that the artifact can evaluate real model-generated source files on hidden executable tasks. The result is useful but bounded. Claude Sonnet saturates the task set, so it cannot separate context conditions. Gemini 2.5 Flash shows a real difference between `reward_selected` and `full_ledger`, but `reward_selected` ties `random`. Gemma 4 E2B QAT gives a non-zero local base-model sanity line at 3/6, and Gemma 4 12B QAT reaches 5/6, which helps interpret the later 0/6 adapter result as a weak-model/training-recipe failure rather than a harness failure. Therefore this benchmark establishes real executable performance measurement and a baseline for future comparisons, but it does not yet establish reward-selected lift over random.
+These executable reports have `synthetic_rows=0` and `measures_executed_task_completion=true`. This proves that the artifact can evaluate real model-generated source files on hidden executable tasks. The result is useful but bounded. Claude Sonnet saturates the task set, so it cannot separate context conditions. Gemini 2.5 Flash shows a real difference between `reward_selected` and `full_ledger`, but `reward_selected` ties `random`. Gemma 4 E2B QAT gives a non-zero local base-model sanity line at 3/6, and Gemma 4 12B QAT reaches 5/6. The Gemma 4 E2B adapter lane then shows the first trained downstream lift signal: `reward_selected` reaches 5/6 while the matched `random` adapter reaches 3/6. Therefore this benchmark establishes real executable performance measurement and a small positive reward-selected training-lift signal, while leaving broad generalization to a larger held-out task suite.
 
 ---
 
@@ -450,7 +453,7 @@ The strongest empirical result inside the reward model is the verification signa
 
 The weakest current empirical signal is outcome. In live future data, user corrections and redo requests should be highly valuable. In the historical backfill, those annotations are sparse, so outcome often defaults to neutral. This makes outcome underrepresented in current ablations.
 
-The most important research boundary is downstream training lift. The repository now has a trained-adapter experiment, and the result is mixed: the reward-selected private split gives the best validation loss, but the adapter-conditioned executable benchmark is 0/6 for every condition. Stronger Gemma 4 base models reach 3/6 and 5/6, so the right diagnosis is not that the held-out executable benchmark is impossible; it is that the first adapter setup was too weak. The honest claim is not "ledger training improves coding agents" yet. The honest claim is "the ledger records, scores, exports, trains from, and evaluates the data needed to test that hypothesis, and the first adapter-conditioned executable evaluation is negative."
+The most important research boundary is downstream training lift. The repository now has two trained-adapter experiments. The first, using Gemma 3 1B and 256-token context, is negative at 0/6 for all conditions. The second, using Gemma 4 E2B, 512 selected rows per condition, and 4096-token context, is positive on the small gate: `reward_selected` reaches 5/6 versus `random` at 3/6. The honest claim is now stronger but still bounded: the ledger records, scores, exports, trains from, and evaluates coding-agent trajectories, and one stronger local adapter gate shows reward-selected downstream lift. It is not yet a broad coding-agent benchmark claim until replicated on more tasks and a stronger training tier.
 
 ---
 
@@ -526,7 +529,47 @@ Checked adapter-conditioned executable result:
 | `reward_selected` | 6 | 0 | 0% | all six tasks |
 | `full_ledger` | 6 | 0 | 0% | all six tasks |
 
-This is a real downstream executable evaluation, and it is negative. The training objective separates conditions in the expected direction, but the trained adapters do not complete the held-out executable tasks. The newer Gemma 4 base sanity runs reach 3/6 for E2B QAT and 5/6 for 12B QAT on the same benchmark, so the negative result is best attributed to the small Gemma 3 1B adapter setup, small split size, 256-token training context, and weak generation loop. Therefore this paper must not claim downstream executable task-completion lift from reward-selected trajectory training. The next valid gate is a stronger base model or training recipe, plus public-only repair and a larger and harder held-out executable task set.
+This is a real downstream executable evaluation, and it is negative. The training objective separates conditions in the expected direction, but the trained Gemma 3 1B adapters do not complete the held-out executable tasks. The newer Gemma 4 base sanity runs reach 3/6 for E2B QAT and 5/6 for 12B QAT on the same benchmark, so the negative result is best attributed to the small Gemma 3 1B adapter setup, small split size, 256-token training context, and weak generation loop.
+
+### 9.4 Gemma 4 E2B 512-Row Adapter Rerun
+
+The stronger local adapter lane uses `mlx-community/gemma-4-E2B-it-qat-4bit` on Mac5. It reuses the same leakage-filtered private pool but increases selected rows per condition from 96 to 512 and increases training context from 256 to 4096 tokens. The public-safe split report is `benchmarks/training-lift-preflight-gemma4-12b-smoke-2026-06-10.json`; despite the filename, the splits were reused for the E2B adapter run after local 12B LoRA training was blocked by current MLX-LM support for the `gemma4_unified` model type.
+
+Training settings:
+
+| Setting | Value |
+|---|---:|
+| Base model | `mlx-community/gemma-4-E2B-it-qat-4bit` |
+| Rows per condition | 512 |
+| Train / validation rows | 460 / 52 |
+| Iterations | 500 |
+| Batch size | 1 |
+| LoRA layers | 4 |
+| Max sequence length | 4096 |
+| Learning rate | 1e-5 |
+| Gradient checkpointing | true |
+
+Aggregate training result:
+
+| Condition | Mean reward | Mean advantage | Final train loss | Final validation loss |
+|---|---:|---:|---:|---:|
+| `random` | 0.6782 | 0.8051 | 1.066 | 1.089 |
+| `reward_selected` | 0.7259 | 1.6717 | 0.963 | 1.277 |
+| `full_ledger` | 0.6790 | 0.8333 | 0.846 | 0.354 |
+
+The validation objective ranks `full_ledger` first, `random` second, and `reward_selected` third. This differs from the earlier Gemma 3 result and shows why validation loss alone cannot carry the downstream claim.
+
+Candidate generation used the same public held-out prompts with `scripts/generate_executable_candidates_mlx_adapter.py`, `--prompt-format raw-python`, `--max-tokens 1024`, and one public-only repair attempt. Hidden verifier tests were not sent to the model. The checked candidate-generation report is `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`.
+
+Checked executable result:
+
+| Condition | Rows | Passed | Pass rate | Failed task ids |
+|---|---:|---:|---:|---|
+| `random` | 6 | 3 | 50.00% | `py_parse_duration`, `py_chunked`, `py_redact_secrets` |
+| `reward_selected` | 6 | 5 | 83.33% | `py_chunked` |
+| `full_ledger` | 6 | 2 | 33.33% | `py_parse_duration`, `py_topological_sort`, `py_group_by_key`, `py_chunked` |
+
+This is the first positive downstream adapter-lift result: reward-selected training data improves the hidden executable pass rate by two tasks and 33.33 percentage points over the matched random split. The report has `synthetic_rows=0`, `measures_executed_task_completion=true`, and `hidden_tests_sent_to_model=false`. The result is still intentionally scoped. Six tasks can demonstrate that the evaluation is not stuck at all-zero and that reward selection can produce downstream lift under a stronger recipe; they cannot establish broad SWE-style generalization.
 
 ---
 
@@ -544,7 +587,7 @@ This is a real downstream executable evaluation, and it is negative. The trainin
 
 **Synthetic executable candidates.** The executable benchmark smoke suite is synthetic. It validates the runner, not the research hypothesis. The separate Claude Sonnet and Gemini 2.5 Flash reports are non-synthetic and should be cited for real model-output performance instead.
 
-**Training-lift downstream result is negative.** The current artifact exports SFT-ready examples, includes prompt-conditioned executable model-output reports, stronger Gemma 4 base-model sanity reports, and a controlled small-adapter experiment. Reward-selected training data achieves the best validation loss, but the adapter-conditioned executable task result is 0/6 for every condition. The Gemma 4 base lines reach 3/6 and 5/6, so the negative adapter result should be treated as a weak training setup, not as a reason to discard the benchmark. This limits the claim to training-objective improvement, not downstream task-completion lift.
+**Training-lift scope.** The current artifact exports SFT-ready examples, includes prompt-conditioned executable model-output reports, stronger Gemma 4 base-model sanity reports, a negative Gemma 3 adapter experiment, and a positive Gemma 4 E2B adapter experiment. The positive result is small but real: `reward_selected` beats `random` 5/6 to 3/6 on hidden executable tasks. This supports a scoped downstream-lift claim for the six-task gate, not a broad SWE-style claim.
 
 ---
 
@@ -683,9 +726,9 @@ For the 12B run, replace the model path/label, condition, and output/report file
 
 ## 12. Conclusion
 
-Trajectory Memory Ledger shows that coding-agent experience can be recorded, normalized, scored, and reused as a durable improvement substrate. The public artifact proves the runtime path: ingestion, cursor safety, schema normalization, reward scoring, locked append, metrics, tests, and benchmarked throughput. The deployment evidence shows a meaningful private corpus of scored trajectories and exported training examples. The reward analysis supports the selection logic, especially the importance of verification behavior. The held-out KARL V7 benchmark adds real model-quality evidence across 50 coding-agent context evaluations. The executable reports add real model-output task-completion evidence across 36 prompt-conditioned non-synthetic candidate rows, 12 Gemma 4 base-model non-synthetic candidate rows, and 18 adapter-conditioned non-synthetic candidate rows.
+Trajectory Memory Ledger shows that coding-agent experience can be recorded, normalized, scored, and reused as a durable improvement substrate. The public artifact proves the runtime path: ingestion, cursor safety, schema normalization, reward scoring, locked append, metrics, tests, and benchmarked throughput. The deployment evidence shows a meaningful private corpus of scored trajectories and exported training examples. The reward analysis supports the selection logic, especially the importance of verification behavior. The held-out KARL V7 benchmark adds real model-quality evidence across 50 coding-agent context evaluations. The executable reports add real model-output task-completion evidence across 36 prompt-conditioned non-synthetic candidate rows, 12 Gemma 4 base-model non-synthetic candidate rows, and 36 adapter-conditioned non-synthetic candidate rows.
 
-The remaining research step is clear: improve the training/generation setup until trained models complete held-out executable coding tasks under random, reward-selected, and full-ledger conditions, then compare those pass rates. The first controlled adapter run is valuable because it is real and falsifiable: reward-selected data improves validation loss, but no condition solves the executable tasks. The Gemma 4 base lines show that stronger local generation can solve most of the set before fine-tuning, so the next lift test should start at the 12B capability tier or above. Until a future gate shows `reward_selected` beating `random` on executed tasks, this work should be claimed as a reproducible trajectory-ledger artifact with real model-quality evaluation, real executable model-output baseline results, and a negative first adapter-conditioned downstream result, not as completed proof of trained reward-selected task-completion lift.
+The remaining research step is clear: replicate the positive reward-selected adapter lift on a larger executable task suite and a stronger model tier. The first controlled adapter run is valuable because it is real and falsifiable: Gemma 3 1B fails all executable tasks despite validation-loss separation. The second run is more important: Gemma 4 E2B with larger splits and 4096-token context shows `reward_selected` at 5/6 versus `random` at 3/6. This work should now be claimed as a reproducible trajectory-ledger artifact with real model-quality evaluation, real executable model-output baseline results, and a small positive adapter-conditioned downstream lift signal that still needs larger-scale replication.
 
 ---
 

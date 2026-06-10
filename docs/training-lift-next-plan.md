@@ -1,6 +1,6 @@
 # Next Training-Lift Plan
 
-The first adapter-conditioned executable result was negative: three Gemma 3 1B MLX LoRA adapters all scored 0/6. The Gemma 4 base-model sanity runs clarify the cause. Gemma 4 E2B QAT scored 3/6, and Gemma 4 12B QAT scored 5/6 on the same hidden-test executable task set before any ledger fine-tuning. The next lift experiment should start at that capability tier instead of repeating the weak setup.
+The first adapter-conditioned executable result was negative: three Gemma 3 1B MLX LoRA adapters all scored 0/6. The stronger Gemma 4 lane changed the picture. Gemma 4 E2B QAT scored 3/6 as a base model, Gemma 4 12B QAT scored 5/6 as a base model, and the Gemma 4 E2B 512-row/4096-token adapter run scored `random` 3/6, `reward_selected` 5/6, and `full_ledger` 2/6. The next lift experiment should replicate that positive reward-selected signal at a stronger tier and larger task scale instead of repeating the weak setup.
 
 ## Diagnosis
 
@@ -14,22 +14,25 @@ The failed adapter run should be interpreted as a weak training/generation setup
 
 The stronger local baselines show the held-out executable set is not impossible:
 
-| Model | Condition | Max generation tokens | Passed | Pass rate |
+| Lane | Condition | Training context | Passed | Pass rate |
 |---|---|---:|---:|---:|
-| Gemma 4 E2B QAT | `gemma4_e2b_qat_base` | 2048 | 3/6 | 50.00% |
-| Gemma 4 12B QAT | `gemma4_12b_qat_base` | 4096 | 5/6 | 83.33% |
+| Gemma 4 E2B QAT base | `gemma4_e2b_qat_base` | n/a | 3/6 | 50.00% |
+| Gemma 4 12B QAT base | `gemma4_12b_qat_base` | n/a | 5/6 | 83.33% |
+| Gemma 4 E2B adapter | `random` | 4096 | 3/6 | 50.00% |
+| Gemma 4 E2B adapter | `reward_selected` | 4096 | 5/6 | 83.33% |
+| Gemma 4 E2B adapter | `full_ledger` | 4096 | 2/6 | 33.33% |
 
 ## Next Gate
 
-The next valid downstream-lift claim requires comparing trained models against their own base-model lines on a larger executable task set.
+The next valid downstream-lift claim requires replicating the reward-selected advantage on a larger executable task set and, ideally, a stronger model family.
 
 Minimum protocol:
 
-1. Use a Gemma 4 12B-class or stronger base model.
-2. Keep base-model candidate generation as a reported control.
-3. Train matched `random`, `reward_selected`, and `full_ledger` conditions from the same eligible private pool.
-4. Use at least 4096-token training context; prefer 8192 if stable.
-5. Use hundreds or thousands of rows per condition, not 86 train rows.
+1. Keep base-model candidate generation as a reported control.
+2. Train matched `random`, `reward_selected`, and `full_ledger` conditions from the same eligible private pool.
+3. Use at least 4096-token training context; prefer 8192 if stable.
+4. Use hundreds or thousands of rows per condition, not 86 train rows.
+5. Prefer Gemma 4 E4B locally if it trains cleanly; otherwise move the 12B-class training proof to a cloud GPU stack.
 6. Match per-condition token budgets so `full_ledger` is not advantaged only by volume.
 7. Keep held-out executable prompts and hidden verifier tests separate.
 8. Allow public-only repair checks: syntax, importability, public starter definitions, and public prompt/example consistency. Do not feed hidden verifier failures back into generation.
@@ -67,4 +70,4 @@ Success criteria for a real downstream-lift claim:
 - The report has `synthetic_rows=0`.
 - The report records `hidden_tests_sent_to_model=false`.
 
-Until that gate passes, the honest claim remains: Trajectory Memory Ledger can record, score, export, train from, and evaluate coding-agent trajectories, and reward-selected data currently improves validation loss, but downstream task-completion lift is not yet proven.
+Current honest claim: Trajectory Memory Ledger can record, score, export, train from, and evaluate coding-agent trajectories; the small Gemma 3 adapter lane failed downstream; the stronger Gemma 4 E2B adapter lane shows a positive reward-selected downstream lift signal on a six-task executable gate. The next step is replication at E4B/12B-class scale and 50-100 held-out executable tasks.

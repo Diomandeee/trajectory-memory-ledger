@@ -5,7 +5,7 @@ Trajectory Memory Ledger currently has four levels of evidence:
 1. Artifact correctness: the Rust runtime builds, passes tests, passes clippy, performs one-shot ingestion, normalizes schema-v2 records, scores trajectories, handles `(date, seq)` cursor rollover, and appends under a file lock.
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
-4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, and a real adapter-conditioned report over a six-task held-out Python stdlib task set. These results prove executable performance measurement. They do not prove trained reward-selected task-completion lift: the adapter run gives the best validation loss for `reward_selected`, but every adapter condition scores 0/6 on executable tasks. The Gemma 4 base lines reach 3/6 for E2B and 5/6 for 12B, so the adapter failure should be read as a weak training/generation setup, not as an all-local-model failure.
+4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, and two real adapter-conditioned reports over a six-task held-out Python stdlib task set. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data: `reward_selected` scores 5/6, `random` scores 3/6, and `full_ledger` scores 2/6 with `synthetic_rows=0` and `hidden_tests_sent_to_model=false`. This is a real downstream lift signal on the small executable gate; the next validity step is replication on a larger task set and stronger model tier.
 
 ## Daemon Benchmark
 
@@ -456,3 +456,48 @@ Interpretation:
 - The Gemma 4 12B QAT base model reaches 5/6 on the same task set, confirming that Mac5 can run a materially stronger local baseline.
 - The remaining 12B failure is a malformed redaction implementation, not a benchmark/system crash. It points toward a public-only repair/checking layer, not hidden-test leakage.
 - The next controlled lift experiment should start from Gemma 4 12B-class or stronger models, train with at least 4096-token context, use hundreds or thousands of rows per condition, and report both base-model and adapter-conditioned executable deltas.
+
+### Gemma 4 E2B 512-Row Adapter Lift Gate
+
+The stronger adapter lane reuses the same private trajectory pool but increases the training scale and context length: 512 selected records per condition, 460 train rows and 52 validation rows, 4096-token training context, 500 MLX LoRA iterations, and raw-Python public-only candidate generation. Raw private rows, adapters, and raw generation logs remain under ignored `output/private-*` paths. The public-safe aggregate training report is `benchmarks/training-lift-adapter-training-mlx-gemma4-e2b-512x4096-mac5-2026-06-10.json`.
+
+Training settings:
+
+| Setting | Value |
+|---|---:|
+| Base model | `mlx-community/gemma-4-E2B-it-qat-4bit` |
+| Rows per condition | 512 |
+| Train / validation rows | 460 / 52 |
+| Iterations | 500 |
+| Batch size | 1 |
+| LoRA layers | 4 |
+| Max sequence length | 4096 |
+| Learning rate | 1e-5 |
+| Gradient checkpointing | true |
+
+Aggregate training result:
+
+| Condition | Mean reward | Mean advantage | Final train loss | Final validation loss |
+|---|---:|---:|---:|---:|
+| `random` | 0.6782 | 0.8051 | 1.066 | 1.089 |
+| `reward_selected` | 0.7259 | 1.6717 | 0.963 | 1.277 |
+| `full_ledger` | 0.6790 | 0.8333 | 0.846 | 0.354 |
+
+The validation objective does not rank the conditions the same way as the hidden executable task result, so downstream completion must be measured directly.
+
+Candidate generation used `scripts/generate_executable_candidates_mlx_adapter.py` with `--prompt-format raw-python`, `--max-tokens 1024`, and one public-only repair attempt. Hidden tests were not sent to the model. The checked generation report is `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`.
+
+Checked adapter-conditioned executable result:
+
+| Condition | Rows | Passed | Pass rate | Failed task ids |
+|---|---:|---:|---:|---|
+| `random` | 6 | 3 | 50.00% | `py_parse_duration`, `py_chunked`, `py_redact_secrets` |
+| `reward_selected` | 6 | 5 | 83.33% | `py_chunked` |
+| `full_ledger` | 6 | 2 | 33.33% | `py_parse_duration`, `py_topological_sort`, `py_group_by_key`, `py_chunked` |
+
+Interpretation:
+
+- This is the first positive downstream adapter lift signal in the repository: `reward_selected` beats `random` by two tasks and 33.33 percentage points on the same hidden executable gate.
+- The result has `synthetic_rows=0` and records `hidden_tests_sent_to_model=false`.
+- The old all-zero adapter result is now correctly scoped to the Gemma 3 1B/256-token recipe.
+- The task set has only six tasks, so this is not yet a broad SWE-style performance proof. The next gate should replicate the lift on E4B or a 12B-class cloud training run and a larger 50-100 task executable set.

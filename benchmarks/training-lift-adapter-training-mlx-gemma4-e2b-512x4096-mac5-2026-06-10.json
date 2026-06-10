@@ -1,0 +1,90 @@
+{
+  "schema": "trajectory-memory-ledger.adapter_training_summary.v1",
+  "created_at": "2026-06-10T08:04:33Z",
+  "benchmark_kind": "training-lift-adapter-training-private-splits",
+  "trainer_host": "mac5",
+  "trainer_backend": "python -m mlx_lm lora",
+  "base_model": "mlx-community/gemma-4-E2B-it-qat-4bit",
+  "base_model_path_recorded": false,
+  "private_trajectory_store": "private-local-karl-trajectories",
+  "private_trajectory_store_path_recorded": false,
+  "split_report": "benchmarks/training-lift-preflight-gemma4-12b-smoke-2026-06-10.json",
+  "adapter_paths_recorded": false,
+  "raw_training_rows_recorded": false,
+  "claim_boundary": "This report records aggregate training metrics for private random/reward_selected/full_ledger splits. It does not include raw private trajectories or adapter weights. Downstream executable task completion is measured separately in benchmarks/executable-task-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json.",
+  "split": {
+    "eligible_records": 2922,
+    "sample_size_per_condition": 512,
+    "train_rows_per_condition": 460,
+    "valid_rows_per_condition": 52,
+    "heldout_leakage_risk_exclusions": 2138,
+    "missing_prompt_exclusions": 749,
+    "too_few_tools_exclusions": 1663
+  },
+  "training_settings": {
+    "iters": 500,
+    "batch_size": 1,
+    "num_layers": 4,
+    "max_seq_length": 4096,
+    "learning_rate": "1e-5",
+    "grad_checkpoint": true,
+    "clear_cache_threshold": 0.0,
+    "steps_per_report": 50,
+    "steps_per_eval": 250,
+    "val_batches": 4,
+    "save_every": 250
+  },
+  "conditions": {
+    "random": {
+      "mean_reward": 0.6782,
+      "mean_advantage": 0.8051,
+      "final_train_loss": 1.066,
+      "final_validation_loss": 1.089,
+      "trained_tokens": 132951,
+      "peak_memory_gb": 6.874,
+      "real_time_s": 406.63,
+      "adapter_size_mb": 6.5
+    },
+    "reward_selected": {
+      "mean_reward": 0.7259,
+      "mean_advantage": 1.6717,
+      "final_train_loss": 0.963,
+      "final_validation_loss": 1.277,
+      "trained_tokens": 132121,
+      "peak_memory_gb": 6.378,
+      "real_time_s": 414.21,
+      "adapter_size_mb": 6.5
+    },
+    "full_ledger": {
+      "mean_reward": 0.679,
+      "mean_advantage": 0.8333,
+      "final_train_loss": 0.846,
+      "final_validation_loss": 0.354,
+      "trained_tokens": 130807,
+      "peak_memory_gb": 7.203,
+      "real_time_s": 414.31,
+      "adapter_size_mb": 6.5
+    }
+  },
+  "training_objective_interpretation": "On this larger 512-row/4096-token E2B run, validation loss ranks full_ledger first, random second, and reward_selected third. This differs from the earlier Gemma 3 1B/256-token run where reward_selected had the best validation loss. Downstream executable performance must therefore be reported separately instead of inferred from validation loss.",
+  "downstream_executable_report": "benchmarks/executable-task-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json",
+  "downstream_executable_summary": {
+    "synthetic_rows": 0,
+    "hidden_tests_sent_to_model": false,
+    "random": {
+      "passed": "3/6",
+      "task_pass_rate": 0.5
+    },
+    "reward_selected": {
+      "passed": "5/6",
+      "task_pass_rate": 0.8333
+    },
+    "full_ledger": {
+      "passed": "2/6",
+      "task_pass_rate": 0.3333
+    },
+    "reward_selected_delta_vs_random_tasks": 2,
+    "reward_selected_delta_vs_random_pass_rate": 0.3333
+  },
+  "interpretation": "The reward-selected adapter achieved the best downstream executable task result under the same Gemma 4 E2B 512-row/4096-token training setup, improving from random 3/6 to reward_selected 5/6 on the six-task hidden executable benchmark. Because the task set is small, this is a positive lift signal and proof that the evaluation path can detect nonzero trained-adapter differences, not a final broad SWE-style claim."
+}

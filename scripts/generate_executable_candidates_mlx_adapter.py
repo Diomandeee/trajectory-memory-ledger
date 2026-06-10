@@ -10,6 +10,7 @@ materialize-executable-bench.
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import os
 import re
@@ -47,6 +48,7 @@ def main() -> int:
             "top_p": args.top_p,
             "timeout_s": args.timeout_s,
             "seed": args.seed,
+            "prompt_format": args.prompt_format,
             "extra_eos_token": args.extra_eos_token,
             "env": {"KMP_DUPLICATE_LIB_OK": "TRUE"} if args.openmp_workaround else {},
         },
@@ -56,27 +58,57 @@ def main() -> int:
         adapter_path = args.adapter_root / condition
         validate_adapter(condition, adapter_path)
         condition_rows: list[dict[str, Any]] = []
-        condition_report = {"rows": 0, "tasks": {}, "adapter_path_recorded": False}
+        condition_report = {
+            "rows": 0,
+            "tasks": {},
+            "adapter_path_recorded": False,
+            "repair_attempts": args.repair_attempts,
+        }
         for task_index, task in enumerate(public_tasks):
-            raw_path = args.raw_dir / condition / f"{task['task_id']}.raw.txt"
-            raw_path.parent.mkdir(parents=True, exist_ok=True)
-            prompt = build_json_prompt(task)
-            response = call_mlx_generate(args, prompt, adapter_path, seed=args.seed + task_index)
-            raw_path.write_text(response, encoding="utf-8")
-            try:
-                candidate_files, parse_mode = parse_candidate_files(response, task)
-            except ValueError:
-                retry_prompt = build_raw_python_prompt(task)
-                retry_response = call_mlx_generate(
+            prompt = build_initial_prompt(task, args.prompt_format)
+            task_report: dict[str, Any] = {"attempts": []}
+            candidate_files: dict[str, str] | None = None
+            parse_mode = "unparsed"
+            public_check = public_check_failure("no candidate generated")
+
+            for attempt in range(args.repair_attempts + 1):
+                raw_path = args.raw_dir / condition / task["task_id"] / f"attempt-{attempt}.raw.txt"
+                raw_path.parent.mkdir(parents=True, exist_ok=True)
+                response = call_mlx_generate(
                     args,
-                    retry_prompt,
+                    prompt,
                     adapter_path,
-                    seed=args.seed + task_index + 10_000,
+                    seed=args.seed + task_index + (attempt * 10_000),
                 )
-                retry_raw_path = args.raw_dir / condition / f"{task['task_id']}.raw-retry.txt"
-                retry_raw_path.write_text(retry_response, encoding="utf-8")
-                candidate_files, parse_mode = parse_raw_python_response(retry_response, task)
-                raw_path = retry_raw_path
+                raw_path.write_text(response, encoding="utf-8")
+                try:
+                    candidate_files, parse_mode = parse_model_response(
+                        response,
+                        task,
+                        prefer_raw_python=args.prompt_format == "raw-python",
+                    )
+                except ValueError as exc:
+                    candidate_files = fallback_model_output(response, task)
+                    parse_mode = "unparsed_model_output"
+                    public_check = public_check_failure(str(exc))
+                else:
+                    public_check = public_check_candidate(candidate_files, task)
+
+                task_report["attempts"].append(
+                    {
+                        "attempt": attempt,
+                        "raw_response": str(raw_path),
+                        "parse_mode": parse_mode,
+                        "public_check": public_check,
+                    }
+                )
+                if public_check["ok"]:
+                    break
+                if attempt < args.repair_attempts:
+                    prompt = build_repair_prompt(task, candidate_files, public_check, response)
+
+            if candidate_files is None:
+                raise SystemExit(f"{condition}/{task['task_id']}: no candidate was generated")
 
             row = normalize_candidate_row(
                 condition=condition,
@@ -85,10 +117,9 @@ def main() -> int:
                 source_artifact=f"mlx:{args.model}:adapter={condition}",
             )
             condition_rows.append(row)
-            condition_report["tasks"][task["task_id"]] = {
-                "raw_response": str(raw_path),
-                "parse_mode": parse_mode,
-            }
+            task_report["final_parse_mode"] = parse_mode
+            task_report["final_public_check"] = public_check
+            condition_report["tasks"][task["task_id"]] = task_report
         validate_condition_coverage(condition, condition_rows, task_ids)
         rows.extend(condition_rows)
         condition_report["rows"] = len(condition_rows)
@@ -123,6 +154,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--timeout-s", type=int, default=360)
     parser.add_argument("--extra-eos-token", nargs="*", default=list(DEFAULT_EXTRA_EOS_TOKENS))
     parser.add_argument("--openmp-workaround", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--repair-attempts", type=int, default=2)
+    parser.add_argument("--prompt-format", choices=("json", "raw-python"), default="json")
     return parser.parse_args()
 
 
@@ -190,17 +223,59 @@ Rules:
 """
 
 
+def build_initial_prompt(task: dict[str, Any], prompt_format: str) -> str:
+    if prompt_format == "raw-python":
+        return build_raw_python_prompt(task)
+    if prompt_format == "json":
+        return build_json_prompt(task)
+    raise ValueError(f"unsupported prompt format {prompt_format!r}")
+
+
 def build_raw_python_prompt(task: dict[str, Any]) -> str:
     candidate_path = task["candidate_paths"][0]
     starter = task["starter_files"][candidate_path]
     return f"""Implement this Python file for an executable benchmark.
 
 Path: {candidate_path}
-Public prompt: {task["public_prompt"]}
+Public prompt:
+{task["public_prompt"]}
+
 Starter file:
 {starter}
 
-Return only the complete Python source code for {candidate_path}. No markdown. No explanation. No tests.
+Return only the complete Python source code for {candidate_path}.
+Begin immediately with a Python import, class, or def line.
+Do not include markdown, JSON, file paths, tests, explanations, analysis, or reasoning-channel text.
+"""
+
+
+def build_repair_prompt(
+    task: dict[str, Any],
+    candidate_files: dict[str, str] | None,
+    check: dict[str, Any],
+    raw_response: str,
+) -> str:
+    candidate_path = task["candidate_paths"][0]
+    previous = raw_response
+    if candidate_files and candidate_path in candidate_files:
+        previous = candidate_files[candidate_path]
+    errors = "\n".join(f"- {error}" for error in check.get("errors", []))
+    return f"""Repair this Python candidate using only public compatibility feedback.
+
+Path: {candidate_path}
+Public prompt: {task["public_prompt"]}
+Starter file:
+{task["starter_files"][candidate_path]}
+
+Previous candidate:
+{clip(previous, 6000)}
+
+Public compatibility errors:
+{errors}
+
+Return only the complete corrected Python source code for {candidate_path}.
+Begin immediately with a Python import, class, or def line.
+Do not include markdown, JSON, file paths, tests, explanations, analysis, or reasoning-channel text.
 """
 
 
@@ -270,6 +345,26 @@ def parse_candidate_files(response: str, task: dict[str, Any]) -> tuple[dict[str
     return normalize_files(files, task), "json"
 
 
+def parse_model_response(
+    response: str,
+    task: dict[str, Any],
+    *,
+    prefer_raw_python: bool,
+) -> tuple[dict[str, str], str]:
+    parsers = (
+        (parse_raw_python_response, parse_candidate_files)
+        if prefer_raw_python
+        else (parse_candidate_files, parse_raw_python_response)
+    )
+    errors: list[str] = []
+    for parser in parsers:
+        try:
+            return parser(response, task)
+        except ValueError as exc:
+            errors.append(str(exc))
+    raise ValueError("; ".join(errors))
+
+
 def parse_response_json(response: str) -> Any:
     response = clean_model_text(response)
     fenced = re.search(r"```(?:json)?\s*(.*?)```", response, flags=re.DOTALL)
@@ -289,19 +384,38 @@ def parse_response_json(response: str) -> Any:
 def parse_raw_python_response(response: str, task: dict[str, Any]) -> tuple[dict[str, str], str]:
     code = extract_python_code(clean_model_text(response))
     if not code.strip():
-        raise SystemExit(f"{task['task_id']}: retry response did not contain Python source")
-    return normalize_files({task["candidate_paths"][0]: code}, task), "raw_python_retry"
+        raise ValueError(f"{task['task_id']}: response did not contain Python source")
+    return normalize_files({task["candidate_paths"][0]: code}, task), "raw_python"
+
+
+def fallback_model_output(response: str, task: dict[str, Any]) -> dict[str, str]:
+    candidate_path = task["candidate_paths"][0]
+    cleaned = clean_model_text(response).strip()
+    if not cleaned:
+        cleaned = "raise NotImplementedError('empty model output')"
+    return normalize_files({candidate_path: cleaned + "\n"}, task)
 
 
 def extract_python_code(response: str) -> str:
     cleaned = clean_model_text(response)
-    fenced = re.search(r"```(?:python|py)?\s*(.*?)```", cleaned.strip(), flags=re.DOTALL)
-    if fenced:
-        return fenced.group(1).strip() + "\n"
     stripped = cleaned.strip()
+    candidates = [
+        match.group(1).strip()
+        for match in re.finditer(r"```(?:python|py)?\s*(.*?)```", stripped, flags=re.DOTALL)
+    ]
     code_start = re.search(r"(?m)^\s*(def|class|import|from)\s+", stripped)
     if code_start:
-        return stripped[code_start.start() :].strip() + "\n"
+        candidates.append(stripped[code_start.start() :].strip())
+    for candidate in reversed(candidates):
+        if not candidate:
+            continue
+        try:
+            compile(candidate, "<model-response>", "exec")
+        except SyntaxError:
+            continue
+        return candidate.strip() + "\n"
+    if candidates:
+        return candidates[-1].strip() + "\n"
     return ""
 
 
@@ -312,6 +426,8 @@ def clean_model_text(response: str) -> str:
             continue
         lines.append(line)
     cleaned = "\n".join(lines)
+    cleaned = re.sub(r"<\|turn\>\s*model\s*", "", cleaned)
+    cleaned = re.sub(r"<\|?channel\|?>\s*(?:thought|analysis|final)?\s*", "", cleaned)
     marker_positions = [
         idx for marker in DEFAULT_EXTRA_EOS_TOKENS if (idx := cleaned.find(marker)) != -1
     ]
@@ -353,6 +469,47 @@ def normalize_candidate_row(
     }
 
 
+def public_check_candidate(candidate_files: dict[str, str], task: dict[str, Any]) -> dict[str, Any]:
+    errors: list[str] = []
+    for path, content in candidate_files.items():
+        if "```" in content:
+            errors.append(f"{path}: markdown fence appears in candidate source")
+        for marker in DEFAULT_EXTRA_EOS_TOKENS:
+            if marker in content:
+                errors.append(f"{path}: stop marker {marker!r} appears in candidate source")
+        try:
+            compile(content, path, "exec")
+        except SyntaxError as exc:
+            errors.append(f"{path}: SyntaxError line {exc.lineno}: {exc.msg}")
+            continue
+        except Exception as exc:  # pragma: no cover - compile rarely raises other exceptions.
+            errors.append(f"{path}: compile failed: {exc}")
+            continue
+        try:
+            generated_defs = top_level_defs(content)
+            expected_defs = top_level_defs(task["starter_files"][path])
+        except SyntaxError as exc:
+            errors.append(f"{path}: AST parse failed line {exc.lineno}: {exc.msg}")
+            continue
+        missing = sorted(expected_defs - generated_defs)
+        if missing:
+            errors.append(f"{path}: missing public starter definitions: {missing}")
+    return {"ok": not errors, "errors": errors}
+
+
+def public_check_failure(error: str) -> dict[str, Any]:
+    return {"ok": False, "errors": [error]}
+
+
+def top_level_defs(source: str) -> set[str]:
+    tree = ast.parse(source)
+    return {
+        node.name
+        for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+    }
+
+
 def validate_relative_path(path: str) -> None:
     candidate = Path(path)
     if candidate.is_absolute() or ".." in candidate.parts or not candidate.parts:
@@ -367,6 +524,12 @@ def validate_condition_coverage(condition: str, rows: list[dict[str, Any]], task
         )
     if len(observed) != len(set(observed)):
         raise SystemExit(f"{condition}: duplicate task ids in generated rows")
+
+
+def clip(text: str, limit: int) -> str:
+    if len(text) <= limit:
+        return text
+    return text[:limit] + "\n...<truncated public repair context>..."
 
 
 if __name__ == "__main__":

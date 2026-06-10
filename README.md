@@ -240,7 +240,23 @@ Checked Mac5 adapter-training result with `mlx-community/gemma-3-1b-it-4bit`:
 - executable held-out task pass rate: `random` 0/6, `reward_selected` 0/6, `full_ledger` 0/6
 - synthetic rows: 0/18 in the adapter-conditioned executable report
 
-Boundary: the controlled adapters were trained and evaluated. The reward-selected split produced the best private validation loss, but downstream executable task-completion lift is not proven because every adapter condition failed all six held-out executable tasks.
+Boundary: this first adapter lane was a real negative result for the small Gemma 3 1B/256-token recipe, not for the ledger hypothesis overall.
+
+Checked Mac5 Gemma 4 E2B adapter result with 512 selected rows per condition, 460 train / 52 validation rows, 4096-token training context, raw-Python public-only generation, and the same hidden executable task set:
+
+- base model: `mlx-community/gemma-4-E2B-it-qat-4bit`
+- training iterations: 500 per condition
+- synthetic rows: 0/18 in the adapter-conditioned executable report
+- hidden tests sent to model: false
+- executable held-out task pass rate: `random` 3/6, `reward_selected` 5/6, `full_ledger` 2/6
+- reward-selected lift vs random: +2 tasks, +33.33 percentage points
+- reward-selected failed task: `py_chunked`
+- public artifacts:
+  - `benchmarks/training-lift-adapter-training-mlx-gemma4-e2b-512x4096-mac5-2026-06-10.json`
+  - `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`
+  - `benchmarks/executable-task-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`
+
+Boundary: this is now a positive downstream lift signal for reward-selected trajectory data under a matched Gemma 4 E2B adapter setup. Because the held-out set has only six tasks, it is not a final broad SWE-style claim. It proves that the evaluation path can detect nonzero trained-adapter differences and that the previous all-zero result was a weak-model/training-recipe failure.
 
 Run the stronger Gemma 4 base-model sanity gate:
 
@@ -323,7 +339,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through Mac5 adapter training: reward-selected data gives the best validation loss, but the checked adapter-conditioned executable benchmark is negative at 0/6 for all conditions. Stronger Gemma 4 base-model sanity runs reach 3/6 for E2B QAT and 5/6 for 12B QAT on the same held-out executable set, showing that the all-zero result was a weak-model/training-recipe failure rather than a benchmark or ledger inevitability. The next research step is a stronger training/generation setup, public-only repair, and a larger executable task set before claiming downstream lift.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through two Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The stronger Gemma 4 E2B/512-row/4096-token adapter result is positive for reward-selected data: `reward_selected` reaches 5/6 versus `random` at 3/6 and `full_ledger` at 2/6 on the same hidden executable set. Stronger Gemma 4 base-model sanity runs also reach 3/6 for E2B QAT and 5/6 for 12B QAT before ledger fine-tuning. The honest next research step is to repeat this positive signal on E4B or a cloud-trained 12B-class model and a larger executable task set.
 
 ## License
 

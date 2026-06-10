@@ -113,7 +113,20 @@ def main() -> int:
         },
         "remote_preflight": remote_preflight,
         "local_preflight": local_preflight,
-        "next_adapter_commands": build_next_commands(output_dir, args.base_model, local_preflight),
+        "training_command_template": {
+            "trainer_python": args.trainer_python,
+            "base_model": args.base_model,
+            "adapter_root": str(args.adapter_root),
+            "iters": args.train_iters,
+            "batch_size": args.train_batch_size,
+            "num_layers": args.train_num_layers,
+            "max_seq_length": args.train_max_seq_length,
+            "learning_rate": args.train_learning_rate,
+            "grad_checkpoint": args.train_grad_checkpoint,
+            "grad_accumulation_steps": args.train_grad_accumulation_steps,
+            "clear_cache_threshold": args.train_clear_cache_threshold,
+        },
+        "next_adapter_commands": build_next_commands(args, output_dir, local_preflight),
         "claim_boundary": (
             "This preflight prepares controlled random/reward_selected/full_ledger training splits "
             "and checks trainer reachability. It does not train adapters, generate post-training "
@@ -140,6 +153,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-tools", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--base-model", default="mlx-community/gemma-3-1b-it-4bit")
+    parser.add_argument("--trainer-python", default="python3")
+    parser.add_argument("--adapter-root", type=Path, default=Path("output/private-adapters"))
+    parser.add_argument("--train-iters", type=int, default=500)
+    parser.add_argument("--train-batch-size", type=int, default=1)
+    parser.add_argument("--train-num-layers", type=int, default=4)
+    parser.add_argument("--train-max-seq-length", type=int, default=256)
+    parser.add_argument("--train-learning-rate", default="1e-5")
+    parser.add_argument("--train-grad-checkpoint", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--train-grad-accumulation-steps", type=int)
+    parser.add_argument("--train-clear-cache-threshold", type=float)
     parser.add_argument("--remote-host", default="mac5")
     parser.add_argument("--remote-timeout-s", type=int, default=3)
     parser.add_argument("--probe-remote", action="store_true")
@@ -540,21 +563,34 @@ def derive_status(
     return "blocked_remote_training_unreachable"
 
 
-def build_next_commands(output_dir: Path, base_model: str, local_preflight: dict[str, Any]) -> dict[str, str]:
+def build_next_commands(args: argparse.Namespace, output_dir: Path, local_preflight: dict[str, Any]) -> dict[str, str]:
     env_prefix = ""
     if local_preflight.get("requires_env", {}).get("KMP_DUPLICATE_LIB_OK"):
         env_prefix = "KMP_DUPLICATE_LIB_OK=TRUE "
     commands = {}
     for condition in CONDITIONS:
         condition_dir = output_dir / condition
-        commands[condition] = (
-            f"{env_prefix}python3 -m mlx_lm lora "
-            f"--model {base_model} "
-            f"--data {condition_dir} "
-            "--train "
-            f"--adapter-path output/private-adapters/{condition} "
-            "--iters 500 --batch-size 1 --num-layers 4 --max-seq-length 256 --learning-rate 1e-5"
-        )
+        adapter_path = args.adapter_root / condition
+        parts = [
+            f"{env_prefix}{args.trainer_python}",
+            "-m mlx_lm lora",
+            f"--model {args.base_model}",
+            f"--data {condition_dir}",
+            "--train",
+            f"--adapter-path {adapter_path}",
+            f"--iters {args.train_iters}",
+            f"--batch-size {args.train_batch_size}",
+            f"--num-layers {args.train_num_layers}",
+            f"--max-seq-length {args.train_max_seq_length}",
+            f"--learning-rate {args.train_learning_rate}",
+        ]
+        if args.train_grad_checkpoint:
+            parts.append("--grad-checkpoint")
+        if args.train_grad_accumulation_steps is not None:
+            parts.append(f"--grad-accumulation-steps {args.train_grad_accumulation_steps}")
+        if args.train_clear_cache_threshold is not None:
+            parts.append(f"--clear-cache-threshold {args.train_clear_cache_threshold}")
+        commands[condition] = " ".join(parts)
     return commands
 
 

@@ -1,0 +1,153 @@
+{
+  "claim_boundary": "This preflight prepares controlled random/reward_selected/full_ledger training splits and checks trainer reachability. It does not train adapters, generate post-training candidates, or prove reward-selected task-completion lift.",
+  "created_at": "2026-06-10T07:18:06.012044+00:00",
+  "experiment_status": "ready_for_adapter_training",
+  "heldout_task_refs": {
+    "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl",
+    "task_specs": "examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl"
+  },
+  "local_preflight": {
+    "status": "not_requested"
+  },
+  "next_adapter_commands": {
+    "full_ledger": "~/Desktop/tml-gemma4-py314-env/bin/python -m mlx_lm lora --model ~/Desktop/tml-gemma4-models/gemma-4-12B-it-qat-4bit --data output/private-training-lift-gemma4-12b-smoke-2026-06-10/full_ledger --train --adapter-path output/private-adapters-gemma4-12b-smoke-2026-06-10/full_ledger --iters 20 --batch-size 1 --num-layers 4 --max-seq-length 4096 --learning-rate 1e-5 --grad-checkpoint --clear-cache-threshold 0.0",
+    "random": "~/Desktop/tml-gemma4-py314-env/bin/python -m mlx_lm lora --model ~/Desktop/tml-gemma4-models/gemma-4-12B-it-qat-4bit --data output/private-training-lift-gemma4-12b-smoke-2026-06-10/random --train --adapter-path output/private-adapters-gemma4-12b-smoke-2026-06-10/random --iters 20 --batch-size 1 --num-layers 4 --max-seq-length 4096 --learning-rate 1e-5 --grad-checkpoint --clear-cache-threshold 0.0",
+    "reward_selected": "~/Desktop/tml-gemma4-py314-env/bin/python -m mlx_lm lora --model ~/Desktop/tml-gemma4-models/gemma-4-12B-it-qat-4bit --data output/private-training-lift-gemma4-12b-smoke-2026-06-10/reward_selected --train --adapter-path output/private-adapters-gemma4-12b-smoke-2026-06-10/reward_selected --iters 20 --batch-size 1 --num-layers 4 --max-seq-length 4096 --learning-rate 1e-5 --grad-checkpoint --clear-cache-threshold 0.0"
+  },
+  "private_output_dir": "output/private-training-lift-gemma4-12b-smoke-2026-06-10",
+  "private_outputs_written": true,
+  "private_trajectory_store": "private-local-karl-trajectories",
+  "private_trajectory_store_path_recorded": false,
+  "remote_preflight": {
+    "mlx_ready": true,
+    "remote_host": "mac5",
+    "status": "ready",
+    "stderr_preview": "/Users/mohameddiomande/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020\n  warnings.warn(",
+    "stdout_preview": "mlx_ready",
+    "training_reachable": true
+  },
+  "schema": "trajectory-memory-ledger.training_lift_preflight.v1",
+  "selection": {
+    "conditions": {
+      "full_ledger": {
+        "advantage": {
+          "max": 3.344,
+          "mean": 0.8333,
+          "min": -3.3407
+        },
+        "condition": "full_ledger",
+        "domain_count": 31,
+        "domain_histogram_hash": "bd2616348fe520eebc83131912390e1a0abfc1dfade8d63d87baeeb8cbac0580",
+        "private_files": {
+          "manifest": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/full_ledger/manifest.json",
+          "train": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/full_ledger/train.jsonl",
+          "valid": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/full_ledger/valid.jsonl"
+        },
+        "record_count": 512,
+        "record_id_hash": "b3b9a1a1c3280dca2d0a87f40d38a248ef9cc6c4dc7af8f480d01c2728fe264f",
+        "reward": {
+          "max": 0.8165,
+          "mean": 0.679,
+          "min": 0.4666
+        },
+        "total_tools": {
+          "max": 50.0,
+          "mean": 10.0098,
+          "min": 2.0
+        },
+        "train_rows": 460,
+        "train_sha256": "8a9156bb040c8bb705aa16bd0eb2a134062f1e76603d4c58db7e126438421dcc",
+        "valid_rows": 52,
+        "valid_sha256": "0c497c7b9cee204b338578e0f22ff256ce09c36f7aa2c26d162fbf6fb2e033a6"
+      },
+      "random": {
+        "advantage": {
+          "max": 2.6941,
+          "mean": 0.8051,
+          "min": -2.698
+        },
+        "condition": "random",
+        "domain_count": 29,
+        "domain_histogram_hash": "350bbe2f57db93d1d650e5faa8bb80c75a98addf2bbeaab2426f80ff1d1a69f0",
+        "private_files": {
+          "manifest": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/random/manifest.json",
+          "train": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/random/train.jsonl",
+          "valid": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/random/valid.jsonl"
+        },
+        "record_count": 512,
+        "record_id_hash": "d6b439316d2ef709afbefd7985f50dc35bc5d0d32bc0893406854328ae84bbff",
+        "reward": {
+          "max": 0.7491,
+          "mean": 0.6782,
+          "min": 0.5378
+        },
+        "total_tools": {
+          "max": 50.0,
+          "mean": 10.4219,
+          "min": 2.0
+        },
+        "train_rows": 460,
+        "train_sha256": "a4f2af421e99c47f664babb62b7ea9a518c251af19171dfa067ac91856852158",
+        "valid_rows": 52,
+        "valid_sha256": "956c0281ed6cdf9480519ed6de44ed961c9871b26fe500c6ad52be7fca24503e"
+      },
+      "reward_selected": {
+        "advantage": {
+          "max": 3.344,
+          "mean": 1.6717,
+          "min": 0.2161
+        },
+        "condition": "reward_selected",
+        "domain_count": 31,
+        "domain_histogram_hash": "4b202cf0663f1bc189a1c7f9e711e75bcc4039feb8c62e6ef8d27a3200d8e5cd",
+        "private_files": {
+          "manifest": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/reward_selected/manifest.json",
+          "train": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/reward_selected/train.jsonl",
+          "valid": "output/private-training-lift-gemma4-12b-smoke-2026-06-10/reward_selected/valid.jsonl"
+        },
+        "record_count": 512,
+        "record_id_hash": "7b7aad3c1b34cb0e5852de1ad15f2c6de767cc49c781d10300a176c3f9e9863a",
+        "reward": {
+          "max": 0.8165,
+          "mean": 0.7259,
+          "min": 0.7157
+        },
+        "total_tools": {
+          "max": 50.0,
+          "mean": 11.9375,
+          "min": 3.0
+        },
+        "train_rows": 460,
+        "train_sha256": "62f9a73309dae66926cd335e534fee9ccb3aed49986a006283ed3895e3fea251",
+        "valid_rows": 52,
+        "valid_sha256": "902878f99b5424e137a15be7f6f3be4f3b9750a63e841f31fb3c1e8c888340f4"
+      }
+    },
+    "eligible_records": 2922,
+    "excluded": {
+      "empty_plan": 0,
+      "heldout_leakage_risk": 2138,
+      "json_decode": 0,
+      "missing_prompt": 749,
+      "missing_reward": 0,
+      "too_few_tools": 1663
+    },
+    "min_tools": 2,
+    "sample_size_per_condition": 512,
+    "seed": 42,
+    "valid_ratio": 0.1
+  },
+  "training_command_template": {
+    "adapter_root": "output/private-adapters-gemma4-12b-smoke-2026-06-10",
+    "base_model": "~/Desktop/tml-gemma4-models/gemma-4-12B-it-qat-4bit",
+    "batch_size": 1,
+    "clear_cache_threshold": 0.0,
+    "grad_accumulation_steps": null,
+    "grad_checkpoint": true,
+    "iters": 20,
+    "learning_rate": "1e-5",
+    "max_seq_length": 4096,
+    "num_layers": 4,
+    "trainer_python": "~/Desktop/tml-gemma4-py314-env/bin/python"
+  }
+}
