@@ -5,7 +5,7 @@ Trajectory Memory Ledger currently has four levels of evidence:
 1. Artifact correctness: the Rust runtime builds, passes tests, passes clippy, performs one-shot ingestion, normalizes schema-v2 records, scores trajectories, handles `(date, seq)` cursor rollover, and appends under a file lock.
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
-4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, and a real adapter-conditioned report over a six-task held-out Python stdlib task set. These results prove executable performance measurement. They do not prove trained reward-selected task-completion lift: the adapter run gives the best validation loss for `reward_selected`, but every adapter condition scores 0/6 on executable tasks.
+4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, and a real adapter-conditioned report over a six-task held-out Python stdlib task set. These results prove executable performance measurement. They do not prove trained reward-selected task-completion lift: the adapter run gives the best validation loss for `reward_selected`, but every adapter condition scores 0/6 on executable tasks. The Gemma 4 base lines reach 3/6 for E2B and 5/6 for 12B, so the adapter failure should be read as a weak training/generation setup, not as an all-local-model failure.
 
 ## Daemon Benchmark
 
@@ -393,3 +393,66 @@ Interpretation:
 - The reward-selected split produced the best validation loss, which supports the claim that the reward-selected data better matches the private validation objective.
 - The downstream executable benchmark is negative. It does not prove that reward-selected trajectory training improves task completion over random selection.
 - The next empirical gate should use a stronger base model or more capable training recipe and a larger/harder executable task set before making a downstream-lift claim.
+
+### Gemma 4 Base-Model Sanity Gate
+
+The first local adapter result was all-zero, but that did not isolate the cause. It combined a very small base model, a small private split, 256-token training context, and limited generation behavior. Stronger base-model sanity runs were added so the repository can distinguish "the benchmark is impossible" from "the previous training recipe was too weak."
+
+Candidate generation used `mlx-community/gemma-4-E2B-it-qat-4bit` and `mlx-community/gemma-4-12B-it-qat-4bit` through `mlx-vlm` on Mac5. The script loads the MLX-VLM model once, applies the instruct chat template, sends only public task prompts and starter files, records raw generations outside the public candidate JSONL, and writes a report with `hidden_tests_sent_to_model=false`.
+
+```bash
+python3 scripts/generate_executable_candidates_mlx_vlm.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --model-path ~/Desktop/tml-gemma4-models/gemma-4-E2B-it-qat-4bit \
+  --model-label mlx-community/gemma-4-E2B-it-qat-4bit \
+  --condition gemma4_e2b_qat_base \
+  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --raw-dir output/private-generation-raw-gemma4-e2b-qat-base-2026-06-10 \
+  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --max-tokens 2048 \
+  --temperature 0.0 \
+  --repair-attempts 2
+```
+
+Generation report:
+
+| Field | Value |
+|---|---:|
+| Model | `mlx-community/gemma-4-E2B-it-qat-4bit` |
+| Backend | `mlx_vlm.generate` |
+| Public tasks | 6 |
+| Synthetic rows | 0 |
+| Hidden tests sent to model | false |
+| Max generation tokens | 2048 |
+| Public compatibility failures before hidden tests | 0/6 |
+
+The 12B run used the same protocol with `mlx-community/gemma-4-12B-it-qat-4bit`, `max_tokens=4096`, `synthetic_rows=0`, and `hidden_tests_sent_to_model=false`. It loaded successfully on Mac5. One public compatibility failure remained before hidden-test materialization: `py_redact_secrets` produced malformed Python even after two public-only repair attempts.
+
+Materialization and execution:
+
+```bash
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --require-real
+```
+
+Checked base-model executable result:
+
+| Condition | Rows | Passed | Pass rate | Failed task ids |
+|---|---:|---:|---:|---|
+| `gemma4_e2b_qat_base` | 6 | 3 | 50.0% | `py_topological_sort`, `py_chunked`, `py_redact_secrets` |
+| `gemma4_12b_qat_base` | 6 | 5 | 83.33% | `py_redact_secrets` |
+
+Interpretation:
+
+- The old all-zero local result should not be read as proof that the ledger idea failed. It was a negative result for the specific Gemma 3 1B adapter setup.
+- The Gemma 4 E2B QAT base model reaches 3/6 on the same hidden-test executable task set without ledger fine-tuning.
+- The Gemma 4 12B QAT base model reaches 5/6 on the same task set, confirming that Mac5 can run a materially stronger local baseline.
+- The remaining 12B failure is a malformed redaction implementation, not a benchmark/system crash. It points toward a public-only repair/checking layer, not hidden-test leakage.
+- The next controlled lift experiment should start from Gemma 4 12B-class or stronger models, train with at least 4096-token context, use hundreds or thousands of rows per condition, and report both base-model and adapter-conditioned executable deltas.

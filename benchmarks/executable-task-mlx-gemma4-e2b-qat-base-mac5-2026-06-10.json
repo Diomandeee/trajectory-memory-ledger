@@ -1,0 +1,100 @@
+{
+  "input_rows": 6,
+  "benchmark_kinds": [
+    "executable-task-bench-real-model-output"
+  ],
+  "task_sets": [
+    "python-stdlib-heldout-v0"
+  ],
+  "source_artifacts": [
+    "mlx-vlm:mlx-community/gemma-4-E2B-it-qat-4bit:base"
+  ],
+  "synthetic_rows": 0,
+  "measures_executed_task_completion": true,
+  "boundary": "Runs verifier commands in isolated temp workspaces and measures executable pass/fail. This report has synthetic_rows=0, so task pass rates are executable results for the supplied candidate/model-output rows.",
+  "conditions": {
+    "gemma4_e2b_qat_base": {
+      "n": 6,
+      "passed": 3,
+      "task_pass_rate": 0.5,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 0.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 68.1667,
+      "failed_task_ids": [
+        "py_topological_sort",
+        "py_chunked",
+        "py_redact_secrets"
+      ]
+    }
+  },
+  "row_results": [
+    {
+      "condition": "gemma4_e2b_qat_base",
+      "task_id": "py_parse_duration",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 84,
+      "stdout_preview": "",
+      "stderr_preview": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e2b_qat_base",
+      "task_id": "py_merge_intervals",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 60,
+      "stdout_preview": "",
+      "stderr_preview": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e2b_qat_base",
+      "task_id": "py_topological_sort",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 67,
+      "stdout_preview": "",
+      "stderr_preview": "..E\n======================================================================\nERROR: test_includes_nodes_from_edges (test_graph_tools.GraphToolsTest)\n----------------------------------------------------------------------\nTraceback (most recent",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e2b_qat_base",
+      "task_id": "py_group_by_key",
+      "passed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 71,
+      "stdout_preview": "",
+      "stderr_preview": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e2b_qat_base",
+      "task_id": "py_chunked",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 60,
+      "stdout_preview": "",
+      "stderr_preview": "F.\n======================================================================\nFAIL: test_chunked_lists_and_generators (test_iter_tools.IterToolsTest)\n----------------------------------------------------------------------\nTraceback (most recent ",
+      "workspace": null
+    },
+    {
+      "condition": "gemma4_e2b_qat_base",
+      "task_id": "py_redact_secrets",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 67,
+      "stdout_preview": "",
+      "stderr_preview": "FF\n======================================================================\nFAIL: test_leaves_unrelated_text (test_security_tools.SecurityToolsTest)\n----------------------------------------------------------------------\nTraceback (most recent",
+      "workspace": null
+    }
+  ]
+}

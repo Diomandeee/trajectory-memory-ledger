@@ -1,0 +1,165 @@
+{
+  "backend": "mlx_vlm.generate",
+  "condition": "gemma4_12b_qat_base",
+  "created_at": "2026-06-10T07:04:43.320020+00:00",
+  "generation": {
+    "chat_template": true,
+    "eos_tokens": [
+      "<turn|>",
+      "<end_of_turn>",
+      "<start_of_turn>"
+    ],
+    "max_tokens": 4096,
+    "repair_attempts": 2,
+    "temperature": 0.0
+  },
+  "generator": "generate_executable_candidates_mlx_vlm.py",
+  "hidden_tests_sent_to_model": false,
+  "model_label": "mlx-community/gemma-4-12B-it-qat-4bit",
+  "model_path_recorded": false,
+  "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl",
+  "raw_dir": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10",
+  "synthetic_rows": 0,
+  "tasks": {
+    "py_chunked": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_chunked/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/iter_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_group_by_key": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_group_by_key/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/collection_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_merge_intervals": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_merge_intervals/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/interval_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_parse_duration": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_parse_duration/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/time_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    },
+    "py_redact_secrets": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [
+              "src/security_tools.py: SyntaxError line 4: unterminated triple-quoted string literal (detected at line 10)"
+            ],
+            "ok": false
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_redact_secrets/attempt-0.raw.txt"
+        },
+        {
+          "attempt": 1,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [
+              "src/security_tools.py: SyntaxError line 4: unterminated triple-quoted string literal (detected at line 10)"
+            ],
+            "ok": false
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_redact_secrets/attempt-1.raw.txt"
+        },
+        {
+          "attempt": 2,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [
+              "src/security_tools.py: SyntaxError line 4: unterminated triple-quoted string literal (detected at line 10)"
+            ],
+            "ok": false
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_redact_secrets/attempt-2.raw.txt"
+        }
+      ],
+      "candidate_path": "src/security_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [
+          "src/security_tools.py: SyntaxError line 4: unterminated triple-quoted string literal (detected at line 10)"
+        ],
+        "ok": false
+      }
+    },
+    "py_topological_sort": {
+      "attempts": [
+        {
+          "attempt": 0,
+          "parse_mode": "raw_python",
+          "public_check": {
+            "errors": [],
+            "ok": true
+          },
+          "raw_response": "output/private-generation-raw-gemma4-12b-qat-base-2026-06-10/gemma4_12b_qat_base/py_topological_sort/attempt-0.raw.txt"
+        }
+      ],
+      "candidate_path": "src/graph_tools.py",
+      "final_parse_mode": "raw_python",
+      "final_public_check": {
+        "errors": [],
+        "ok": true
+      }
+    }
+  }
+}

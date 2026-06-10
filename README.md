@@ -31,6 +31,7 @@ This repository contains:
 - `docs/architecture.md`: system architecture
 - `docs/metrics.md`: Prometheus metrics
 - `docs/evaluation.md`: benchmark results and downstream evaluation protocol
+- `docs/training-lift-next-plan.md`: next controlled downstream-lift protocol
 - `examples/`: synthetic event and trajectory examples
 - `examples/evaluation/karl-v7-heldout-coding-agent-model-scores.jsonl`: privacy-preserving aggregate rows from a real held-out coding-agent model-quality benchmark
 - `examples/evaluation/executable-taskset-python-stdlib-smoke.jsonl`: canonical executable smoke task specs
@@ -41,6 +42,8 @@ This repository contains:
 - `examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl`: non-synthetic Claude Sonnet candidate rows
 - `examples/evaluation/executable-candidates-gemini-flash-karl-context-2026-06-07.jsonl`: non-synthetic Gemini 2.5 Flash candidate rows
 - `examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl`: non-synthetic MLX adapter candidate rows from the controlled training-lift split
+- `examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 E2B QAT base-model candidate rows
+- `examples/evaluation/executable-candidates-mlx-gemma4-12b-qat-base-mac5-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 12B QAT base-model candidate rows
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -239,6 +242,52 @@ Checked Mac5 adapter-training result with `mlx-community/gemma-3-1b-it-4bit`:
 
 Boundary: the controlled adapters were trained and evaluated. The reward-selected split produced the best private validation loss, but downstream executable task-completion lift is not proven because every adapter condition failed all six held-out executable tasks.
 
+Run the stronger Gemma 4 base-model sanity gate:
+
+```bash
+python3 scripts/generate_executable_candidates_mlx_vlm.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --model-path ~/Desktop/tml-gemma4-models/gemma-4-E2B-it-qat-4bit \
+  --model-label mlx-community/gemma-4-E2B-it-qat-4bit \
+  --condition gemma4_e2b_qat_base \
+  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --raw-dir output/private-generation-raw-gemma4-e2b-qat-base-2026-06-10 \
+  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --max-tokens 2048 \
+  --temperature 0.0 \
+  --repair-attempts 2
+
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --require-real
+```
+
+Checked Mac5 base-model result with `mlx-community/gemma-4-E2B-it-qat-4bit` through `mlx-vlm`:
+
+- executable held-out task pass rate: `gemma4_e2b_qat_base` 3/6
+- pass rate: 50.0%
+- passed tasks: `py_parse_duration`, `py_merge_intervals`, `py_group_by_key`
+- failed tasks: `py_topological_sort`, `py_chunked`, `py_redact_secrets`
+- synthetic rows: 0/6
+- hidden tests sent to model: false
+
+The same gate with `mlx-community/gemma-4-12B-it-qat-4bit` loaded successfully on Mac5 and was run with `--max-tokens 4096`:
+
+- executable held-out task pass rate: `gemma4_12b_qat_base` 5/6
+- pass rate: 83.33%
+- passed tasks: `py_parse_duration`, `py_merge_intervals`, `py_topological_sort`, `py_group_by_key`, `py_chunked`
+- failed task: `py_redact_secrets`
+- synthetic rows: 0/6
+- hidden tests sent to model: false
+
+Boundary: this is a base-model sanity result, not trained ledger lift. It corrects the old all-zero local-model picture: the Gemma 3 1B adapter setup failed downstream task completion, Gemma 4 E2B QAT reaches 3/6, and Gemma 4 12B QAT reaches 5/6 before any ledger fine-tuning.
+
 ## Test
 
 ```bash
@@ -274,7 +323,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through Mac5 adapter training: reward-selected data gives the best validation loss, but the checked adapter-conditioned executable benchmark is negative at 0/6 for all conditions. The next research step is a stronger training/generation setup and a larger executable task set before claiming downstream lift.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through Mac5 adapter training: reward-selected data gives the best validation loss, but the checked adapter-conditioned executable benchmark is negative at 0/6 for all conditions. Stronger Gemma 4 base-model sanity runs reach 3/6 for E2B QAT and 5/6 for 12B QAT on the same held-out executable set, showing that the all-zero result was a weak-model/training-recipe failure rather than a benchmark or ledger inevitability. The next research step is a stronger training/generation setup, public-only repair, and a larger executable task set before claiming downstream lift.
 
 ## License
 
