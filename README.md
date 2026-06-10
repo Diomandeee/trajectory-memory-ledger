@@ -40,6 +40,7 @@ This repository contains:
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl`: public prompts used for real model-output generation
 - `examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl`: non-synthetic Claude Sonnet candidate rows
 - `examples/evaluation/executable-candidates-gemini-flash-karl-context-2026-06-07.jsonl`: non-synthetic Gemini 2.5 Flash candidate rows
+- `examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl`: non-synthetic MLX adapter candidate rows from the controlled training-lift split
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -125,7 +126,7 @@ Current result:
 - fastest 1.0-score model: `GPT-5.4-mini` at 1.5688s mean latency
 - lowest result: `Qwen3.5 397B`, 0.0 mean score / 0% quality pass
 
-Boundary: this measures model response quality on held-out coding-agent contexts. It does not execute repository tasks or prove that reward-selected trajectory training improves SWE-style task completion. The next empirical gate is still a same-task comparison of random trajectory selection, reward-selected trajectory selection, and the full normalized ledger export.
+Boundary: this measures model response quality on held-out coding-agent contexts. It does not execute repository tasks or prove that reward-selected trajectory training improves SWE-style task completion. The repository now includes that same-task adapter gate; its first result is negative for executable task completion, even though reward-selected training gives the best validation loss.
 
 Run the executable task benchmark smoke suite:
 
@@ -204,7 +205,39 @@ Checked preflight result:
 - Mac5-free local trainer status: ready with `KMP_DUPLICATE_LIB_OK=TRUE`
 - local trainer resources: 16 GB memory, 6.97 GB free disk at preflight time
 
-Boundary: this prepares the controlled adapter experiment and records the real blockers/options. It still does not train adapters or prove task-completion lift. Since `mac5` is unavailable, the next viable path is local MLX LoRA on this Mac with the small 1B 4-bit base model and ignored private adapter outputs.
+Run the trained-adapter executable gate after one MLX LoRA adapter has been trained per condition:
+
+```bash
+python3 scripts/generate_executable_candidates_mlx_adapter.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --model mlx-community/gemma-3-1b-it-4bit \
+  --adapter-root output/private-adapters-gemma3-1b-2026-06-10 \
+  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --raw-dir output/private-generation-raw-gemma3-1b-clean-2026-06-10 \
+  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --max-tokens 1024 \
+  --timeout-s 360 \
+  --seed 42
+
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --require-real
+```
+
+Checked Mac5 adapter-training result with `mlx-community/gemma-3-1b-it-4bit`:
+
+- final validation loss: `reward_selected` 1.484, `full_ledger` 1.843, `random` 2.031
+- relative validation-loss reduction vs `random`: `reward_selected` 26.93%, `full_ledger` 9.26%
+- executable held-out task pass rate: `random` 0/6, `reward_selected` 0/6, `full_ledger` 0/6
+- synthetic rows: 0/18 in the adapter-conditioned executable report
+
+Boundary: the controlled adapters were trained and evaluated. The reward-selected split produced the best private validation loss, but downstream executable task-completion lift is not proven because every adapter condition failed all six held-out executable tasks.
 
 ## Test
 
@@ -241,7 +274,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift preflight now prepares controlled private splits and records that remote adapter training is blocked on `mac5` reachability. The next research step is to run those adapters once the trainer is reachable, then evaluate them on the same executable held-out task set.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through Mac5 adapter training: reward-selected data gives the best validation loss, but the checked adapter-conditioned executable benchmark is negative at 0/6 for all conditions. The next research step is a stronger training/generation setup and a larger executable task set before claiming downstream lift.
 
 ## License
 

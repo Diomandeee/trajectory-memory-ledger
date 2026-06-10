@@ -1,0 +1,115 @@
+{
+  "adapter_root_recorded": false,
+  "backend": "python -m mlx_lm generate",
+  "conditions": {
+    "full_ledger": {
+      "adapter_path_recorded": false,
+      "rows": 6,
+      "tasks": {
+        "py_chunked": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/full_ledger/py_chunked.raw-retry.txt"
+        },
+        "py_group_by_key": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/full_ledger/py_group_by_key.raw-retry.txt"
+        },
+        "py_merge_intervals": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/full_ledger/py_merge_intervals.raw-retry.txt"
+        },
+        "py_parse_duration": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/full_ledger/py_parse_duration.raw-retry.txt"
+        },
+        "py_redact_secrets": {
+          "parse_mode": "json",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/full_ledger/py_redact_secrets.raw.txt"
+        },
+        "py_topological_sort": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/full_ledger/py_topological_sort.raw-retry.txt"
+        }
+      }
+    },
+    "random": {
+      "adapter_path_recorded": false,
+      "rows": 6,
+      "tasks": {
+        "py_chunked": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/random/py_chunked.raw-retry.txt"
+        },
+        "py_group_by_key": {
+          "parse_mode": "json",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/random/py_group_by_key.raw.txt"
+        },
+        "py_merge_intervals": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/random/py_merge_intervals.raw-retry.txt"
+        },
+        "py_parse_duration": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/random/py_parse_duration.raw-retry.txt"
+        },
+        "py_redact_secrets": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/random/py_redact_secrets.raw-retry.txt"
+        },
+        "py_topological_sort": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/random/py_topological_sort.raw-retry.txt"
+        }
+      }
+    },
+    "reward_selected": {
+      "adapter_path_recorded": false,
+      "rows": 6,
+      "tasks": {
+        "py_chunked": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/reward_selected/py_chunked.raw-retry.txt"
+        },
+        "py_group_by_key": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/reward_selected/py_group_by_key.raw-retry.txt"
+        },
+        "py_merge_intervals": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/reward_selected/py_merge_intervals.raw-retry.txt"
+        },
+        "py_parse_duration": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/reward_selected/py_parse_duration.raw-retry.txt"
+        },
+        "py_redact_secrets": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/reward_selected/py_redact_secrets.raw-retry.txt"
+        },
+        "py_topological_sort": {
+          "parse_mode": "raw_python_retry",
+          "raw_response": "output/private-generation-raw-gemma3-1b-clean-2026-06-10/reward_selected/py_topological_sort.raw-retry.txt"
+        }
+      }
+    }
+  },
+  "created_at": "2026-06-10T03:42:06.645803+00:00",
+  "generation": {
+    "env": {},
+    "extra_eos_token": [
+      "<end_of_turn>",
+      "<start_of_turn>"
+    ],
+    "max_tokens": 1024,
+    "seed": 42,
+    "temp": 0.0,
+    "timeout_s": 360,
+    "top_p": 1.0
+  },
+  "generator": "generate_executable_candidates_mlx_adapter.py",
+  "hidden_tests_sent_to_model": false,
+  "model": "mlx-community/gemma-3-1b-it-4bit",
+  "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl",
+  "raw_dir": "output/private-generation-raw-gemma3-1b-clean-2026-06-10",
+  "synthetic_rows": 0
+}

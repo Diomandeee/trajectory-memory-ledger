@@ -1,0 +1,74 @@
+{
+  "benchmark_kind": "training-lift-adapter-training-private-splits",
+  "created_at": "2026-06-10T03:47:49Z",
+  "model": "mlx-community/gemma-3-1b-it-4bit",
+  "trainer": "mac5",
+  "private_training_rows_checked_in": false,
+  "private_adapter_outputs_checked_in": false,
+  "private_raw_generation_logs_checked_in": false,
+  "training_split_report": "benchmarks/training-lift-local-preflight-2026-06-08.json",
+  "candidate_generation_report": "benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json",
+  "executable_task_report": "benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json",
+  "training_settings": {
+    "iters": 500,
+    "batch_size": 1,
+    "num_layers": 4,
+    "max_seq_length": 256,
+    "learning_rate": 1e-5,
+    "steps_per_report": 25,
+    "steps_per_eval": 100,
+    "save_every": 100
+  },
+  "conditions": {
+    "random": {
+      "train_rows": 86,
+      "validation_rows": 10,
+      "final_train_loss": 0.918,
+      "final_validation_loss": 2.031,
+      "trained_tokens": 99937,
+      "peak_memory_gb": 1.644
+    },
+    "reward_selected": {
+      "train_rows": 86,
+      "validation_rows": 10,
+      "final_train_loss": 1.129,
+      "final_validation_loss": 1.484,
+      "trained_tokens": 108938,
+      "peak_memory_gb": 1.644
+    },
+    "full_ledger": {
+      "train_rows": 86,
+      "validation_rows": 10,
+      "final_train_loss": 0.973,
+      "final_validation_loss": 1.843,
+      "trained_tokens": 99317,
+      "peak_memory_gb": 1.644
+    }
+  },
+  "validation_loss_ranking_lowest_to_highest": [
+    "reward_selected",
+    "full_ledger",
+    "random"
+  ],
+  "relative_to_random_validation_loss": {
+    "reward_selected": {
+      "absolute_delta": -0.547,
+      "relative_reduction_pct": 26.9325
+    },
+    "full_ledger": {
+      "absolute_delta": -0.188,
+      "relative_reduction_pct": 9.2565
+    }
+  },
+  "downstream_executable_result": {
+    "task_set": "python-stdlib-heldout-v0",
+    "synthetic_rows": 0,
+    "measures_executed_task_completion": true,
+    "passes": {
+      "random": "0/6",
+      "reward_selected": "0/6",
+      "full_ledger": "0/6"
+    }
+  },
+  "interpretation": "The reward-selected adapter achieved the lowest private validation loss, but the adapter-conditioned executable held-out task benchmark did not show downstream task-completion lift; all three conditions scored 0/6."
+}

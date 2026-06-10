@@ -1,0 +1,273 @@
+{
+  "input_rows": 18,
+  "benchmark_kinds": [
+    "executable-task-bench-real-model-output"
+  ],
+  "task_sets": [
+    "python-stdlib-heldout-v0"
+  ],
+  "source_artifacts": [
+    "mlx:mlx-community/gemma-3-1b-it-4bit:adapter=random",
+    "mlx:mlx-community/gemma-3-1b-it-4bit:adapter=reward_selected",
+    "mlx:mlx-community/gemma-3-1b-it-4bit:adapter=full_ledger"
+  ],
+  "synthetic_rows": 0,
+  "measures_executed_task_completion": true,
+  "boundary": "Runs verifier commands in isolated temp workspaces and measures executable pass/fail. This report has synthetic_rows=0, so task pass rates are executable results for the supplied candidate/model-output rows.",
+  "conditions": {
+    "full_ledger": {
+      "n": 6,
+      "passed": 0,
+      "task_pass_rate": 0.0,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 0.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 169.8333,
+      "failed_task_ids": [
+        "py_parse_duration",
+        "py_merge_intervals",
+        "py_topological_sort",
+        "py_group_by_key",
+        "py_chunked",
+        "py_redact_secrets"
+      ]
+    },
+    "random": {
+      "n": 6,
+      "passed": 0,
+      "task_pass_rate": 0.0,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 0.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 155.0,
+      "failed_task_ids": [
+        "py_parse_duration",
+        "py_merge_intervals",
+        "py_topological_sort",
+        "py_group_by_key",
+        "py_chunked",
+        "py_redact_secrets"
+      ]
+    },
+    "reward_selected": {
+      "n": 6,
+      "passed": 0,
+      "task_pass_rate": 0.0,
+      "timeout_rate": 0.0,
+      "valid_tool_plan_rate": 1.0,
+      "test_inclusion_rate": 0.0,
+      "build_inclusion_rate": 0.0,
+      "mean_duration_ms": 173.1667,
+      "failed_task_ids": [
+        "py_parse_duration",
+        "py_merge_intervals",
+        "py_topological_sort",
+        "py_group_by_key",
+        "py_chunked",
+        "py_redact_secrets"
+      ]
+    }
+  },
+  "row_results": [
+    {
+      "condition": "random",
+      "task_id": "py_parse_duration",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 268,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_time_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: ",
+      "workspace": null
+    },
+    {
+      "condition": "random",
+      "task_id": "py_merge_intervals",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 109,
+      "stdout_preview": "",
+      "stderr_preview": "FF\n======================================================================\nFAIL: test_merge_intervals_overlaps_and_adjacency (test_interval_tools.IntervalToolsTest)\n----------------------------------------------------------------------\nTrace",
+      "workspace": null
+    },
+    {
+      "condition": "random",
+      "task_id": "py_topological_sort",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 131,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_graph_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module:",
+      "workspace": null
+    },
+    {
+      "condition": "random",
+      "task_id": "py_group_by_key",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 176,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_collection_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test mo",
+      "workspace": null
+    },
+    {
+      "condition": "random",
+      "task_id": "py_chunked",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 107,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_iter_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: ",
+      "workspace": null
+    },
+    {
+      "condition": "random",
+      "task_id": "py_redact_secrets",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 139,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_security_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test modu",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_parse_duration",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 164,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_time_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: ",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_merge_intervals",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 180,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_interval_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test modu",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_topological_sort",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 206,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_graph_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module:",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_group_by_key",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 131,
+      "stdout_preview": "",
+      "stderr_preview": "F\n======================================================================\nFAIL: test_group_by_key_preserves_order_and_missing_key (test_collection_tools.CollectionToolsTest)\n-------------------------------------------------------------------",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_chunked",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 202,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_iter_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: ",
+      "workspace": null
+    },
+    {
+      "condition": "reward_selected",
+      "task_id": "py_redact_secrets",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 156,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_security_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test modu",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_parse_duration",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 142,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_time_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: ",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_merge_intervals",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 158,
+      "stdout_preview": "",
+      "stderr_preview": "F.\n======================================================================\nFAIL: test_merge_intervals_overlaps_and_adjacency (test_interval_tools.IntervalToolsTest)\n----------------------------------------------------------------------\nTrace",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_topological_sort",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 189,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_graph_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module:",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_group_by_key",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 180,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_collection_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test mo",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_chunked",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 156,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_iter_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: ",
+      "workspace": null
+    },
+    {
+      "condition": "full_ledger",
+      "task_id": "py_redact_secrets",
+      "passed": false,
+      "exit_code": 1,
+      "timed_out": false,
+      "duration_ms": 194,
+      "stdout_preview": "",
+      "stderr_preview": "E\n======================================================================\nERROR: test_security_tools (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test modu",
+      "workspace": null
+    }
+  ]
+}

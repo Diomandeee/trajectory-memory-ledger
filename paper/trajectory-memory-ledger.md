@@ -14,7 +14,7 @@ Coding agents generate a continuous stream of operational experience: prompts, f
 
 This paper presents the public reference artifact and the current evaluation evidence. The Rust daemon, `trajectory-ledgerd`, ingests gateway events, tracks date-scoped cursors, normalizes schema-v2 trajectory cards, scores records at emit time, appends under a file lock, and exports Prometheus metrics. On the checked synthetic daemon benchmark, it ingests 8,000 event envelopes in 6.287 seconds, reaching 1,272.385 events/sec and 159.048 trajectory cards/sec with p95 append latency of 4.027 ms. The originating private deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML training examples.
 
-The current empirical evidence supports four claims: the artifact is operationally reproducible, the reward model selects cleaner trajectories than random sampling, a real held-out coding-agent model-quality benchmark can be reproduced from aggregate rows in the repository, and real model-output candidates can be evaluated on executable held-out tasks. The strongest checked held-out model-quality result evaluates 10 model conditions over 5 coding-agent session contexts each, with `GPT-5.4-mini` selected as the best tied condition by mean score and latency. The new executable benchmark evaluates Claude Sonnet and Gemini 2.5 Flash outputs over a six-task Python stdlib held-out set, with hidden verifier tests and `synthetic_rows=0`. Claude Sonnet saturates the benchmark at 6/6 for all context conditions. Gemini 2.5 Flash reaches 5/6 for `random`, 5/6 for `reward_selected`, and 4/6 for `full_ledger`. These are real executable performance results, but they do not yet prove trained reward-selected trajectory lift over random selection.
+The current empirical evidence supports five measured claims and one important negative boundary: the artifact is operationally reproducible, the reward model selects cleaner trajectories than random sampling, a real held-out coding-agent model-quality benchmark can be reproduced from aggregate rows in the repository, real model-output candidates can be evaluated on executable held-out tasks, and reward-selected private training data gives the best small-adapter validation loss. The strongest checked held-out model-quality result evaluates 10 model conditions over 5 coding-agent session contexts each, with `GPT-5.4-mini` selected as the best tied condition by mean score and latency. The prompt-conditioned executable benchmark evaluates Claude Sonnet and Gemini 2.5 Flash outputs over a six-task Python stdlib held-out set, with hidden verifier tests and `synthetic_rows=0`. Claude Sonnet saturates the benchmark at 6/6 for all context conditions. Gemini 2.5 Flash reaches 5/6 for `random`, 5/6 for `reward_selected`, and 4/6 for `full_ledger`. The trained-adapter gate then trains three MLX LoRA adapters with `mlx-community/gemma-3-1b-it-4bit`: `reward_selected` achieves the best validation loss at 1.484 versus `full_ledger` at 1.843 and `random` at 2.031, but all three adapters score 0/6 on the same executable held-out tasks. Therefore the artifact now proves adapter training and executable adapter evaluation, but it still does not prove downstream reward-selected task-completion lift over random selection.
 
 ---
 
@@ -30,9 +30,10 @@ The current empirical evidence supports four claims: the artifact is operational
 | Executable benchmark runner works | Proven for harness mechanics | 3 Python stdlib smoke tasks x 3 conditions, isolated temp workspaces, verifier commands, pass/fail aggregation | Smoke rows are synthetic |
 | Real executable model-output evaluation | Proven for prompt-conditioned model outputs | Claude Sonnet and Gemini 2.5 Flash, 6 held-out tasks x 3 context conditions each, 36 non-synthetic rows total | Measures executable pass/fail for generated candidates |
 | Reward-selected context improves over full-ledger context | Partially supported | Gemini 2.5 Flash: `reward_selected` 5/6 vs `full_ledger` 4/6 | Single backend and small task set |
-| Reward-selected trajectory data improves executable coding-task completion over random | Not proven yet | Gemini 2.5 Flash ties `random` at 5/6; Claude Sonnet saturates all conditions at 6/6 | Requires harder tasks and/or trained adapter evaluation |
+| Reward-selected training data improves adapter validation loss over random | Supported for the private split | Mac5 MLX LoRA run: `reward_selected` validation loss 1.484 vs `random` 2.031, a 26.93% reduction | Validation loss is not executable task completion |
+| Reward-selected trajectory data improves executable coding-task completion over random | Not proven; current adapter run is negative | Mac5 adapter-conditioned executable benchmark: `random` 0/6, `reward_selected` 0/6, `full_ledger` 0/6 | Requires stronger training/generation setup and a larger or harder task set |
 
-The short answer: performance and evaluation are now proven for the artifact/runtime, held-out model-quality scoring, and real executable model-output measurement. The stronger claim, that ledger-selected training data improves real executable coding-task completion over random selection, is not proven yet.
+The short answer: performance and evaluation are now proven for the artifact/runtime, held-out model-quality scoring, real executable model-output measurement, and the mechanics of training/evaluating adapters from controlled private splits. The stronger claim, that ledger-selected training data improves real executable coding-task completion over random selection, is not proven; the first adapter-conditioned executable result is negative.
 
 ---
 
@@ -440,45 +441,31 @@ Both executable reports have `synthetic_rows=0` and `measures_executed_task_comp
 
 ## 8. Discussion
 
-Trajectory Memory Ledger is best understood as an artifact and systems paper at the current stage. The runtime and data pipeline are implemented. The scoring model has interpretable selection and ablation evidence. The held-out model-quality benchmark is real and reproducible from aggregate rows. The executable task-completion path has now been fed real prompt-conditioned model outputs, producing checked non-synthetic pass/fail reports.
+Trajectory Memory Ledger is best understood as an artifact and systems paper at the current stage. The runtime and data pipeline are implemented. The scoring model has interpretable selection and ablation evidence. The held-out model-quality benchmark is real and reproducible from aggregate rows. The executable task-completion path has now been fed both prompt-conditioned model outputs and trained-adapter outputs, producing checked non-synthetic pass/fail reports.
 
 The strongest empirical result inside the reward model is the verification signal. Removing verification changes the top-ranked set more than removing any other component. This matches the practical coding-agent intuition: the best sessions do not merely edit code, they close the loop with tests, builds, or inspection.
 
 The weakest current empirical signal is outcome. In live future data, user corrections and redo requests should be highly valuable. In the historical backfill, those annotations are sparse, so outcome often defaults to neutral. This makes outcome underrepresented in current ablations.
 
-The most important research boundary is training lift. The repository now has real executable model-output results, but those results are prompt-conditioned rather than trained-adapter results. The honest claim is not "ledger training improves coding agents" yet. The honest claim is "the ledger records, scores, exports, and evaluates the data needed to test that hypothesis, and the first real executable model-output evaluations now run."
+The most important research boundary is downstream training lift. The repository now has a trained-adapter experiment, and the result is mixed: the reward-selected private split gives the best validation loss, but the adapter-conditioned executable benchmark is 0/6 for every condition. The honest claim is not "ledger training improves coding agents" yet. The honest claim is "the ledger records, scores, exports, trains from, and evaluates the data needed to test that hypothesis, and the first adapter-conditioned executable evaluation is negative."
 
 ---
 
-## 9. Required Training-Lift Experiment
+## 9. Training-Lift Adapter Experiment
 
-The next empirical gate is a trained or adapter-conditioned executable held-out coding-agent evaluation. The same held-out task set should be evaluated under at least three conditions:
+The trained-adapter gate evaluates whether reward-selected trajectory data improves a model trained on private ledger exports. It uses the same six held-out executable Python stdlib tasks as Section 7 and the same three conditions:
 
-| Condition | Description |
+| Condition | Training data |
 |---|---|
-| `random` | Model or planner conditioned on randomly sampled eligible trajectories |
-| `reward_selected` | Model or planner conditioned on positive-advantage trajectories |
-| `full_ledger` | Model or planner conditioned on the full normalized export after leakage filtering |
+| `random` | Randomly sampled eligible private trajectories |
+| `reward_selected` | Positive-advantage private trajectories selected by the reward model |
+| `full_ledger` | Full normalized export after leakage filtering |
 
-Each condition must generate candidate files for the same task ids. The materializer should join those candidates with canonical task specs, and the executable runner should evaluate pass/fail in isolated temp workspaces.
+The gate has three stages: prepare private train/validation splits, train one adapter per condition, then generate held-out candidate files from each adapter using only public task prompts. Hidden verifier tests are introduced only by `materialize-executable-bench`.
 
-Minimum metrics:
+### 9.1 Split Preparation
 
-| Metric | Meaning |
-|---|---|
-| `task_pass_rate` | Fraction of held-out tasks passing verifier commands |
-| `valid_tool_plan_rate` | Fraction of generated plans with executable non-empty steps |
-| `test_inclusion_rate` | Fraction of plans that include tests or verification |
-| `build_inclusion_rate` | Fraction of plans that include build or compile checks when applicable |
-| `timeout_rate` | Fraction of candidate runs killed by timeout |
-| `retry_loop_rate` | Fraction of plans with repeated low-value loops |
-| `mean_duration_ms` | Verifier runtime cost |
-
-Only after this experiment shows `reward_selected` outperforming `random` on executable held-out tasks should the paper claim downstream executable task-performance lift from trajectory replay. The current real model-output reports prove executable measurement and provide baseline results, not training-lift proof.
-
-### 9.1 Training-Lift Preflight
-
-The artifact now includes a concrete preflight for the training-lift experiment. Running `scripts/prepare_training_lift_experiment.py` against the private KARL trajectory store creates three private train/validation splits under ignored `output/private-*` paths and writes the public-safe aggregate report `benchmarks/training-lift-preflight-2026-06-08.json`. The script records only counts, means, hashes, and remote trainer reachability. It does not write raw private prompts or tool plans into the repository.
+Running `scripts/prepare_training_lift_experiment.py` against the private KARL trajectory store creates three private train/validation splits under ignored `output/private-*` paths and writes public-safe aggregate reports under `benchmarks/`. The script records only counts, means, hashes, and trainer reachability. It does not write raw private prompts or tool plans into the repository.
 
 The checked preflight selected 96 records per condition, split into 86 train rows and 10 validation rows. The resulting condition statistics were:
 
@@ -488,13 +475,55 @@ The checked preflight selected 96 records per condition, split into 86 train row
 | `reward_selected` | 0.7408 | 1.6182 |
 | `full_ledger` | 0.6787 | 0.8774 |
 
-The preflight found 2,920 eligible private records after minimum-tool, prompt, plan, and held-out leakage filters. It also recorded 2,138 held-out leakage-risk exclusions, 749 missing-prompt exclusions, and 1,663 too-few-tool exclusions. The remote trainer probe did not pass: `mac5` SSH timed out, so the report status is `blocked_remote_training_unreachable`.
+The preflight found 2,920 eligible private records after minimum-tool, prompt, plan, and held-out leakage filters. It also recorded 2,138 held-out leakage-risk exclusions, 749 missing-prompt exclusions, and 1,663 too-few-tool exclusions. The initial remote trainer probe timed out on `mac5`; a local preflight then recorded a fallback status of `ready_for_local_adapter_training`. Mac5 later became reachable, so the adapter run was executed there.
 
-This result narrows the remaining gap. The controlled random, reward-selected, and full-ledger training splits now exist and are hash-addressed, but no adapter has been trained from them yet. Therefore the paper still must not claim trained reward-selected task-completion lift. The next valid claim boundary is: once `mac5` or another MLX trainer is reachable, train one adapter per condition, generate held-out executable candidates from those adapters, and run the existing executable benchmark with `--require-real`.
+### 9.2 Adapter Training
 
-After `mac5` was confirmed unavailable, the same preflight was extended with a local-trainer probe. The local Mac has 16.0 GB memory and 6.97 GB free disk at preflight time. Plain MLX import fails in the Homebrew Python environment because of a duplicate OpenMP runtime, but `mlx_lm` imports and prints help successfully with `KMP_DUPLICATE_LIB_OK=TRUE`. The resulting local preflight status is `ready_for_local_adapter_training`.
+The Mac5 run trained three MLX LoRA adapters from `mlx-community/gemma-3-1b-it-4bit`. The checked public summary is `benchmarks/training-lift-adapter-training-mlx-gemma3-1b-mac5-2026-06-10.json`. Adapter weights, raw training rows, and raw generation logs remain in ignored private output directories.
 
-This creates a Mac5-free path: run three local MLX LoRA jobs, one per condition, using the private split directories and writing adapters under ignored `output/private-adapters/`. This path is resource-constrained and uses a workaround for the local Python environment, but it is sufficient to proceed without remote compute. It still does not change the paper claim until the adapters are trained and evaluated on the executable held-out tasks.
+Training settings:
+
+| Setting | Value |
+|---|---:|
+| Iterations | 500 |
+| Batch size | 1 |
+| LoRA layers | 4 |
+| Max sequence length | 256 |
+| Learning rate | 1e-5 |
+| Validation rows per condition | 10 |
+
+Final training result:
+
+| Condition | Final train loss | Final validation loss | Validation rank |
+|---|---:|---:|---:|
+| `reward_selected` | 1.129 | 1.484 | 1 |
+| `full_ledger` | 0.973 | 1.843 | 2 |
+| `random` | 0.918 | 2.031 | 3 |
+
+Relative to `random`, `reward_selected` reduces validation loss by 26.93%, and `full_ledger` reduces validation loss by 9.26%. This supports the narrower claim that the reward-selected split better matches the private validation objective under this small-adapter setup.
+
+### 9.3 Executable Adapter Evaluation
+
+Candidate generation used `scripts/generate_executable_candidates_mlx_adapter.py` with only the public prompts in `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl`. The checked candidate generation report is `benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json`; it records `synthetic_rows=0` and `hidden_tests_sent_to_model=false`.
+
+The candidates were materialized against the hidden-test task specs and executed with:
+
+```bash
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --require-real
+```
+
+Checked adapter-conditioned executable result:
+
+| Condition | Rows | Passed | Pass rate | Failed task ids |
+|---|---:|---:|---:|---|
+| `random` | 6 | 0 | 0% | all six tasks |
+| `reward_selected` | 6 | 0 | 0% | all six tasks |
+| `full_ledger` | 6 | 0 | 0% | all six tasks |
+
+This is a real downstream executable evaluation, and it is negative. The training objective separates conditions in the expected direction, but the trained adapters do not complete the held-out executable tasks. Therefore this paper must not claim downstream executable task-completion lift from reward-selected trajectory training. The next valid gate is a stronger base model or training recipe, plus a larger and harder held-out executable task set.
 
 ---
 
@@ -512,7 +541,7 @@ This creates a Mac5-free path: run three local MLX LoRA jobs, one per condition,
 
 **Synthetic executable candidates.** The executable benchmark smoke suite is synthetic. It validates the runner, not the research hypothesis. The separate Claude Sonnet and Gemini 2.5 Flash reports are non-synthetic and should be cited for real model-output performance instead.
 
-**Training-lift not yet measured.** The current artifact exports SFT-ready examples and includes prompt-conditioned executable model-output reports. A controlled fine-tuning or adapter-conditioned experiment has not yet demonstrated reward-selected lift over random on executable held-out tasks.
+**Training-lift downstream result is negative.** The current artifact exports SFT-ready examples, includes prompt-conditioned executable model-output reports, and now includes a controlled small-adapter experiment. Reward-selected training data achieves the best validation loss, but the adapter-conditioned executable task result is 0/6 for every condition. This limits the claim to training-objective improvement, not downstream task-completion lift.
 
 ---
 
@@ -594,13 +623,38 @@ cargo run --bin executable-task-bench -- \
   --require-real
 ```
 
+Run the adapter-conditioned executable benchmark after training the private adapters:
+
+```bash
+python3 scripts/generate_executable_candidates_mlx_adapter.py \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
+  --model mlx-community/gemma-3-1b-it-4bit \
+  --adapter-root output/private-adapters-gemma3-1b-2026-06-10 \
+  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --raw-dir output/private-generation-raw-gemma3-1b-clean-2026-06-10 \
+  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --max-tokens 1024 \
+  --timeout-s 360 \
+  --seed 42
+
+cargo run --bin materialize-executable-bench -- \
+  --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
+  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl
+
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --require-real
+```
+
 ---
 
 ## 12. Conclusion
 
-Trajectory Memory Ledger shows that coding-agent experience can be recorded, normalized, scored, and reused as a durable improvement substrate. The public artifact proves the runtime path: ingestion, cursor safety, schema normalization, reward scoring, locked append, metrics, tests, and benchmarked throughput. The deployment evidence shows a meaningful private corpus of scored trajectories and exported training examples. The reward analysis supports the selection logic, especially the importance of verification behavior. The held-out KARL V7 benchmark adds real model-quality evidence across 50 coding-agent context evaluations. The new executable reports add real model-output task-completion evidence across 36 non-synthetic candidate rows.
+Trajectory Memory Ledger shows that coding-agent experience can be recorded, normalized, scored, and reused as a durable improvement substrate. The public artifact proves the runtime path: ingestion, cursor safety, schema normalization, reward scoring, locked append, metrics, tests, and benchmarked throughput. The deployment evidence shows a meaningful private corpus of scored trajectories and exported training examples. The reward analysis supports the selection logic, especially the importance of verification behavior. The held-out KARL V7 benchmark adds real model-quality evidence across 50 coding-agent context evaluations. The executable reports add real model-output task-completion evidence across 36 prompt-conditioned non-synthetic candidate rows, plus 18 adapter-conditioned non-synthetic candidate rows.
 
-The remaining research step is clear: run trained or adapter-conditioned models through executable held-out coding tasks under random, reward-selected, and full-ledger conditions. Until that gate passes, this work should be claimed as a reproducible trajectory-ledger artifact with real model-quality evaluation and real executable model-output baseline results, not as completed proof of trained reward-selected task-completion lift.
+The remaining research step is clear: improve the training/generation setup until trained models complete held-out executable coding tasks under random, reward-selected, and full-ledger conditions, then compare those pass rates. The first controlled adapter run is valuable because it is real and falsifiable: reward-selected data improves validation loss, but no condition solves the executable tasks. Until a future gate shows `reward_selected` beating `random` on executed tasks, this work should be claimed as a reproducible trajectory-ledger artifact with real model-quality evaluation, real executable model-output baseline results, and a negative first adapter-conditioned downstream result, not as completed proof of trained reward-selected task-completion lift.
 
 ---
 
