@@ -1,0 +1,1319 @@
+{
+  "adapter_root_recorded": false,
+  "backend": "python -m mlx_lm generate",
+  "conditions": {
+    "reward_selected": {
+      "adapter_path_recorded": false,
+      "repair_attempts": 1,
+      "rows": 60,
+      "tasks": {
+        "py_v1_business_days_between": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_business_days_between/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_chunked_list": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_chunked_list/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_clamp_numbers": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_clamp_numbers/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_coalesce_intervals": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_coalesce_intervals/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_collapse_ranges": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_collapse_ranges/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_common_prefix_path": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_common_prefix_path: response did not contain Python source; response JSON was not an object"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_common_prefix_path/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_common_prefix_path/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_count_word_frequencies": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_count_word_frequencies/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_csv_to_dicts": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_csv_to_dicts: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_csv_to_dicts/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_csv_to_dicts/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_days_between": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_days_between: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_days_between/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [
+                  "src/date_tools.py: markdown fence appears in candidate source",
+                  "src/date_tools.py: SyntaxError line 3: unexpected indent"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_days_between/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [
+              "src/date_tools.py: markdown fence appears in candidate source",
+              "src/date_tools.py: SyntaxError line 3: unexpected indent"
+            ],
+            "ok": false
+          }
+        },
+        "py_v1_dedupe_preserve_order": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_dedupe_preserve_order/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_dependency_order": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_dependency_order/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_dicts_to_csv": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_dicts_to_csv: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_dicts_to_csv/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_dicts_to_csv/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_expand_ranges": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_expand_ranges/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_extension_counts": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_extension_counts/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_extract_hashtags": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_extract_hashtags: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_extract_hashtags/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_extract_hashtags/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_flatten_dict": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_flatten_dict: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_flatten_dict/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_flatten_dict/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_flatten_one_level": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_flatten_one_level: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_flatten_one_level/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_flatten_one_level/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_format_iso_date": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_format_iso_date/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_group_count": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_group_count/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_group_sum": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_group_sum/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_has_cycle_directed": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_has_cycle_directed/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_histogram_bins": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_histogram_bins/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_index_unique": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_index_unique: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_index_unique/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_index_unique/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_is_subpath": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_is_subpath/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_json_get_path": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_json_get_path/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_json_set_path": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_json_set_path/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_median": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_median/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_merge_defaults": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_merge_defaults/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_month_range": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_month_range/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_moving_average": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_moving_average/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_normalize_segments": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_normalize_segments: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_normalize_segments/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_normalize_segments/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_normalize_whitespace": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_normalize_whitespace: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_normalize_whitespace/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_normalize_whitespace/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_pairwise_deltas": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_pairwise_deltas/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_parse_bool": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_bool/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_parse_date_parts": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [
+                  "src/date_tools.py: SyntaxError line 16: unterminated string literal (detected at line 16)"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_date_parts/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_date_parts/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_parse_env_lines": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [
+                  "src/parse_tools.py: SyntaxError line 15: unterminated string literal (detected at line 15)"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_env_lines/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [
+                  "src/parse_tools.py: markdown fence appears in candidate source",
+                  "src/parse_tools.py: SyntaxError line 3: unexpected indent"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_env_lines/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [
+              "src/parse_tools.py: markdown fence appears in candidate source",
+              "src/parse_tools.py: SyntaxError line 3: unexpected indent"
+            ],
+            "ok": false
+          }
+        },
+        "py_v1_parse_query_string": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_query_string/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_parse_semver": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [
+                  "src/parse_tools.py: SyntaxError line 10: unexpected character after line continuation character"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_semver/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [
+                  "src/parse_tools.py: markdown fence appears in candidate source",
+                  "src/parse_tools.py: SyntaxError line 3: unexpected indent"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_semver/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [
+              "src/parse_tools.py: markdown fence appears in candidate source",
+              "src/parse_tools.py: SyntaxError line 3: unexpected indent"
+            ],
+            "ok": false
+          }
+        },
+        "py_v1_parse_size_bytes": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_parse_size_bytes/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_percent_change": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_percent_change/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_project_fields": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_project_fields/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_rate_limit_events": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_rate_limit_events/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_reachable_nodes": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_reachable_nodes/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_redact_bearer_tokens": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_redact_bearer_tokens/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_redact_emails": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_redact_emails: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_redact_emails/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_redact_emails/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_redact_ipv4_last_octet": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_redact_ipv4_last_octet/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_reverse_adjacency": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_reverse_adjacency/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_rotate": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_rotate/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_run_length_decode": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_run_length_decode/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_run_length_encode": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_run_length_encode/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_safe_filename": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_safe_filename/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_shortest_path_unweighted": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_shortest_path_unweighted/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_slugify_text": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_slugify_text/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_split_filename_version": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_split_filename_version/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_stable_partition": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_stable_partition/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_strip_markdown_links": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_strip_markdown_links: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_strip_markdown_links/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_strip_markdown_links/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_top_k_frequent": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_top_k_frequent/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_validate_parentheses": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "unparsed_model_output",
+              "public_check": {
+                "errors": [
+                  "py_v1_validate_parentheses: response did not contain Python source; could not parse JSON from response"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_validate_parentheses/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_validate_parentheses/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_validate_relative_path": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [
+                  "src/security_tools.py: SyntaxError line 37: unterminated string literal (detected at line 37)"
+                ],
+                "ok": false
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_validate_relative_path/attempt-0.raw.txt"
+            },
+            {
+              "attempt": 1,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_validate_relative_path/attempt-1.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        },
+        "py_v1_windowed": {
+          "attempts": [
+            {
+              "attempt": 0,
+              "parse_mode": "raw_python",
+              "public_check": {
+                "errors": [],
+                "ok": true
+              },
+              "raw_response": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10/reward_selected/py_v1_windowed/attempt-0.raw.txt"
+            }
+          ],
+          "final_parse_mode": "raw_python",
+          "final_public_check": {
+            "errors": [],
+            "ok": true
+          }
+        }
+      }
+    }
+  },
+  "created_at": "2026-06-10T18:52:54.415954+00:00",
+  "generation": {
+    "env": {},
+    "extra_eos_token": [
+      "<turn|>",
+      "<end_of_turn>",
+      "<start_of_turn>"
+    ],
+    "max_tokens": 1024,
+    "prompt_format": "raw-python",
+    "seed": 42,
+    "temp": 0.0,
+    "timeout_s": 240,
+    "top_p": 1.0
+  },
+  "generator": "generate_executable_candidates_mlx_adapter.py",
+  "hidden_tests_sent_to_model": false,
+  "model": "/Users/mohameddiomande/Desktop/tml-gemma4-models/gemma-4-E2B-it-qat-4bit",
+  "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl",
+  "raw_dir": "output/private-generation-raw-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-2026-06-10",
+  "synthetic_rows": 0
+}

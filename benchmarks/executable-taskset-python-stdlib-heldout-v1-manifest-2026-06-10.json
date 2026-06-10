@@ -1,0 +1,27 @@
+{
+  "claim_boundary": "This manifest describes a deterministic held-out executable task suite. Oracle rows are synthetic and only validate the harness; model evidence must use non-synthetic candidate rows with hidden_tests_sent_to_model=false.",
+  "created_at": "2026-06-10T18:39:47.629237+00:00",
+  "hidden_tests_in_public_prompts": false,
+  "module_count": 12,
+  "modules": [
+    "src/collection_tools.py",
+    "src/data_tools.py",
+    "src/date_tools.py",
+    "src/graph_tools.py",
+    "src/math_tools.py",
+    "src/misc_tools.py",
+    "src/parse_tools.py",
+    "src/path_tools.py",
+    "src/record_tools.py",
+    "src/security_tools.py",
+    "src/state_tools.py",
+    "src/text_tools.py"
+  ],
+  "oracle_candidates": "examples/evaluation/executable-candidates-oracle-python-stdlib-heldout-v1.jsonl",
+  "oracle_candidates_synthetic": true,
+  "public_tasks": "examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl",
+  "schema": "trajectory-memory-ledger.executable_taskset_manifest.v1",
+  "task_count": 60,
+  "task_set": "python-stdlib-heldout-v1-60",
+  "task_specs": "examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl"
+}

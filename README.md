@@ -31,6 +31,7 @@ This repository contains:
 - `docs/architecture.md`: system architecture
 - `docs/metrics.md`: Prometheus metrics
 - `docs/evaluation.md`: benchmark results and downstream evaluation protocol
+- `docs/harness-skills.md`: SkillDAG/SkillOpt/MUSE-style harness skills layer
 - `docs/training-lift-next-plan.md`: next controlled downstream-lift protocol
 - `examples/`: synthetic event and trajectory examples
 - `examples/evaluation/karl-v7-heldout-coding-agent-model-scores.jsonl`: privacy-preserving aggregate rows from a real held-out coding-agent model-quality benchmark
@@ -44,6 +45,9 @@ This repository contains:
 - `examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl`: non-synthetic MLX adapter candidate rows from the controlled training-lift split
 - `examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 E2B QAT base-model candidate rows
 - `examples/evaluation/executable-candidates-mlx-gemma4-12b-qat-base-mac5-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 12B QAT base-model candidate rows
+- `examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl`: 60-task hidden-test executable held-out task specs
+- `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl`: public prompts for the 60-task replication suite
+- `examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/`: generated harness skill packages from the 60-task E2B adapter comparison
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -258,6 +262,42 @@ Checked Mac5 Gemma 4 E2B adapter result with 512 selected rows per condition, 46
 
 Boundary: this is now a positive downstream lift signal for reward-selected trajectory data under a matched Gemma 4 E2B adapter setup. Because the held-out set has only six tasks, it is not a final broad SWE-style claim. It proves that the evaluation path can detect nonzero trained-adapter differences and that the previous all-zero result was a weak-model/training-recipe failure.
 
+Larger 60-task replication result:
+
+- task set: `python-stdlib-heldout-v1-60`
+- oracle: `60/60`
+- Gemma 4 E2B QAT base: `50/60`
+- Gemma 4 E4B QAT base: `49/60`
+- Gemma 4 E2B reward-selected adapter: `46/60`
+- synthetic rows: `0`
+- hidden tests sent to model: false
+
+Boundary: the six-task E2B adapter lift did not replicate on the larger suite. The current large-suite evidence does not prove that TML improves downstream coding-agent task completion. It does prove that the executable harness is working, that the local Gemma 4 base models are strong enough to evaluate, and that adapter changes can be measured rather than inferred from validation loss.
+
+Extract regression-gated harness skill packages from that larger result:
+
+```bash
+cargo run --bin skillgraph-evolve -- \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
+  --task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl \
+  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.json \
+  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.json \
+  --output-dir examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base
+```
+
+Checked skillgraph result:
+
+- fixed tasks: 5
+- regressed tasks: 9
+- net pass delta: `-4`
+- promoted skills: 0
+- proposed skills: 1
+- quarantined skills: 7
+- diagnostic skills: 1
+- active router skills: 0
+
+Boundary: the harness extracts useful repair evidence from the failed adapter run, but it correctly promotes nothing because the comparison regressed overall.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash
@@ -339,7 +379,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through two Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The stronger Gemma 4 E2B/512-row/4096-token adapter result is positive for reward-selected data: `reward_selected` reaches 5/6 versus `random` at 3/6 and `full_ledger` at 2/6 on the same hidden executable set. Stronger Gemma 4 base-model sanity runs also reach 3/6 for E2B QAT and 5/6 for 12B QAT before ledger fine-tuning. The honest next research step is to repeat this positive signal on E4B or a cloud-trained 12B-class model and a larger executable task set.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm that lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. The current honest claim is that TML has a working reproducible evaluation and harness-skill extraction pipeline, but it has not yet proven broad downstream coding-agent performance lift.
 
 ## License
 

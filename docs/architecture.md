@@ -39,9 +39,24 @@ This split keeps the operational collector reliable while leaving research tooli
 
 ## Evaluation Tools
 
-The repository includes two Rust evaluation binaries:
+The repository includes these Rust evaluation binaries:
 
 - `daemon-bench`: generates synthetic gateway events and measures ingestion throughput, append latency, duplicate skipping, cursor rollover, and concurrent append safety.
 - `agent-eval`: aggregates held-out tool-plan generations by condition. It is intended for downstream experiments comparing random trajectory selection, reward-selected trajectory selection, and the full normalized ledger export.
+- `materialize-executable-bench`: joins canonical executable task specs with condition-specific candidate rows.
+- `executable-task-bench`: runs each materialized candidate in an isolated workspace and aggregates hidden-test pass/fail results.
+- `skillgraph-evolve`: converts executable benchmark deltas into regression-gated SkillDAG nodes, router indexes, and MUSE-style skill packages.
 
 The synthetic `agent-eval` example in `examples/evaluation/` verifies the protocol shape. It is not downstream model-performance evidence.
+
+## Harness Skills Layer
+
+`skillgraph-evolve` sits after `executable-task-bench`. It compares a baseline report against a comparison report, groups task deltas by inferred task family, and emits:
+
+- `trajectory-skills.jsonl`
+- `skill-graph.json`
+- `router-index.json`
+- `skillgraph-evolution-report.json`
+- `packages/<skill_id>/{SKILL.md,MEMORY.md,tests.jsonl,failure_modes.json,skill.json}`
+
+The routing rule is conservative: only `promoted` skills can be auto-injected. `proposed` skills need a clean follow-up regression gate, `quarantined` skills are repair evidence, and `diagnostic` packages record persistent failures. This lets a failed adapter run improve the next harness iteration without poisoning automatic routing.

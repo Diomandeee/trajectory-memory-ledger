@@ -501,3 +501,87 @@ Interpretation:
 - The result has `synthetic_rows=0` and records `hidden_tests_sent_to_model=false`.
 - The old all-zero adapter result is now correctly scoped to the Gemma 3 1B/256-token recipe.
 - The task set has only six tasks, so this is not yet a broad SWE-style performance proof. The next gate should replicate the lift on E4B or a 12B-class cloud training run and a larger 50-100 task executable set.
+
+### Larger 60-Task Replication Gate
+
+The six-task lift signal was followed by a larger Python stdlib held-out suite, `python-stdlib-heldout-v1-60`. The suite has 60 public prompts, 60 hidden-test executable specs, and an oracle candidate file. The oracle report passed all tasks, so the suite itself is internally consistent.
+
+Run shape:
+
+```bash
+cargo run --bin executable-task-bench -- \
+  --input examples/evaluation/executable-task-oracle-python-stdlib-heldout-v1.jsonl \
+  --output benchmarks/executable-task-oracle-python-stdlib-heldout-v1-2026-06-10.json \
+  --require-real
+```
+
+Gemma 4 E2B QAT base, E4B QAT base, and the E2B reward-selected adapter were then generated from public prompts only, materialized, and scored with `--require-real`.
+
+Checked 60-task result:
+
+| Condition | Rows | Passed | Pass rate | Synthetic rows |
+|---|---:|---:|---:|---:|
+| Oracle | 60 | 60 | 100.00% | 0 |
+| Gemma 4 E2B QAT base | 60 | 50 | 83.33% | 0 |
+| Gemma 4 E4B QAT base | 60 | 49 | 81.67% | 0 |
+| Gemma 4 E2B reward-selected adapter | 60 | 46 | 76.67% | 0 |
+
+Interpretation:
+
+- The larger suite falsifies the broad version of the six-task lift claim for the current E2B adapter recipe.
+- Current evidence does not prove that TML improves downstream coding-agent task completion.
+- The executable evaluation path is stronger after this run: oracle validation, non-synthetic model rows, hidden-test execution, and base/adapted comparisons all work on a 60-task suite.
+- Validation loss and small-suite lift are not enough. Future claims need larger-suite downstream pass-rate lift.
+
+### Harness Skill Extraction From Failed Runs
+
+The `skillgraph-evolve` binary converts executable benchmark deltas into regression-gated skill packages. It lets the system learn from a failed adapter run without promoting unsafe routing behavior.
+
+Run:
+
+```bash
+cargo run --bin skillgraph-evolve -- \
+  --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
+  --task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl \
+  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.json \
+  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.json \
+  --output-dir examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base
+```
+
+Checked result:
+
+| Metric | Value |
+|---|---:|
+| Baseline passed | 50/60 |
+| Comparison passed | 46/60 |
+| Net pass delta | -4 |
+| Fixed tasks | 5 |
+| Regressed tasks | 9 |
+| Shared failures | 5 |
+| Promoted skills | 0 |
+| Proposed skills | 1 |
+| Quarantined skills | 7 |
+| Diagnostic skills | 1 |
+| Active router skills | 0 |
+
+The generated artifacts live under `examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/`.
+
+Artifacts:
+
+| Artifact | Purpose |
+|---|---|
+| `trajectory-skills.jsonl` | Structured skill rows grouped by task family |
+| `skill-graph.json` | SkillDAG-style nodes and typed edges |
+| `router-index.json` | Activation index with promoted/proposed/quarantined/diagnostic status |
+| `skillgraph-evolution-report.json` | Aggregate gate result |
+| `packages/<skill_id>/SKILL.md` | Human-readable activation boundary |
+| `packages/<skill_id>/MEMORY.md` | Evidence memory for the package |
+| `packages/<skill_id>/tests.jsonl` | Task-level delta evidence |
+| `packages/<skill_id>/failure_modes.json` | Regression and shared-failure boundary |
+
+Interpretation:
+
+- The router correctly has no active skills because the global adapter comparison regressed.
+- `python_stdlib_math_trajectory_delta` is only `proposed`, not active, because it repaired `py_v1_moving_average` but the global gate failed.
+- Families with regressions are quarantined and should be used as repair targets, not automatic prompts.
+- This is harness improvement, not downstream performance proof.
