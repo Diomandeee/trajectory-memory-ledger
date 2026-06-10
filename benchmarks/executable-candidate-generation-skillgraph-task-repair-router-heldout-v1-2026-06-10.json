@@ -1,0 +1,61 @@
+{
+  "allow_status": [
+    "proposed",
+    "quarantined"
+  ],
+  "base_candidates": "examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl",
+  "base_condition": "gemma4_e2b_qat_base_v1",
+  "comparison_candidates": "examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl",
+  "comparison_condition": "reward_selected",
+  "condition": "skillgraph_task_repair_router",
+  "created_at": "2026-06-10T21:24:41.438474+00:00",
+  "generator": "apply_skillgraph_repair_router.py",
+  "hidden_tests_sent_to_model": false,
+  "known_regression_task_ids_preserved_from_base": [
+    "py_v1_days_between",
+    "py_v1_dependency_order",
+    "py_v1_dicts_to_csv",
+    "py_v1_extension_counts",
+    "py_v1_extract_hashtags",
+    "py_v1_json_set_path",
+    "py_v1_parse_env_lines",
+    "py_v1_parse_semver",
+    "py_v1_validate_relative_path"
+  ],
+  "output": "examples/evaluation/executable-candidates-skillgraph-task-repair-router-heldout-v1-2026-06-10.jsonl",
+  "preserved_base_row_count": 55,
+  "repairs_by_task": {
+    "py_v1_business_days_between": {
+      "skill_id": "python_stdlib_date_trajectory_delta",
+      "status": "quarantined"
+    },
+    "py_v1_format_iso_date": {
+      "skill_id": "python_stdlib_date_trajectory_delta",
+      "status": "quarantined"
+    },
+    "py_v1_moving_average": {
+      "skill_id": "python_stdlib_math_trajectory_delta",
+      "status": "proposed"
+    },
+    "py_v1_parse_query_string": {
+      "skill_id": "python_stdlib_parse_trajectory_delta",
+      "status": "quarantined"
+    },
+    "py_v1_safe_filename": {
+      "skill_id": "python_stdlib_security_trajectory_delta",
+      "status": "quarantined"
+    }
+  },
+  "require_no_skill_regressions": false,
+  "routed_row_count": 5,
+  "routed_task_ids": [
+    "py_v1_parse_query_string",
+    "py_v1_moving_average",
+    "py_v1_format_iso_date",
+    "py_v1_business_days_between",
+    "py_v1_safe_filename"
+  ],
+  "skills_jsonl": "examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl",
+  "synthetic_rows": 0,
+  "total_rows": 60
+}

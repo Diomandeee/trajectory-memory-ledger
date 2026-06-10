@@ -23,7 +23,9 @@ def main() -> int:
 
     base_by_task = rows_by_task(base_rows, "base")
     comparison_by_task = rows_by_task(comparison_rows, "comparison")
-    repairs = collect_repairs(skills, set(args.allow_status), args.require_no_skill_regressions)
+    allowed_statuses = set(args.allow_status)
+    repairs = collect_repairs(skills, allowed_statuses, args.require_no_skill_regressions)
+    preserved_regressions = collect_regressions(skills, allowed_statuses)
     routed_rows, routed_task_ids = apply_repairs(
         base_rows=base_rows,
         comparison_by_task=comparison_by_task,
@@ -60,6 +62,9 @@ def main() -> int:
         "routed_row_count": len(routed_task_ids),
         "preserved_base_row_count": len(routed_rows) - len(routed_task_ids),
         "repairs_by_task": repairs,
+        "known_regression_task_ids_preserved_from_base": sorted(
+            set(preserved_regressions) - set(routed_task_ids)
+        ),
     }
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
@@ -142,6 +147,16 @@ def collect_repairs(
     if not repairs:
         raise SystemExit(f"no repairs found for allowed statuses {sorted(allow_status)}")
     return repairs
+
+
+def collect_regressions(skills: list[dict[str, Any]], allow_status: set[str]) -> list[str]:
+    regressions: list[str] = []
+    for skill in skills:
+        status = str(skill.get("status", "")).strip()
+        if status not in allow_status:
+            continue
+        regressions.extend(str(task_id) for task_id in skill.get("regression_task_ids", []))
+    return sorted(set(regressions))
 
 
 def apply_repairs(

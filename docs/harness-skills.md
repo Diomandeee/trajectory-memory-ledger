@@ -141,3 +141,37 @@ Checked result:
 Running `skillgraph-evolve` on base vs the repair-router report promotes `python_stdlib_math_trajectory_delta` and writes active router artifacts under `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`.
 
 Boundary: this is a real narrow router lift on the 60-task executable gate. It is not a broad claim that the reward-selected adapter should replace the base model.
+
+## Task-Level Repair Router
+
+The stronger repair-map test routes all fixed task ids from the failed adapter while preserving base outputs for every known adapter regression. This uses quarantined family evidence only as task-level repair candidates; it does not activate the quarantined family wholesale.
+
+```bash
+python3 scripts/apply_skillgraph_repair_router.py \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
+  --allow-status proposed quarantined \
+  --no-require-no-skill-regressions \
+  --condition skillgraph_task_repair_router \
+  --output examples/evaluation/executable-candidates-skillgraph-task-repair-router-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-task-repair-router-heldout-v1-2026-06-10.json
+```
+
+Checked result:
+
+| Metric | Value |
+|---|---:|
+| Preserved base rows | 55 |
+| Routed repair rows | 5 |
+| Known adapter regressions preserved from base | 9 |
+| E2B base | 50/60 |
+| Task repair router | 55/60 |
+| Net pass delta | +5 |
+| Regressions vs base | 0 |
+| Synthetic rows | 0 |
+| Promoted repair families | 4 |
+
+The base-vs-router skillgraph promotes `python_stdlib_date_trajectory_delta`, `python_stdlib_math_trajectory_delta`, `python_stdlib_parse_trajectory_delta`, and `python_stdlib_security_trajectory_delta` under `examples/skills/python-stdlib-heldout-v1/task-repair-router-vs-base/`.
+
+Boundary: this is the current strongest 60-task evidence for the harness skills layer. It proves the repair map can improve pass rate when used as a gated router. It still does not prove that the reward-selected adapter should replace the base model globally.

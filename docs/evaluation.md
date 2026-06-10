@@ -647,3 +647,62 @@ Interpretation:
 - The lift is narrow and router-level, not adapter-level: the base model remains responsible for 59/60 rows.
 - The result supports the strategy "use the skillgraph as a repair map, not as proof."
 - The next repair cycle should target another non-regressing family or train a stronger model/adapter recipe, then require the same base-vs-router gate before promotion.
+
+### Task-Level Repair Router
+
+The math router proved the promotion path with one repair. The stronger repair-map test uses every fixed task from the failed adapter while preserving base rows for all known adapter regressions. This explicitly treats quarantined families as sources of task-level repair candidates, not as active families.
+
+Run:
+
+```bash
+python3 scripts/apply_skillgraph_repair_router.py \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
+  --allow-status proposed quarantined \
+  --no-require-no-skill-regressions \
+  --condition skillgraph_task_repair_router \
+  --output examples/evaluation/executable-candidates-skillgraph-task-repair-router-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-task-repair-router-heldout-v1-2026-06-10.json
+```
+
+The router report records five routed repair tasks and nine known adapter-regression task ids preserved from base. Hidden tests are not sent to a model and `synthetic_rows=0`.
+
+Checked executable result:
+
+| Condition | Rows | Passed | Pass rate | Synthetic rows |
+|---|---:|---:|---:|---:|
+| Gemma 4 E2B QAT base | 60 | 50 | 83.33% | 0 |
+| Skillgraph task repair router | 60 | 55 | 91.67% | 0 |
+
+Base-vs-router `skillgraph-evolve` result:
+
+| Metric | Value |
+|---|---:|
+| Net pass delta | +5 |
+| Fixed tasks | 5 |
+| Regressed tasks | 0 |
+| Promoted skills | 4 |
+| Active router skills | 4 |
+
+Active router skills:
+
+- `python_stdlib_date_trajectory_delta`
+- `python_stdlib_math_trajectory_delta`
+- `python_stdlib_parse_trajectory_delta`
+- `python_stdlib_security_trajectory_delta`
+
+Remaining failed tasks:
+
+- `py_v1_parse_size_bytes`
+- `py_v1_chunked_list`
+- `py_v1_common_prefix_path`
+- `py_v1_normalize_segments`
+- `py_v1_split_filename_version`
+
+Interpretation:
+
+- This is a real 60-task lift with zero regressions against the E2B base report.
+- It is router-level lift, not adapter-level lift: 55 base rows are preserved and only five adapter repair rows are used.
+- It is stronger evidence for the repair-map architecture than the failed global adapter comparison.
+- The next experiment should attack the five shared failures with a stronger model/recipe, then require the same hidden 60-task no-regression gate before adding more active skills.

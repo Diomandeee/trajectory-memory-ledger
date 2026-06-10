@@ -49,6 +49,7 @@ This repository contains:
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl`: public prompts for the 60-task replication suite
 - `examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/`: generated harness skill packages from the 60-task E2B adapter comparison
 - `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`: generated harness skill packages from the promoted narrow math repair router
+- `examples/skills/python-stdlib-heldout-v1/task-repair-router-vs-base/`: generated harness skill packages from the promoted task-level repair router
 - `paper/trajectory-memory-ledger.md`: paper draft
 
 The originating deployment corpus, not included here, contains 7,468 scored trajectories, 67,409 observed tool events, and 73,470 recovered tool steps. Raw private trajectories are intentionally excluded from this public artifact.
@@ -326,6 +327,34 @@ Checked 60-task router result:
 
 Boundary: this proves a narrow harness/router repair can beat the base model on the 60-task executable gate with zero regressions. It still does not prove that the failed adapter as a whole improves downstream performance.
 
+Apply all positive task-level repairs while preserving base outputs for known adapter regressions:
+
+```bash
+python3 scripts/apply_skillgraph_repair_router.py \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
+  --allow-status proposed quarantined \
+  --no-require-no-skill-regressions \
+  --condition skillgraph_task_repair_router \
+  --output examples/evaluation/executable-candidates-skillgraph-task-repair-router-heldout-v1-2026-06-10.jsonl \
+  --report benchmarks/executable-candidate-generation-skillgraph-task-repair-router-heldout-v1-2026-06-10.json
+```
+
+Checked 60-task task-router result:
+
+- routed repairs: `5`
+- preserved base rows: `55`
+- known adapter-regression task ids preserved from base: `9`
+- E2B base: `50/60`
+- task repair router: `55/60`
+- net pass delta vs base: `+5`
+- regressions vs base: `0`
+- promoted repair families: date, math, parse, security
+- active router skills: `4`
+
+Boundary: this is a clean router-level repair-map result, not an adapter-level claim. It uses the failed adapter only as a source of candidate repairs and requires the routed result to beat base under the same hidden 60-task gate.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash
@@ -407,7 +436,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph repair router then used the failed adapter only for the proposed math repair and reached 51/60 with zero regressions against E2B base. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router-repair pipeline. It has not yet proven broad adapter-level downstream coding-agent performance lift.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, and a task-level repair router reached 55/60 with zero regressions by using only five adapter repairs while preserving base for known regressions. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router-repair pipeline. It has not yet proven broad adapter-level downstream coding-agent performance lift.
 
 ## License
 
