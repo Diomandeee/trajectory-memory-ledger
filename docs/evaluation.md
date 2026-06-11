@@ -1095,6 +1095,7 @@ Checked gate preflight:
 | Prediction instances | 1 |
 | Same prediction ids | true |
 | Same model name | true |
+| Input fingerprints | manifest plus base/planner prediction SHA-256 hashes recorded |
 | Performance claim | `waiting_for_official_harness_results` |
 
 The matching local environment preflight is
@@ -1108,6 +1109,9 @@ It confirms the one-row prediction files exist, but local scoring is blocked by:
 Boundary:
 
 - This generates real base/planner patches on one real repository issue.
+- The gate report records byte-level fingerprints for the manifest and both
+  prediction JSONL files, so a future official result can be tied back to the
+  exact scorer inputs.
 - It does not apply either patch in the official SWE-bench Docker harness.
 - It does not measure resolution rate, regressions, or test pass/fail.
 - It cannot support a planner-performance claim until both prediction files are
@@ -1138,6 +1142,7 @@ Checked handoff report:
 | Instance count | 1 |
 | Same prediction ids | true |
 | Same model name | true |
+| Input fingerprints | SHA-256 hashes recorded for all three scorer inputs |
 | Official harness run | false |
 | Performance claim allowed | false |
 
@@ -1146,12 +1151,15 @@ The private ignored bundle contains:
 - `inputs/instances.jsonl`
 - `inputs/base-agent.predictions.jsonl`
 - `inputs/tml-planner.predictions.jsonl`
+- `input-fingerprints.json`
 - `run_official_harness.sh`
 - `README.md`
 
 Boundary:
 
 - This handoff reduces scorer setup friction.
+- The private runner verifies input fingerprints before launching the official
+  SWE-bench commands.
 - It still does not run the official harness.
 - It contains private patch predictions only under ignored `output/private-*`.
 

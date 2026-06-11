@@ -59,6 +59,8 @@ Current execution state:
   bundle under `output/private-swebench/scorer-handoff-codex-real-smoke-1` and a
   public report
   `benchmarks/real-repo-harness-handoff-codex-real-smoke-2026-06-11.json`.
+  The report records SHA-256 fingerprints for the manifest and prediction
+  JSONL files, and the private runner verifies them before the harness starts.
   This is still only a handoff, not a harness run.
 - Scorer-target audit is now recorded:
   `scripts/audit_real_repo_scorer_targets.py` writes

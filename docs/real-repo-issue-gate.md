@@ -155,7 +155,8 @@ python3 scripts/prepare_real_repo_issue_gate.py \
 ```
 
 The checked gate report has `preflight.ok=true`, same prediction ids, same model
-name, and `performance_claim.status=waiting_for_official_harness_results`.
+name, SHA-256 fingerprints for the manifest and prediction files, and
+`performance_claim.status=waiting_for_official_harness_results`.
 
 Package the same predictions for a Docker scorer:
 
@@ -175,7 +176,9 @@ The checked handoff report has
 `status=handoff_ready_waiting_for_official_harness`, validates the one instance,
 records same ids/model, and writes an ignored private runner at
 `output/private-swebench/scorer-handoff-codex-real-smoke-1/run_official_harness.sh`.
-It still does not run SWE-bench or allow a performance claim.
+It also writes `input-fingerprints.json`; the private runner verifies the
+manifest and both prediction files before launching the official harness. It
+still does not run SWE-bench or allow a performance claim.
 
 Audit available scorer targets:
 

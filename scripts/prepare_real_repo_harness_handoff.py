@@ -10,6 +10,7 @@ contains no patch text.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
@@ -73,11 +74,27 @@ def main() -> int:
     shutil.copyfile(args.base_predictions, bundle_paths["base_predictions"])
     shutil.copyfile(args.planner_predictions, bundle_paths["planner_predictions"])
 
+    fingerprints = build_bundle_fingerprints(args.output_dir, bundle_paths)
+    fingerprint_path = args.output_dir / "input-fingerprints.json"
+    write_json(fingerprint_path, fingerprints)
+
     ids_for_harness = manifest_ids
     harness_commands = build_harness_commands(args, bundle_paths, ids_for_harness)
     summarize_command = build_summarize_command(args, bundle_paths)
-    write_runner(args.output_dir / "run_official_harness.sh", harness_commands, summarize_command)
-    write_readme(args.output_dir / "README.md", args, ids_for_harness, harness_commands, summarize_command)
+    write_runner(
+        args.output_dir / "run_official_harness.sh",
+        harness_commands,
+        summarize_command,
+        fingerprint_path,
+    )
+    write_readme(
+        args.output_dir / "README.md",
+        args,
+        ids_for_harness,
+        harness_commands,
+        summarize_command,
+        fingerprint_path,
+    )
 
     env = environment_status(args.workspace)
     status = "handoff_ready_waiting_for_official_harness"
@@ -106,6 +123,8 @@ def main() -> int:
         },
         "private_handoff_dir": str(args.output_dir),
         "private_bundle_paths": {key: str(path) for key, path in bundle_paths.items()},
+        "input_fingerprints": fingerprints["input_fingerprints"],
+        "fingerprint_manifest_path": str(fingerprint_path),
         "runner_path": str(args.output_dir / "run_official_harness.sh"),
         "harness_commands": harness_commands,
         "summarize_command": summarize_command,
@@ -192,6 +211,24 @@ def ordered_ids(rows: list[dict[str, Any]]) -> list[str]:
     return [str(row["instance_id"]).strip() for row in rows]
 
 
+def build_bundle_fingerprints(
+    output_dir: Path,
+    bundle_paths: dict[str, Path],
+) -> dict[str, Any]:
+    return {
+        "schema": "trajectory-memory-ledger.real_repo_handoff_fingerprints.v1",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "claim_boundary": (
+            "Fingerprints bind a future scorer run to these exact handoff inputs. "
+            "They are not performance evidence."
+        ),
+        "input_fingerprints": {
+            key: file_fingerprint(path, root=output_dir)
+            for key, path in sorted(bundle_paths.items())
+        },
+    }
+
+
 def build_harness_commands(
     args: argparse.Namespace,
     bundle_paths: dict[str, Path],
@@ -257,7 +294,12 @@ def build_summarize_command(args: argparse.Namespace, bundle_paths: dict[str, Pa
     return " ".join(shlex.quote(part) for part in parts)
 
 
-def write_runner(path: Path, harness_commands: dict[str, str], summarize_command: str) -> None:
+def write_runner(
+    path: Path,
+    harness_commands: dict[str, str],
+    summarize_command: str,
+    fingerprint_path: Path,
+) -> None:
     text = "\n".join(
         [
             "#!/usr/bin/env bash",
@@ -265,6 +307,31 @@ def write_runner(path: Path, harness_commands: dict[str, str], summarize_command
             'SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"',
             'REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"',
             'cd "$REPO_ROOT"',
+            "",
+            "echo '[tml] verifying handoff input fingerprints'",
+            f"python3 - \"$SCRIPT_DIR/{fingerprint_path.name}\" <<'PY'",
+            "import hashlib, json, sys",
+            "from pathlib import Path",
+            "",
+            "fingerprint_path = Path(sys.argv[1])",
+            "bundle_root = fingerprint_path.parent",
+            "fingerprints = json.loads(fingerprint_path.read_text(encoding='utf-8'))",
+            "",
+            "def sha256_file(path):",
+            "    digest = hashlib.sha256()",
+            "    with path.open('rb') as handle:",
+            "        for chunk in iter(lambda: handle.read(1024 * 1024), b''):",
+            "            digest.update(chunk)",
+            "    return digest.hexdigest()",
+            "",
+            "for label, expected in sorted(fingerprints['input_fingerprints'].items()):",
+            "    path = bundle_root / expected['relative_path']",
+            "    actual_size = path.stat().st_size",
+            "    actual_hash = sha256_file(path)",
+            "    if actual_size != expected['size_bytes'] or actual_hash != expected['sha256']:",
+            "        raise SystemExit(f'fingerprint mismatch for {label}: {path}')",
+            "print('[tml] handoff fingerprints verified')",
+            "PY",
             "",
             "echo '[tml] running base official harness'",
             harness_commands["base_agent"],
@@ -287,6 +354,7 @@ def write_readme(
     instance_ids: list[str],
     harness_commands: dict[str, str],
     summarize_command: str,
+    fingerprint_path: Path,
 ) -> None:
     text = "\n".join(
         [
@@ -299,6 +367,7 @@ def write_readme(
             f"Split: `{args.split}`",
             f"Subset: `{args.subset_label}`",
             f"Instances: `{', '.join(instance_ids)}`",
+            f"Input fingerprints: `{fingerprint_path}`",
             "",
             "Run both conditions:",
             "",
@@ -362,6 +431,25 @@ def write_json(path: Path, data: dict[str, Any]) -> None:
     with path.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=2, sort_keys=True)
         handle.write("\n")
+
+
+def file_fingerprint(path: Path, *, root: Path | None = None) -> dict[str, Any]:
+    data = {
+        "path": str(path),
+        "size_bytes": path.stat().st_size,
+        "sha256": sha256_file(path),
+    }
+    if root is not None:
+        data["relative_path"] = path.relative_to(root).as_posix()
+    return data
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 if __name__ == "__main__":

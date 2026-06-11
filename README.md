@@ -586,11 +586,15 @@ Checked handoff result:
 - instance count: `1`
 - same prediction ids: true
 - same model names: true
+- input fingerprints: SHA-256 hashes recorded for the manifest and both
+  prediction JSONL files
 - official harness run: `false`
 - performance claim allowed: `false`
 
 Boundary: this creates an ignored private scorer bundle with prediction JSONL
-and exact harness commands. It still does not score the patches.
+and exact harness commands. The private runner verifies those input
+fingerprints before calling the official harness. It still does not score the
+patches.
 
 Audit scorer targets:
 

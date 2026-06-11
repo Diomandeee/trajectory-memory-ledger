@@ -10,6 +10,7 @@ or missing report into a performance claim.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -25,6 +26,8 @@ class ConditionPredictions:
     by_instance: dict[str, dict[str, Any]]
     model_names: list[str]
     synthetic_rows: int
+    sha256: str
+    size_bytes: int
 
 
 @dataclass(frozen=True)
@@ -40,6 +43,7 @@ class HarnessReport:
     error_count: int | None
     synthetic: bool
     source_files: list[str]
+    source_fingerprints: dict[str, dict[str, Any]]
 
 
 def main() -> int:
@@ -124,6 +128,9 @@ def main() -> int:
             "split": args.split,
             "subset_label": args.subset_label,
             "instances_jsonl": str(args.instances_jsonl) if args.instances_jsonl else None,
+            "instances_fingerprint": file_fingerprint(args.instances_jsonl)
+            if args.instances_jsonl
+            else None,
             "manifest_instance_count": len(instance_ids) if instance_ids else None,
             "prediction_instance_count": len(prediction_ids),
             "synthetic_manifest_rows": instance_synthetic_rows,
@@ -241,6 +248,8 @@ def load_predictions(label: str, path: Path) -> ConditionPredictions:
         by_instance=by_instance,
         model_names=sorted(model_names),
         synthetic_rows=count_synthetic(rows),
+        sha256=sha256_file(path),
+        size_bytes=path.stat().st_size,
     )
 
 
@@ -263,6 +272,8 @@ def instance_id_set(rows: list[dict[str, Any]]) -> set[str]:
 def summarize_predictions(predictions: ConditionPredictions) -> dict[str, Any]:
     return {
         "path": str(predictions.path),
+        "sha256": predictions.sha256,
+        "size_bytes": predictions.size_bytes,
         "prediction_count": len(predictions.rows),
         "model_names": predictions.model_names,
         "synthetic_rows": predictions.synthetic_rows,
@@ -353,6 +364,7 @@ def load_harness_report(path: Path) -> HarnessReport:
         error_count=error_count,
         synthetic=synthetic,
         source_files=[str(p) for p in source_files],
+        source_fingerprints={str(p): file_fingerprint(p) for p in source_files},
     )
 
 
@@ -426,6 +438,7 @@ def summarize_report(report: HarnessReport | None) -> dict[str, Any] | None:
     return {
         "path": str(report.path),
         "source_files": report.source_files,
+        "source_fingerprints": report.source_fingerprints,
         "total_instances": report.total_instances,
         "submitted_instances": report.submitted_instances,
         "completed_instances": report.completed_instances,
@@ -615,6 +628,22 @@ def write_json(path: Path, data: dict[str, Any]) -> None:
     with path.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=2, sort_keys=True)
         handle.write("\n")
+
+
+def file_fingerprint(path: Path) -> dict[str, Any]:
+    return {
+        "path": str(path),
+        "size_bytes": path.stat().st_size,
+        "sha256": sha256_file(path),
+    }
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 if __name__ == "__main__":
