@@ -48,7 +48,17 @@ def main() -> int:
     warnings: list[str] = []
     fingerprint_report = verify_handoff_fingerprints(args.handoff_dir, errors, warnings)
 
-    report_supplied = all(path.exists() for path in expected_reports.values())
+    report_presence = {
+        key: {
+            "path": str(path),
+            "exists": path.exists(),
+        }
+        for key, path in expected_reports.items()
+    }
+    report_supplied = all(row["exists"] for row in report_presence.values())
+    any_report_supplied = any(row["exists"] for row in report_presence.values())
+    partial_report_summaries = summarize_present_reports(expected_reports, warnings)
+    failure_evidence = collect_failure_evidence(args.failure_log_dir)
     gate_command: list[str] | None = None
     gate_result: dict[str, Any] | None = None
     gate_process: dict[str, Any] | None = None
@@ -73,7 +83,12 @@ def main() -> int:
         else:
             errors.append(f"gate output was not written: {args.gate_output}")
 
-    status = status_from_state(errors, report_supplied, gate_result)
+    status = status_from_state(
+        errors,
+        report_supplied,
+        any_report_supplied,
+        gate_result,
+    )
     admission = {
         "schema": "trajectory-memory-ledger.real_repo_official_result_admission.v1",
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -87,10 +102,15 @@ def main() -> int:
         "input_paths": {key: str(path) for key, path in input_paths.items()},
         "handoff_fingerprints": fingerprint_report,
         "expected_reports": {key: str(path) for key, path in expected_reports.items()},
+        "report_presence": report_presence,
         "official_reports_present": report_supplied,
+        "all_official_reports_present": report_supplied,
+        "any_official_report_present": any_report_supplied,
         "missing_reports": [
             str(path) for path in expected_reports.values() if not path.exists()
         ],
+        "partial_report_summaries": partial_report_summaries,
+        "failure_evidence": failure_evidence,
         "gate_output": str(args.gate_output),
         "gate_output_fingerprint": file_fingerprint(args.gate_output)
         if args.gate_output.exists()
@@ -136,6 +156,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--base-run-id", default="tml_base_real_repo_gate")
     parser.add_argument("--planner-run-id", default="tml_planner_real_repo_gate")
     parser.add_argument("--report-dir", default="evaluation_results")
+    parser.add_argument(
+        "--failure-log-dir",
+        action="append",
+        type=Path,
+        default=[],
+        help=(
+            "Optional private log directory to fingerprint and classify when an "
+            "official report is missing because the scorer failed before tests."
+        ),
+    )
     parser.add_argument("--minimum-real-instances", type=int, default=50)
     parser.add_argument("--minimum-broad-instances", type=int, default=300)
     return parser.parse_args()
@@ -263,10 +293,13 @@ def build_gate_command(
 def status_from_state(
     errors: list[str],
     report_supplied: bool,
+    any_report_supplied: bool,
     gate_result: dict[str, Any] | None,
 ) -> str:
     if errors:
         return "official_result_admission_failed"
+    if any_report_supplied and not report_supplied:
+        return "partial_official_reports_waiting_for_counterpart"
     if not report_supplied:
         return "waiting_for_official_reports"
     if not gate_result:
@@ -280,11 +313,106 @@ def status_from_state(
 def next_gate(status: str) -> str:
     if status == "waiting_for_official_reports":
         return "Run the fingerprint-locked handoff on a ready SWE-bench scorer, then rerun this admission script with the report paths."
+    if status == "partial_official_reports_waiting_for_counterpart":
+        return "Keep the valid official report as partial evidence, repair scorer infrastructure, and rerun only the missing counterpart before comparing performance."
     if status == "official_result_packet_admitted":
         return "Review fixed/regressed ids and decide whether TML planner lift justifies scaling to a 50-row Verified Mini run."
     if status.startswith("official_result_not_claimable"):
         return "Treat the official reports as a negative or invalid result; inspect failure families before adapter work."
     return "Repair the admission errors before citing any official result."
+
+
+def summarize_present_reports(
+    reports: dict[str, Path],
+    warnings: list[str],
+) -> dict[str, Any]:
+    summaries: dict[str, Any] = {}
+    for label, path in sorted(reports.items()):
+        if not path.exists():
+            continue
+        try:
+            data = read_json(path)
+        except Exception as exc:
+            warnings.append(f"could not summarize report {path}: {type(exc).__name__}: {exc}")
+            summaries[label] = {
+                "path": str(path),
+                "source_fingerprint": file_fingerprint(path),
+                "summary_error": f"{type(exc).__name__}: {exc}",
+            }
+            continue
+        summaries[label] = {
+            "path": str(path),
+            "source_fingerprint": file_fingerprint(path),
+            "schema_version": data.get("schema_version"),
+            "total_instances": data.get("total_instances"),
+            "submitted_instances": data.get("submitted_instances"),
+            "completed_instances": data.get("completed_instances"),
+            "resolved_instances": data.get("resolved_instances"),
+            "unresolved_instances": data.get("unresolved_instances"),
+            "empty_patch_instances": data.get("empty_patch_instances"),
+            "error_instances": data.get("error_instances"),
+            "resolved_ids": extract_string_list(data, "resolved_ids"),
+            "unresolved_ids": extract_string_list(data, "unresolved_ids"),
+            "error_ids": extract_string_list(data, "error_ids"),
+        }
+    return summaries
+
+
+def collect_failure_evidence(log_dirs: list[Path]) -> list[dict[str, Any]]:
+    return [summarize_failure_log_dir(path) for path in log_dirs]
+
+
+def summarize_failure_log_dir(log_dir: Path) -> dict[str, Any]:
+    logs = sorted(log_dir.rglob("*.log")) if log_dir.exists() else []
+    markers: dict[str, int] = {}
+    affected_instances: set[str] = set()
+    fingerprints: dict[str, dict[str, Any]] = {}
+
+    marker_patterns = {
+        "docker_api_error": "docker.errors.",
+        "docker_http_500": "500 Server Error",
+        "docker_image_not_found": "ImageNotFound",
+        "docker_no_such_image": "No such image",
+        "swebench_build_image_error": "BuildImageError",
+        "containerd_io_error": "input/output error",
+        "containerd_metadata_write_error": "io.containerd.metadata",
+    }
+    for log_path in logs:
+        fingerprints[str(log_path)] = file_fingerprint(log_path)
+        affected_instances.add(log_path.parent.name)
+        text = log_path.read_text(encoding="utf-8", errors="replace")
+        for marker, pattern in marker_patterns.items():
+            if pattern in text:
+                markers[marker] = markers.get(marker, 0) + 1
+
+    classified_as = "unknown"
+    if "containerd_io_error" in markers or "containerd_metadata_write_error" in markers:
+        classified_as = "docker_containerd_io_error_before_tests"
+    elif "swebench_build_image_error" in markers:
+        classified_as = "swebench_docker_image_build_or_pull_failure_before_tests"
+
+    return {
+        "log_dir": str(log_dir),
+        "exists": log_dir.exists(),
+        "log_count": len(logs),
+        "log_fingerprints": fingerprints,
+        "affected_instance_ids": sorted(affected_instances),
+        "infra_failure_markers": sorted(markers),
+        "marker_counts": markers,
+        "classified_as": classified_as,
+        "public_summary": (
+            "The missing official report is treated as infrastructure failure "
+            "evidence only. These logs are not interpreted as model failures or "
+            "issue-resolution results."
+        ),
+    }
+
+
+def extract_string_list(data: dict[str, Any], key: str) -> list[str]:
+    value = data.get(key)
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value if str(item).strip()]
 
 
 def read_json(path: Path) -> dict[str, Any]:

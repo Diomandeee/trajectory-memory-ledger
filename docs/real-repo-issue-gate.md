@@ -196,6 +196,29 @@ verifies all three handoff input fingerprints, and records the missing base and
 planner official report directories. When those reports exist, the same script
 runs `prepare_real_repo_issue_gate.py` and emits the official comparison.
 
+The first partial official Mac4 scorer result is preserved separately:
+
+```bash
+python3 scripts/prepare_real_repo_official_result_admission.py \
+  --handoff-dir output/private-swebench/scorer-handoff-codex-real-mini-4 \
+  --report benchmarks/real-repo-official-result-admission-codex-real-mini-4-partial-mac4-2026-06-11.json \
+  --base-report output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_base_codex_real_mini_4.json \
+  --planner-report output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_planner_codex_real_mini_4.json \
+  --failure-log-dir output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs \
+  --subset-label verified-mini-codex-real-mini-4 \
+  --base-run-id tml_base_codex_real_mini_4 \
+  --planner-run-id tml_planner_codex_real_mini_4
+```
+
+That report has
+`status=partial_official_reports_waiting_for_counterpart`: the base official
+SWE-bench run completed and resolved `4/4` Django instances, while the planner
+official report is absent. The planner run logs are fingerprinted and
+classified as Docker/containerd infrastructure failure before tests, including
+image build/pull failures and containerd I/O errors. This is valid one-sided
+official evidence, but it is not a base-vs-planner comparison and still sets
+`performance_claim_allowed=false`.
+
 Grow the scorer packet incrementally:
 
 ```bash
@@ -233,10 +256,14 @@ input set.
 
 The post-four live scorer audit is
 `benchmarks/real-repo-scorer-target-audit-post-four-instance-2026-06-11.json`.
-It still reports `no_ready_official_scorer`: local has only `4.56 GiB` free and
-no Docker or `swebench`; Mac4 has Docker but only `12.45 GiB` free and no
-`swebench`; Mac5 is reachable but has only `16.04 GiB` free, no Docker, and no
-`swebench`; cloud-vm remains unreachable. No official harness ran.
+It reported `no_ready_official_scorer` before the Mac4 HD2 bootstrap: local had
+only `4.56 GiB` free and no Docker or `swebench`; Mac4 had Docker but only
+`12.45 GiB` free on internal storage and no global `swebench`; Mac5 was
+reachable but had only `16.04 GiB` free, no Docker, and no `swebench`;
+cloud-vm remained unreachable. The later storage-candidate audit found HD2 on
+Mac4 and enabled the partial official base run, but Docker/Colima still wrote
+through the nearly full internal containerd storage and failed before planner
+tests.
 
 The same four patched worktree pairs also passed selected local public/touched
 Django tests:
@@ -261,10 +288,16 @@ python3 scripts/audit_real_repo_scorer_targets.py \
   --gcloud-project <project>
 ```
 
-The checked audit reports `no_ready_official_scorer`: local, Mac4, and Mac5 are
-blocked by disk/package/Docker gaps, cloud-vm is unreachable, and local cloud
-CLIs are not ready to submit an official job. Cloud account/project identifiers
-are redacted in the public report.
+The checked storage-candidate audit reports `no_ready_official_scorer`: local,
+Mac4, Mac5, and Mac2 are blocked by disk/package/Docker gaps, cloud-vm is
+unreachable, and local cloud CLIs are not ready to submit an official job.
+Cloud account/project identifiers are redacted in the public report. Mac2 was
+explicitly checked after the partial Mac4 run; it has only about `13.43 GiB`
+free, no Docker, no `swebench`, and no external volume, so it can hold small
+artifacts but is not a scorer target. Mac4 still has HD2 space, but its
+internal Docker/Colima storage hit containerd I/O errors during the planner
+run, so do not run more official Docker scoring there until Docker storage is
+repaired or moved.
 
 Prepare bootstrap scripts for a future scorer:
 
@@ -378,14 +411,19 @@ synthetic_fixture_not_performance_evidence
 
 ## Current Status
 
-As of this artifact, TML has run one real patch-generation smoke for
-`django__django-11790`: base and planner prediction JSONL files exist, and the
-gate validates same-instance/same-model coverage. TML has not yet run the
-official SWE-bench Docker harness on those predictions. The proven result
-therefore remains narrower: the anticipatory planner reaches 60/60 on the local
-Python stdlib executable suite, and the real-repo lane has produced patches but
-not resolved-rate evidence. That is useful planner and plumbing evidence, but
-it does not prove SWE-bench issue-resolution lift.
+As of this artifact, TML has generated four real Codex prediction pairs for
+`django__django-11790`, `django__django-11815`, `django__django-11848`, and
+`django__django-11880`. The gate validates same-instance/same-model coverage;
+all base and planner patches apply; and both conditions pass the selected
+local public/touched Django smoke tests for each instance.
+
+The first official SWE-bench evidence is partial. Mac4 completed the base
+condition through the official harness with `4/4` resolved and `0` errors. The
+planner condition did not produce an official report because the scorer failed
+inside Docker/containerd before tests. Therefore the real-repo proof is still
+incomplete: we have a valid base official result and a valid infrastructure
+failure record for the missing planner run, but no official base-vs-planner
+resolved-rate comparison.
 
 The next honest decision is simple:
 

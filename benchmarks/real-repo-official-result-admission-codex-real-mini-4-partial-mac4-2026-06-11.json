@@ -1,0 +1,178 @@
+{
+  "all_official_reports_present": false,
+  "any_official_report_present": true,
+  "claim_boundary": "This admission step verifies scorer input identity and summarizes official reports when present. It does not run SWE-bench and does not create performance evidence without official reports.",
+  "created_at": "2026-06-11T23:08:44.377542+00:00",
+  "errors": [],
+  "expected_reports": {
+    "base_agent": "output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_base_codex_real_mini_4.json",
+    "base_agent_tml_planner": "output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_planner_codex_real_mini_4.json"
+  },
+  "failure_evidence": [
+    {
+      "affected_instance_ids": [
+        "django__django-11790",
+        "django__django-11815",
+        "django__django-11848",
+        "django__django-11880"
+      ],
+      "classified_as": "docker_containerd_io_error_before_tests",
+      "exists": true,
+      "infra_failure_markers": [
+        "containerd_io_error",
+        "containerd_metadata_write_error",
+        "docker_api_error",
+        "docker_http_500",
+        "docker_image_not_found",
+        "docker_no_such_image",
+        "swebench_build_image_error"
+      ],
+      "log_count": 4,
+      "log_dir": "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs",
+      "log_fingerprints": {
+        "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11790/run_instance.log": {
+          "path": "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11790/run_instance.log",
+          "sha256": "31b47f83baeff5db558530ff5ad567ea0b23339940d2a02a9d53369f9e9c7672",
+          "size_bytes": 7269
+        },
+        "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11815/run_instance.log": {
+          "path": "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11815/run_instance.log",
+          "sha256": "22f1ebc24e8a500bd94f33f9b87ea793eaf6b1f6832523246cc30dabb2c0e5b3",
+          "size_bytes": 6942
+        },
+        "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11848/run_instance.log": {
+          "path": "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11848/run_instance.log",
+          "sha256": "3fae9ccacf7653f3177419ed15267d04f2e6f7ac0a836cfbf0fdb3c3611ac2c1",
+          "size_bytes": 6942
+        },
+        "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11880/run_instance.log": {
+          "path": "output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs/django__django-11880/run_instance.log",
+          "sha256": "fad6ec31fac2c8c4eb6a23cb3c1b024d34bdae3025b004d28930f17c851b49cd",
+          "size_bytes": 6942
+        }
+      },
+      "marker_counts": {
+        "containerd_io_error": 3,
+        "containerd_metadata_write_error": 3,
+        "docker_api_error": 4,
+        "docker_http_500": 3,
+        "docker_image_not_found": 4,
+        "docker_no_such_image": 4,
+        "swebench_build_image_error": 1
+      },
+      "public_summary": "The missing official report is treated as infrastructure failure evidence only. These logs are not interpreted as model failures or issue-resolution results."
+    }
+  ],
+  "gate_command": null,
+  "gate_comparison": null,
+  "gate_output": "benchmarks/real-repo-issue-gate-verified-mini-codex-real-mini-4-official.json",
+  "gate_output_fingerprint": null,
+  "gate_performance_claim": null,
+  "gate_process": null,
+  "handoff_dir": "output/private-swebench/scorer-handoff-codex-real-mini-4",
+  "handoff_fingerprints": {
+    "inputs": {
+      "base_predictions": {
+        "actual": {
+          "path": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/base-agent.predictions.jsonl",
+          "sha256": "b7db1f064a8c74535984c517a386dc256b7317ea15a836460f241405db27d152",
+          "size_bytes": 12063
+        },
+        "expected": {
+          "sha256": "b7db1f064a8c74535984c517a386dc256b7317ea15a836460f241405db27d152",
+          "size_bytes": 12063
+        },
+        "path": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/base-agent.predictions.jsonl",
+        "relative_path": "inputs/base-agent.predictions.jsonl",
+        "verified": true
+      },
+      "instances_jsonl": {
+        "actual": {
+          "path": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/instances.jsonl",
+          "sha256": "8c1f97e09b0457075311df3a069b254481c8e502f4b9c3e2bbd9ef9b997fdb92",
+          "size_bytes": 11106
+        },
+        "expected": {
+          "sha256": "8c1f97e09b0457075311df3a069b254481c8e502f4b9c3e2bbd9ef9b997fdb92",
+          "size_bytes": 11106
+        },
+        "path": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/instances.jsonl",
+        "relative_path": "inputs/instances.jsonl",
+        "verified": true
+      },
+      "planner_predictions": {
+        "actual": {
+          "path": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/tml-planner.predictions.jsonl",
+          "sha256": "6ed17d3108e1a0e64afed21cd23ff6010c16c8a0fe81d9779a1853e817dec691",
+          "size_bytes": 11170
+        },
+        "expected": {
+          "sha256": "6ed17d3108e1a0e64afed21cd23ff6010c16c8a0fe81d9779a1853e817dec691",
+          "size_bytes": 11170
+        },
+        "path": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/tml-planner.predictions.jsonl",
+        "relative_path": "inputs/tml-planner.predictions.jsonl",
+        "verified": true
+      }
+    },
+    "manifest_fingerprint": {
+      "path": "output/private-swebench/scorer-handoff-codex-real-mini-4/input-fingerprints.json",
+      "sha256": "947b3ed520dbc2b68e7790668afd84261cc266737593ade89b67651cd8185f44",
+      "size_bytes": 1209
+    },
+    "manifest_path": "output/private-swebench/scorer-handoff-codex-real-mini-4/input-fingerprints.json",
+    "verified": true,
+    "verified_count": 3
+  },
+  "input_paths": {
+    "base_predictions": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/base-agent.predictions.jsonl",
+    "instances_jsonl": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/instances.jsonl",
+    "planner_predictions": "output/private-swebench/scorer-handoff-codex-real-mini-4/inputs/tml-planner.predictions.jsonl"
+  },
+  "missing_reports": [
+    "output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_planner_codex_real_mini_4.json"
+  ],
+  "next_gate": "Keep the valid official report as partial evidence, repair scorer infrastructure, and rerun only the missing counterpart before comparing performance.",
+  "official_reports_present": false,
+  "partial_report_summaries": {
+    "base_agent": {
+      "completed_instances": 4,
+      "empty_patch_instances": 0,
+      "error_ids": [],
+      "error_instances": 0,
+      "path": "output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_base_codex_real_mini_4.json",
+      "resolved_ids": [
+        "django__django-11790",
+        "django__django-11815",
+        "django__django-11848",
+        "django__django-11880"
+      ],
+      "resolved_instances": 4,
+      "schema_version": 2,
+      "source_fingerprint": {
+        "path": "output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_base_codex_real_mini_4.json",
+        "sha256": "087c534dd64848dcc804687677e4141035060beb9209046a3fef146783e74840",
+        "size_bytes": 802
+      },
+      "submitted_instances": 4,
+      "total_instances": 4,
+      "unresolved_ids": [],
+      "unresolved_instances": 0
+    }
+  },
+  "performance_claim_allowed": false,
+  "ran_official_harness": false,
+  "report_presence": {
+    "base_agent": {
+      "exists": true,
+      "path": "output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_base_codex_real_mini_4.json"
+    },
+    "base_agent_tml_planner": {
+      "exists": false,
+      "path": "output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_planner_codex_real_mini_4.json"
+    }
+  },
+  "schema": "trajectory-memory-ledger.real_repo_official_result_admission.v1",
+  "status": "partial_official_reports_waiting_for_counterpart",
+  "warnings": []
+}

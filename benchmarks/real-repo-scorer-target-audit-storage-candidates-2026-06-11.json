@@ -1,0 +1,299 @@
+{
+  "claim_boundary": "This audit checks scorer readiness only. It does not run SWE-bench and cannot prove planner performance.",
+  "cloud_cli": {
+    "modal": {
+      "available": false,
+      "label": "modal",
+      "path": null
+    },
+    "sb_cli": {
+      "available": false,
+      "label": "sb-cli",
+      "path": null
+    }
+  },
+  "created_at": "2026-06-11T23:09:12.500278+00:00",
+  "gcloud": {
+    "account_count": 3,
+    "auth_list": [
+      {
+        "account": "account_1",
+        "status": ""
+      },
+      {
+        "account": "account_2",
+        "status": ""
+      },
+      {
+        "account": "account_3",
+        "status": "ACTIVE"
+      }
+    ],
+    "auth_list_returncode": 0,
+    "available": true,
+    "config": {
+      "core": {
+        "account": "account_3",
+        "disable_usage_reporting": "True",
+        "project": "project_1"
+      }
+    },
+    "config_returncode": 0,
+    "project_count": 1,
+    "project_results": [],
+    "redacted_identifiers": true
+  },
+  "local": {
+    "architecture": "arm64",
+    "architecture_warning": "official SWE-bench Docker evaluation is recommended on x86_64; this target may need an experimental ARM path",
+    "blockers": [
+      "no audited path has at least 120.00 GiB free",
+      "docker executable not found",
+      "python module 'swebench' is not importable"
+    ],
+    "docker_error": "docker executable not found",
+    "docker_ok": false,
+    "docker_path": null,
+    "docker_server_version": null,
+    "free_disk_gb": 4.702,
+    "ready_storage_paths": [],
+    "status": "blocked",
+    "storage_candidates": [
+      {
+        "available": true,
+        "free_disk_gb": 4.702,
+        "path": ".",
+        "total_disk_gb": 460.432
+      },
+      {
+        "available": true,
+        "free_disk_gb": 4.702,
+        "path": "/Users/mohameddiomande",
+        "total_disk_gb": 460.432
+      },
+      {
+        "available": true,
+        "free_disk_gb": 4.702,
+        "path": "/",
+        "total_disk_gb": 460.432
+      },
+      {
+        "available": true,
+        "free_disk_gb": 4.702,
+        "path": "/tmp",
+        "total_disk_gb": 460.432
+      },
+      {
+        "available": true,
+        "free_disk_gb": 4.702,
+        "path": "/Volumes",
+        "total_disk_gb": 460.432
+      },
+      {
+        "available": true,
+        "free_disk_gb": 12.741,
+        "path": "/Volumes/HD1",
+        "total_disk_gb": 460.187
+      },
+      {
+        "available": true,
+        "free_disk_gb": 4.702,
+        "path": "/Volumes/Macintosh HD",
+        "total_disk_gb": 460.432
+      }
+    ],
+    "swebench_importable": false,
+    "target": "local"
+  },
+  "min_free_disk_gb": 120.0,
+  "next_gate": "Run the handoff bundle on a ready Docker scorer, or provision/repair one with enough disk and swebench installed.",
+  "performance_claim_allowed": false,
+  "ran_official_harness": false,
+  "ready_targets": [],
+  "remotes": [
+    {
+      "architecture": "arm64",
+      "architecture_warning": "official SWE-bench Docker evaluation is recommended on x86_64; this target may need an experimental ARM path",
+      "blockers": [
+        "python module 'swebench' is not importable"
+      ],
+      "docker_error": null,
+      "docker_ok": true,
+      "docker_path": "/opt/homebrew/bin/docker",
+      "docker_server_version": "\"29.2.0\"",
+      "free_disk_gb": 1.234,
+      "ready_storage_paths": [
+        "/Volumes/HD2"
+      ],
+      "status": "blocked",
+      "storage_candidates": [
+        {
+          "available": true,
+          "free_disk_gb": 1.234,
+          "path": ".",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 1.234,
+          "path": "/Users/mohameddiomande",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 1.234,
+          "path": "/",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 1.234,
+          "path": "/tmp",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 1.234,
+          "path": "/Volumes",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 1.234,
+          "path": "/Volumes/Macintosh HD",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 164.431,
+          "path": "/Volumes/HD2",
+          "total_disk_gb": 231.047
+        }
+      ],
+      "swebench_importable": false,
+      "target": "mac4"
+    },
+    {
+      "architecture": "arm64",
+      "architecture_warning": "official SWE-bench Docker evaluation is recommended on x86_64; this target may need an experimental ARM path",
+      "blockers": [
+        "no audited path has at least 120.00 GiB free",
+        "docker executable not found",
+        "python module 'swebench' is not importable"
+      ],
+      "docker_error": null,
+      "docker_ok": false,
+      "docker_path": null,
+      "docker_server_version": null,
+      "free_disk_gb": 27.358,
+      "ready_storage_paths": [],
+      "status": "blocked",
+      "storage_candidates": [
+        {
+          "available": true,
+          "free_disk_gb": 27.358,
+          "path": ".",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 27.358,
+          "path": "/Users/mohameddiomande",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 27.358,
+          "path": "/",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 27.358,
+          "path": "/tmp",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 27.358,
+          "path": "/Volumes",
+          "total_disk_gb": 460.432
+        },
+        {
+          "available": true,
+          "free_disk_gb": 27.358,
+          "path": "/Volumes/Macintosh HD",
+          "total_disk_gb": 460.432
+        }
+      ],
+      "swebench_importable": false,
+      "target": "mac5"
+    },
+    {
+      "blockers": [
+        "ssh unreachable"
+      ],
+      "error": "ssh: connect to host 100.114.92.88 port 22: Operation timed out",
+      "status": "unreachable",
+      "target": "cloud-vm"
+    },
+    {
+      "architecture": "arm64",
+      "architecture_warning": "official SWE-bench Docker evaluation is recommended on x86_64; this target may need an experimental ARM path",
+      "blockers": [
+        "no audited path has at least 120.00 GiB free",
+        "docker executable not found",
+        "python module 'swebench' is not importable"
+      ],
+      "docker_error": null,
+      "docker_ok": false,
+      "docker_path": null,
+      "docker_server_version": null,
+      "free_disk_gb": 13.431,
+      "ready_storage_paths": [],
+      "status": "blocked",
+      "storage_candidates": [
+        {
+          "available": true,
+          "free_disk_gb": 13.431,
+          "path": ".",
+          "total_disk_gb": 228.274
+        },
+        {
+          "available": true,
+          "free_disk_gb": 13.431,
+          "path": "/Users/mohameddiomande",
+          "total_disk_gb": 228.274
+        },
+        {
+          "available": true,
+          "free_disk_gb": 13.431,
+          "path": "/",
+          "total_disk_gb": 228.274
+        },
+        {
+          "available": true,
+          "free_disk_gb": 13.431,
+          "path": "/tmp",
+          "total_disk_gb": 228.274
+        },
+        {
+          "available": true,
+          "free_disk_gb": 13.431,
+          "path": "/Volumes",
+          "total_disk_gb": 228.274
+        },
+        {
+          "available": true,
+          "free_disk_gb": 13.431,
+          "path": "/Volumes/Macintosh HD",
+          "total_disk_gb": 228.274
+        }
+      ],
+      "swebench_importable": false,
+      "target": "mac2"
+    }
+  ],
+  "schema": "trajectory-memory-ledger.real_repo_scorer_target_audit.v1",
+  "status": "no_ready_official_scorer"
+}
