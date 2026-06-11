@@ -107,6 +107,21 @@ conditions. The only difference is that `base_agent_tml_planner` receives
 retrieved TML skill memory in its prompt. The command must output a unified diff
 to stdout or `{raw_output_file}`.
 
+For real agent context, add `--prepare-repos`. The wrapper creates separate
+condition-specific worktrees under ignored `output/private-swebench` and checks
+each one out at the instance `base_commit`.
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --dry-run \
+  --prepare-repos \
+  --max-instances 1 \
+  --report benchmarks/real-repo-prediction-generation-repo-prep-smoke-2026-06-11.json
+```
+
+The checked smoke prepares `django__django-11790` for both conditions and still
+writes no predictions. It exists to prove repository-context plumbing only.
+
 Run the official harness for both prediction files:
 
 ```bash

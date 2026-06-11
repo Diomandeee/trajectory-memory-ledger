@@ -507,6 +507,29 @@ That writes `output/private-swebench/base-agent.predictions.jsonl` and
 `output/private-swebench/tml-planner.predictions.jsonl` for the official
 SWE-bench harness.
 
+Prepare real repository worktrees for agent-context generation:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --dry-run \
+  --prepare-repos \
+  --max-instances 1 \
+  --report benchmarks/real-repo-prediction-generation-repo-prep-smoke-2026-06-11.json
+```
+
+Checked repo-prep smoke result:
+
+- instance: `django__django-11790`
+- base worktree prepared: true
+- planner worktree prepared: true
+- worktrees are condition-specific under ignored `output/private-swebench/repo-worktrees`
+- predictions written: `0`
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Boundary: this proves the prediction wrapper can provide actual base-commit
+repository context to an agent. It still does not test planner performance.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash

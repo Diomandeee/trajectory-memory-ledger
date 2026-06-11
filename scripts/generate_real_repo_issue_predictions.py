@@ -67,11 +67,13 @@ def main() -> int:
                 if condition == "base_agent_tml_planner"
                 else []
             )
+            repo_worktree = prepare_repo_worktree(instance, condition, args) if args.prepare_repos else None
             prompt = build_prompt(
                 instance=instance,
                 condition=condition,
                 retrieved=retrieved,
                 max_context_chars=args.max_planner_context_chars,
+                repo_worktree=repo_worktree,
             )
             prompt_path = condition_dir / f"{safe_name(instance_id)}.prompt.md"
             raw_output_path = condition_dir / f"{safe_name(instance_id)}.raw.txt"
@@ -83,6 +85,8 @@ def main() -> int:
                 "condition": condition,
                 "prompt_path": str(prompt_path),
                 "raw_output_path": str(raw_output_path),
+                "repo_worktree_path": str(repo_worktree) if repo_worktree else None,
+                "repo_prepared": repo_worktree is not None,
                 "prompt_chars": len(prompt),
                 "retrieved_skill_count": len(retrieved),
                 "retrieved_skills": [
@@ -103,11 +107,14 @@ def main() -> int:
                     instance_id=instance_id,
                     model_name=args.model_name,
                     timeout_s=args.timeout_s,
-                    cwd=args.command_cwd,
+                    cwd=repo_worktree or args.command_cwd,
+                    repo_worktree=repo_worktree,
                 )
                 elapsed = time.monotonic() - started
                 raw_text = read_text(raw_output_path)
                 patch = extract_unified_diff(raw_text)
+                if not patch.strip() and repo_worktree is not None:
+                    patch = git_diff(repo_worktree)
                 rows.append(
                     {
                         "instance_id": instance_id,
@@ -156,6 +163,8 @@ def main() -> int:
         "agent_command_recorded": bool(args.agent_command),
         "raw_dir": str(args.raw_dir),
         "output_dir": str(args.output_dir),
+        "repo_work_dir": str(args.repo_work_dir) if args.repo_work_dir else None,
+        "prepare_repos": args.prepare_repos,
         "skill_roots": [str(path) for path in args.skill_root],
         "skill_memory_count": len(skill_memories),
         "hidden_eval_fields_used": False,
@@ -195,10 +204,14 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Shell command template that reads {prompt_file} and writes a unified diff to "
             "stdout or {raw_output_file}. Available fields: prompt_file, raw_output_file, "
-            "condition, instance_id, model_name."
+            "condition, instance_id, model_name, repo_worktree."
         ),
     )
     parser.add_argument("--command-cwd", type=Path)
+    parser.add_argument(
+        "--repo-work-dir", type=Path, default=Path("output/private-swebench/repo-worktrees")
+    )
+    parser.add_argument("--prepare-repos", action="store_true")
     parser.add_argument("--timeout-s", type=int, default=1800)
     parser.add_argument("--max-instances", type=int)
     parser.add_argument("--dry-run", action="store_true")
@@ -286,6 +299,7 @@ def build_prompt(
     condition: str,
     retrieved: list[tuple[SkillMemory, int]],
     max_context_chars: int,
+    repo_worktree: Path | None,
 ) -> str:
     parts = [
         "You are a coding agent solving one SWE-bench style real repository issue.",
@@ -304,6 +318,15 @@ def build_prompt(
     hints = str(instance.get("hints_text", "")).strip()
     if hints:
         parts.extend(["", "Public hints:", hints])
+    if repo_worktree is not None:
+        parts.extend(
+            [
+                "",
+                "Repository working tree:",
+                str(repo_worktree),
+                "The working tree is checked out at the base commit. Inspect and edit files there, then output the final unified diff.",
+            ]
+        )
     if condition == "base_agent_tml_planner":
         parts.extend(
             [
@@ -352,6 +375,7 @@ def run_agent_command(
     model_name: str,
     timeout_s: int,
     cwd: Path | None,
+    repo_worktree: Path | None,
 ) -> dict[str, Any]:
     if command_template is None:
         raise SystemExit("--agent-command is required")
@@ -361,6 +385,7 @@ def run_agent_command(
         condition=condition,
         instance_id=instance_id,
         model_name=model_name,
+        repo_worktree=str(repo_worktree) if repo_worktree else "",
     )
     result = subprocess.run(
         command,
@@ -386,8 +411,119 @@ def run_agent_command(
         "stderr_path": str(stderr_path) if result.stderr else None,
         "stdout_chars": len(result.stdout),
         "output_chars": len(output_text),
+        "repo_worktree": str(repo_worktree) if repo_worktree else None,
         "status": "command_succeeded" if result.returncode == 0 else "command_failed",
     }
+
+
+def prepare_repo_worktree(instance: dict[str, Any], condition: str, args: argparse.Namespace) -> Path:
+    repo = str(instance["repo"])
+    instance_id = safe_name(str(instance["instance_id"]))
+    base_commit = str(instance["base_commit"])
+    repo_key = repo.replace("/", "__")
+    cache_dir = args.repo_work_dir / "cache" / f"{repo_key}.git"
+    worktree = args.repo_work_dir / "worktrees" / condition / instance_id
+    args.repo_work_dir.mkdir(parents=True, exist_ok=True)
+
+    if not cache_dir.exists():
+        cache_dir.parent.mkdir(parents=True, exist_ok=True)
+        run_git(
+            [
+                "git",
+                "clone",
+                "--mirror",
+                f"https://github.com/{repo}.git",
+                str(cache_dir),
+            ],
+            cwd=None,
+        )
+    else:
+        run_git(["git", "fetch", "--quiet", "origin"], cwd=cache_dir)
+
+    if not worktree.exists():
+        worktree.parent.mkdir(parents=True, exist_ok=True)
+        run_git(["git", "clone", str(cache_dir), str(worktree)], cwd=None)
+    else:
+        status = git_status(worktree)
+        if status:
+            raise SystemExit(
+                f"{worktree} has local changes; move it aside before regenerating predictions"
+            )
+
+    run_git(["git", "checkout", "--quiet", base_commit], cwd=worktree)
+    return worktree
+
+
+def run_git(command: list[str], cwd: Path | None) -> None:
+    result = subprocess.run(
+        command,
+        cwd=str(cwd) if cwd else None,
+        text=True,
+        capture_output=True,
+        timeout=300,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise SystemExit(
+            f"git command failed ({' '.join(command)}): {(result.stderr or result.stdout).strip()}"
+        )
+
+
+def git_status(repo_worktree: Path) -> str:
+    result = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=str(repo_worktree),
+        text=True,
+        capture_output=True,
+        timeout=60,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise SystemExit(f"git status failed in {repo_worktree}: {result.stderr.strip()}")
+    return result.stdout.strip()
+
+
+def git_diff(repo_worktree: Path) -> str:
+    mark_untracked_files_for_diff(repo_worktree)
+    result = subprocess.run(
+        ["git", "diff", "--binary"],
+        cwd=str(repo_worktree),
+        text=True,
+        capture_output=True,
+        timeout=60,
+        check=False,
+    )
+    if result.returncode != 0:
+        return ""
+    return result.stdout.strip() + ("\n" if result.stdout.strip() else "")
+
+
+def mark_untracked_files_for_diff(repo_worktree: Path) -> None:
+    result = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard", "-z"],
+        cwd=str(repo_worktree),
+        text=True,
+        capture_output=True,
+        timeout=60,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise SystemExit(f"git ls-files failed in {repo_worktree}: {result.stderr.strip()}")
+    untracked = [path for path in result.stdout.split("\0") if path]
+    if not untracked:
+        return
+    add_result = subprocess.run(
+        ["git", "add", "--intent-to-add", "--", *untracked],
+        cwd=str(repo_worktree),
+        text=True,
+        capture_output=True,
+        timeout=60,
+        check=False,
+    )
+    if add_result.returncode != 0:
+        raise SystemExit(
+            f"git add --intent-to-add failed in {repo_worktree}: {add_result.stderr.strip()}"
+        )
 
 
 def extract_unified_diff(text: str) -> str:

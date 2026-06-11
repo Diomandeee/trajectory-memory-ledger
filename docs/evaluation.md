@@ -1007,3 +1007,39 @@ Boundary:
 - It does not run repository tests.
 - It does not create a TML performance claim.
 - Official SWE-bench harness reports are still required.
+
+### Repo-Prep Smoke
+
+The prediction wrapper can also prepare condition-specific repository
+worktrees, so the external agent can inspect and edit real source files checked
+out at the SWE-bench base commit:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --dry-run \
+  --prepare-repos \
+  --max-instances 1 \
+  --report benchmarks/real-repo-prediction-generation-repo-prep-smoke-2026-06-11.json
+```
+
+Checked repo-prep smoke:
+
+| Field | Value |
+|---|---|
+| Status | `dry_run_prompt_generation_ready` |
+| Instance | `django__django-11790` |
+| Base repo prepared | true |
+| Planner repo prepared | true |
+| Base worktree | `output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11790` |
+| Planner worktree | `output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11790` |
+| Predictions written | 0 |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+Boundary:
+
+- This verifies real repository checkout plumbing for one instance.
+- It does not generate a patch.
+- It does not run SWE-bench tests.
+- Local disk fell to about 5.2 GiB free after the private repo-prep cache, so
+  this local machine should not be expanded to the full 50-instance run.

@@ -1,0 +1,94 @@
+{
+  "agent_command_recorded": false,
+  "claim_boundary": "Prediction generation is not performance evidence. Only official SWE-bench harness reports can measure real-repo issue resolution.",
+  "condition_reports": {
+    "base_agent": {
+      "all_predictions_written": false,
+      "instance_count": 1,
+      "per_instance": [
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11790",
+          "prompt_chars": 1275,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11790.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11790.raw.txt",
+          "repo": "django/django",
+          "repo_prepared": true,
+          "repo_worktree_path": "output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11790",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        }
+      ],
+      "prediction_count": 0,
+      "prediction_path": null
+    },
+    "base_agent_tml_planner": {
+      "all_predictions_written": false,
+      "instance_count": 1,
+      "per_instance": [
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11790",
+          "prompt_chars": 9689,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11790.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11790.raw.txt",
+          "repo": "django/django",
+          "repo_prepared": true,
+          "repo_worktree_path": "output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11790",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 5
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 5
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 5
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        }
+      ],
+      "prediction_count": 0,
+      "prediction_path": null
+    }
+  },
+  "conditions": [
+    "base_agent",
+    "base_agent_tml_planner"
+  ],
+  "created_at": "2026-06-11T02:19:37.664642+00:00",
+  "dry_run": true,
+  "gold_patch_used": false,
+  "hidden_eval_fields_used": false,
+  "instance_count": 1,
+  "instances_jsonl": "examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl",
+  "model_name": "external-agent-same-model",
+  "next_gate_command": "python3 scripts/prepare_real_repo_issue_gate.py --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl --base-predictions output/private-swebench/base-agent.predictions.jsonl --planner-predictions output/private-swebench/tml-planner.predictions.jsonl --output benchmarks/real-repo-issue-gate-preflight.json",
+  "output_dir": "output/private-swebench",
+  "performance_claim_allowed": false,
+  "prepare_repos": true,
+  "ran_official_harness": false,
+  "raw_dir": "output/private-swebench/raw-agent-output",
+  "repo_work_dir": "output/private-swebench/repo-worktrees",
+  "same_agent_command_for_conditions": true,
+  "same_instance_order": true,
+  "same_timeout_s": 1800,
+  "schema": "trajectory-memory-ledger.real_repo_prediction_generation.v1",
+  "skill_memory_count": 6,
+  "skill_roots": [
+    "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages"
+  ],
+  "status": "dry_run_prompt_generation_ready",
+  "test_patch_used": false
+}

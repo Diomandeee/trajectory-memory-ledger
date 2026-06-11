@@ -40,6 +40,10 @@ Current execution state:
 - Prediction-generation dry-run is wired for all 50 instances:
   `scripts/generate_real_repo_issue_predictions.py --dry-run` writes 100
   private prompt files and no predictions.
+- Repo-prep smoke is wired for one real instance:
+  `scripts/generate_real_repo_issue_predictions.py --dry-run --prepare-repos --max-instances 1`
+  prepares condition-specific `django__django-11790` worktrees at the base
+  commit, but writes no predictions and runs no harness.
 - Base and planner prediction JSONL files still need to be generated with a
   real external agent command on, or transferred from, the machine that will run
   the official harness.
