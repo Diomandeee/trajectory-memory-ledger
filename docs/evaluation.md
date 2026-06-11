@@ -1194,6 +1194,44 @@ Boundary:
 - It does not run SWE-bench, and without official reports it cannot measure
   issue resolution.
 
+### Incremental Two-Instance Packet
+
+The next incremental batch selects the next not-yet-predicted public-safe
+Verified Mini row:
+
+```bash
+python3 scripts/select_real_repo_manifest_subset.py \
+  --input examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl \
+  --output examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-2-2026-06-11.jsonl \
+  --report benchmarks/swebench-verified-mini-public-manifest-codex-smoke-2-2026-06-11.json \
+  --count 1 \
+  --exclude-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl
+```
+
+Checked two-instance packet:
+
+| Field | Value |
+|---|---|
+| Selected new instance | `django__django-11815` |
+| Merged instance count | 2 |
+| Base patch apply | 2/2 |
+| Planner patch apply | 2/2 |
+| Gate status | `waiting_for_official_harness_results` |
+| Handoff status | `handoff_ready_waiting_for_official_harness` |
+| Admission status | `waiting_for_official_reports` |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+Boundary:
+
+- This expands the private scorer input set from one issue to two real Django
+  issues.
+- The public reports record counts, ids, and fingerprints only; private patch
+  bodies remain under ignored `output/private-*`.
+- It proves both base and planner patches apply to the target base commits.
+- It still does not run the official SWE-bench Docker harness or measure
+  issue-resolution lift.
+
 ### Scorer Target Audit
 
 The current machines and cloud CLIs are audited with:

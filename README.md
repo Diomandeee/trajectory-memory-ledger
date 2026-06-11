@@ -618,6 +618,33 @@ Checked admission result:
 Boundary: this verifies the frozen handoff identity and records the exact
 report paths needed later. It still does not run SWE-bench or score patches.
 
+Grow the real-prediction packet incrementally:
+
+```bash
+python3 scripts/select_real_repo_manifest_subset.py \
+  --input examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl \
+  --output examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-2-2026-06-11.jsonl \
+  --report benchmarks/swebench-verified-mini-public-manifest-codex-smoke-2-2026-06-11.json \
+  --count 1 \
+  --exclude-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl
+```
+
+Checked incremental two-instance packet:
+
+- new selected instance: `django__django-11815`
+- second Codex prediction smoke: base patch `5365` chars, planner patch `4711` chars
+- merged packet: `2` instances, same base/planner ids
+- gate status: `waiting_for_official_harness_results`
+- handoff status: `handoff_ready_waiting_for_official_harness`
+- admission status: `waiting_for_official_reports`
+- patch apply: base `2/2`, planner `2/2`
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Boundary: this expands the future scorer input set from one real issue to two
+real issues and proves both generated patch sets apply. It still does not run
+SWE-bench, hidden tests, or measure issue resolution.
+
 Audit scorer targets:
 
 ```bash

@@ -87,6 +87,12 @@ Current execution state:
   form tests in the patched base and planner worktrees; both conditions pass.
   This is not the full Django suite, hidden SWE-bench tests, or official issue
   resolution.
+- Incremental two-instance real-prediction packet is complete:
+  `scripts/select_real_repo_manifest_subset.py` selected `django__django-11815`
+  as the next public-safe row, `scripts/merge_real_repo_prediction_batches.py`
+  merged the first two private Codex batches, and the two-instance packet has
+  gate/handoff/admission reports plus patch-apply status. Both base and planner
+  patches apply on both instances; official scoring is still unrun.
 - Full base and planner prediction JSONL files still need to be generated for
   the 50-row Verified Mini subset on, or transferred to, the machine that will
   run the official harness.

@@ -196,6 +196,23 @@ verifies all three handoff input fingerprints, and records the missing base and
 planner official report directories. When those reports exist, the same script
 runs `prepare_real_repo_issue_gate.py` and emits the official comparison.
 
+Grow the scorer packet incrementally:
+
+```bash
+python3 scripts/select_real_repo_manifest_subset.py \
+  --input examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl \
+  --output examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-2-2026-06-11.jsonl \
+  --report benchmarks/swebench-verified-mini-public-manifest-codex-smoke-2-2026-06-11.json \
+  --count 1 \
+  --exclude-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl
+```
+
+The checked two-instance packet adds `django__django-11815`, merges the first
+two private Codex prediction batches, packages a fingerprint-locked two-instance
+handoff, verifies admission is still waiting for official reports, and confirms
+both base and planner patches apply on both instances. It still does not run
+SWE-bench or allow a performance claim.
+
 Audit available scorer targets:
 
 ```bash

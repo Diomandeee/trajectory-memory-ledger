@@ -1,0 +1,86 @@
+{
+  "claim_boundary": "This admission step verifies scorer input identity and summarizes official reports when present. It does not run SWE-bench and does not create performance evidence without official reports.",
+  "created_at": "2026-06-11T03:53:05.880600+00:00",
+  "errors": [],
+  "expected_reports": {
+    "base_agent": "evaluation_results/tml_base_codex_real_mini_2",
+    "base_agent_tml_planner": "evaluation_results/tml_planner_codex_real_mini_2"
+  },
+  "gate_command": null,
+  "gate_comparison": null,
+  "gate_output": "benchmarks/real-repo-issue-gate-verified-mini-codex-real-mini-2-official.json",
+  "gate_output_fingerprint": null,
+  "gate_performance_claim": null,
+  "gate_process": null,
+  "handoff_dir": "output/private-swebench/scorer-handoff-codex-real-mini-2",
+  "handoff_fingerprints": {
+    "inputs": {
+      "base_predictions": {
+        "actual": {
+          "path": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/base-agent.predictions.jsonl",
+          "sha256": "cbf700a28d897117871054a759f3e2927dcc31a6e58fc3b90c24c111a98aba3b",
+          "size_bytes": 7665
+        },
+        "expected": {
+          "sha256": "cbf700a28d897117871054a759f3e2927dcc31a6e58fc3b90c24c111a98aba3b",
+          "size_bytes": 7665
+        },
+        "path": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/base-agent.predictions.jsonl",
+        "relative_path": "inputs/base-agent.predictions.jsonl",
+        "verified": true
+      },
+      "instances_jsonl": {
+        "actual": {
+          "path": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/instances.jsonl",
+          "sha256": "a2258bc18f22b90ac149ffdc21b26a2b9d24762362918a660f577a304e2dd541",
+          "size_bytes": 5947
+        },
+        "expected": {
+          "sha256": "a2258bc18f22b90ac149ffdc21b26a2b9d24762362918a660f577a304e2dd541",
+          "size_bytes": 5947
+        },
+        "path": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/instances.jsonl",
+        "relative_path": "inputs/instances.jsonl",
+        "verified": true
+      },
+      "planner_predictions": {
+        "actual": {
+          "path": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/tml-planner.predictions.jsonl",
+          "sha256": "554eda02fed0cb806e18c158e54a0617e248db219c0ca76c78682bb30f7b50b7",
+          "size_bytes": 7052
+        },
+        "expected": {
+          "sha256": "554eda02fed0cb806e18c158e54a0617e248db219c0ca76c78682bb30f7b50b7",
+          "size_bytes": 7052
+        },
+        "path": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/tml-planner.predictions.jsonl",
+        "relative_path": "inputs/tml-planner.predictions.jsonl",
+        "verified": true
+      }
+    },
+    "manifest_fingerprint": {
+      "path": "output/private-swebench/scorer-handoff-codex-real-mini-2/input-fingerprints.json",
+      "sha256": "b7d5e230a12d77b97deba71f36256ebb01194881ffbb03e42c42522f375aa05b",
+      "size_bytes": 1206
+    },
+    "manifest_path": "output/private-swebench/scorer-handoff-codex-real-mini-2/input-fingerprints.json",
+    "verified": true,
+    "verified_count": 3
+  },
+  "input_paths": {
+    "base_predictions": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/base-agent.predictions.jsonl",
+    "instances_jsonl": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/instances.jsonl",
+    "planner_predictions": "output/private-swebench/scorer-handoff-codex-real-mini-2/inputs/tml-planner.predictions.jsonl"
+  },
+  "missing_reports": [
+    "evaluation_results/tml_base_codex_real_mini_2",
+    "evaluation_results/tml_planner_codex_real_mini_2"
+  ],
+  "next_gate": "Run the fingerprint-locked handoff on a ready SWE-bench scorer, then rerun this admission script with the report paths.",
+  "official_reports_present": false,
+  "performance_claim_allowed": false,
+  "ran_official_harness": false,
+  "schema": "trajectory-memory-ledger.real_repo_official_result_admission.v1",
+  "status": "waiting_for_official_reports",
+  "warnings": []
+}
