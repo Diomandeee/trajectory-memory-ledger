@@ -83,6 +83,30 @@ The checked local `2026-06-11` preflight is blocked:
 This is not a failure of TML. It says the official harness run belongs on a
 Docker-capable machine with enough disk and generated prediction files.
 
+Prepare prompts for both conditions:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py --dry-run
+```
+
+The checked dry-run writes 100 private prompt files under
+`output/private-swebench/raw-agent-output`: 50 for `base_agent` and 50 for
+`base_agent_tml_planner`. It writes no prediction JSONL files and allows no
+performance claim.
+
+Generate real prediction files by providing an external agent command:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --model-name same-agent-model \
+  --agent-command 'your-agent --prompt-file {prompt_file}'
+```
+
+The same command, model name, timeout, and instance order are used for both
+conditions. The only difference is that `base_agent_tml_planner` receives
+retrieved TML skill memory in its prompt. The command must output a unified diff
+to stdout or `{raw_output_file}`.
+
 Run the official harness for both prediction files:
 
 ```bash

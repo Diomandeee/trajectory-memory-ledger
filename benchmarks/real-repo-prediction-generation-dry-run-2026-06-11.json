@@ -1,0 +1,2048 @@
+{
+  "agent_command_recorded": false,
+  "claim_boundary": "Prediction generation is not performance evidence. Only official SWE-bench harness reports can measure real-repo issue resolution.",
+  "condition_reports": {
+    "base_agent": {
+      "all_predictions_written": false,
+      "instance_count": 50,
+      "per_instance": [
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11790",
+          "prompt_chars": 1050,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11790.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11790.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11815",
+          "prompt_chars": 4903,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11815.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11815.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11848",
+          "prompt_chars": 3365,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11848.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11848.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11880",
+          "prompt_chars": 1769,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11880.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11880.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11885",
+          "prompt_chars": 1849,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11885.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11885.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11951",
+          "prompt_chars": 1162,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11951.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11951.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11964",
+          "prompt_chars": 3476,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11964.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11964.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-11999",
+          "prompt_chars": 5275,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11999.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-11999.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12039",
+          "prompt_chars": 2157,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12039.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12039.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12050",
+          "prompt_chars": 900,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12050.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12050.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12143",
+          "prompt_chars": 1990,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12143.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12143.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12155",
+          "prompt_chars": 2298,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12155.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12155.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12193",
+          "prompt_chars": 1489,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12193.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12193.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12209",
+          "prompt_chars": 4295,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12209.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12209.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12262",
+          "prompt_chars": 1583,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12262.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12262.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12273",
+          "prompt_chars": 6629,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12273.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12273.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12276",
+          "prompt_chars": 1989,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12276.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12276.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12304",
+          "prompt_chars": 1133,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12304.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12304.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12308",
+          "prompt_chars": 1396,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12308.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12308.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12325",
+          "prompt_chars": 3876,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12325.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12325.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12406",
+          "prompt_chars": 1717,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12406.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12406.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12708",
+          "prompt_chars": 1949,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12708.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12708.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12713",
+          "prompt_chars": 810,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12713.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12713.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-12774",
+          "prompt_chars": 1647,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12774.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-12774.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "django__django-9296",
+          "prompt_chars": 1302,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/django__django-9296.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/django__django-9296.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10323",
+          "prompt_chars": 4071,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10323.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10323.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10435",
+          "prompt_chars": 2743,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10435.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10435.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10466",
+          "prompt_chars": 14280,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10466.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10466.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10673",
+          "prompt_chars": 1894,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10673.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-10673.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-11510",
+          "prompt_chars": 21308,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-11510.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-11510.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7590",
+          "prompt_chars": 1160,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7590.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7590.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7748",
+          "prompt_chars": 2256,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7748.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7748.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7757",
+          "prompt_chars": 1212,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7757.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7757.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7985",
+          "prompt_chars": 2807,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7985.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-7985.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8035",
+          "prompt_chars": 1285,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8035.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8035.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8056",
+          "prompt_chars": 2125,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8056.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8056.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8265",
+          "prompt_chars": 2394,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8265.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8265.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8269",
+          "prompt_chars": 1747,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8269.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8269.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8475",
+          "prompt_chars": 1326,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8475.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8475.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8548",
+          "prompt_chars": 4271,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8548.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8548.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8551",
+          "prompt_chars": 2718,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8551.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8551.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "prompt_chars": 3484,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8638.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8638.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8721",
+          "prompt_chars": 1122,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8721.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-8721.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9229",
+          "prompt_chars": 4384,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9229.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9229.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9230",
+          "prompt_chars": 1797,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9230.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9230.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9281",
+          "prompt_chars": 2381,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9281.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9281.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9320",
+          "prompt_chars": 1873,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9320.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9320.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9367",
+          "prompt_chars": 1071,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9367.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9367.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9461",
+          "prompt_chars": 3456,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9461.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9461.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9698",
+          "prompt_chars": 1377,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9698.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent/sphinx-doc__sphinx-9698.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "status": "dry_run_prompt_written"
+        }
+      ],
+      "prediction_count": 0,
+      "prediction_path": null
+    },
+    "base_agent_tml_planner": {
+      "all_predictions_written": false,
+      "instance_count": 50,
+      "per_instance": [
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11790",
+          "prompt_chars": 9452,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11790.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11790.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 5
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 5
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 5
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11815",
+          "prompt_chars": 13306,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11815.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11815.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 22
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 21
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 20
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11848",
+          "prompt_chars": 11770,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11848.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11848.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 23
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 21
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 21
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11880",
+          "prompt_chars": 10177,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11880.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11880.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 12
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 10
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 10
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11885",
+          "prompt_chars": 10253,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11885.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11885.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 10
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 9
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11951",
+          "prompt_chars": 9562,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11951.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11951.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 5
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 5
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 4
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11964",
+          "prompt_chars": 11880,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11964.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11964.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 16
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 15
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 15
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-11999",
+          "prompt_chars": 13679,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11999.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-11999.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 23
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 22
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 22
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12039",
+          "prompt_chars": 10561,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12039.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12039.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 17
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 16
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 15
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12050",
+          "prompt_chars": 9303,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12050.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12050.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 8
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 7
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12143",
+          "prompt_chars": 10398,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12143.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12143.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 15
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 12
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 12
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12155",
+          "prompt_chars": 10703,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12155.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12155.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 20
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 18
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 18
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12193",
+          "prompt_chars": 9888,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12193.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12193.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 15
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 13
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12209",
+          "prompt_chars": 12698,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12209.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12209.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 22
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 22
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 20
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12262",
+          "prompt_chars": 9987,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12262.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12262.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 11
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12273",
+          "prompt_chars": 15034,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12273.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12273.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 30
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 29
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 27
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12276",
+          "prompt_chars": 10397,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12276.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12276.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 12
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 11
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12304",
+          "prompt_chars": 9535,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12304.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12304.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 9
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12308",
+          "prompt_chars": 9795,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12308.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12308.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 15
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 12
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12325",
+          "prompt_chars": 12280,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12325.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12325.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 13
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12406",
+          "prompt_chars": 10121,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12406.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12406.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 10
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 10
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12708",
+          "prompt_chars": 10353,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12708.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12708.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 13
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12713",
+          "prompt_chars": 9212,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12713.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12713.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 6
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 6
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 6
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-12774",
+          "prompt_chars": 10050,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12774.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-12774.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 10
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "django__django-9296",
+          "prompt_chars": 9710,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-9296.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/django__django-9296.raw.txt",
+          "repo": "django/django",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 12
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10323",
+          "prompt_chars": 12473,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10323.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10323.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 19
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 18
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 18
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10435",
+          "prompt_chars": 11151,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10435.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10435.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 12
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10466",
+          "prompt_chars": 22685,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10466.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10466.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 41
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 37
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 35
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-10673",
+          "prompt_chars": 10296,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10673.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-10673.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 8
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 7
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 7
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-11510",
+          "prompt_chars": 29713,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-11510.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-11510.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 35
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 32
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 31
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7590",
+          "prompt_chars": 9560,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7590.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7590.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 5
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 4
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 3
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7748",
+          "prompt_chars": 10660,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7748.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7748.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 13
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7757",
+          "prompt_chars": 9609,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7757.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7757.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 7
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-7985",
+          "prompt_chars": 11212,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7985.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-7985.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 16
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 16
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 16
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8035",
+          "prompt_chars": 9682,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8035.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8035.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 9
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8056",
+          "prompt_chars": 10527,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8056.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8056.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 8
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8265",
+          "prompt_chars": 10797,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8265.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8265.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 12
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 11
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8269",
+          "prompt_chars": 10151,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8269.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8269.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 13
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8475",
+          "prompt_chars": 9732,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8475.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8475.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 8
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 7
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 6
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8548",
+          "prompt_chars": 12679,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8548.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8548.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 20
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 19
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 19
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8551",
+          "prompt_chars": 11120,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8551.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8551.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 11
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 10
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "prompt_chars": 11886,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8638.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8638.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 13
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 11
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-8721",
+          "prompt_chars": 9524,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8721.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-8721.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 7
+            },
+            {
+              "name": "python_stdlib_math_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_math_trajectory_delta",
+              "score": 7
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 7
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9229",
+          "prompt_chars": 12788,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9229.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9229.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 24
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 24
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 23
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9230",
+          "prompt_chars": 10196,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9230.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9230.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 10
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 10
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 9
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9281",
+          "prompt_chars": 10786,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9281.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9281.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 16
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 15
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 14
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9320",
+          "prompt_chars": 10278,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9320.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9320.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 14
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 12
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 12
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9367",
+          "prompt_chars": 9472,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9367.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9367.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 6
+            },
+            {
+              "name": "python_stdlib_security_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_security_trajectory_delta",
+              "score": 6
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 5
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9461",
+          "prompt_chars": 11861,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9461.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9461.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 18
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 15
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 15
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "dry_run": true,
+          "instance_id": "sphinx-doc__sphinx-9698",
+          "prompt_chars": 9780,
+          "prompt_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9698.prompt.md",
+          "raw_output_path": "output/private-swebench/raw-agent-output/base_agent_tml_planner/sphinx-doc__sphinx-9698.raw.txt",
+          "repo": "sphinx-doc/sphinx",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 9
+            },
+            {
+              "name": "python_stdlib_path_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_path_trajectory_delta",
+              "score": 9
+            }
+          ],
+          "status": "dry_run_prompt_written"
+        }
+      ],
+      "prediction_count": 0,
+      "prediction_path": null
+    }
+  },
+  "conditions": [
+    "base_agent",
+    "base_agent_tml_planner"
+  ],
+  "created_at": "2026-06-11T02:03:47.573008+00:00",
+  "dry_run": true,
+  "gold_patch_used": false,
+  "hidden_eval_fields_used": false,
+  "instance_count": 50,
+  "instances_jsonl": "examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl",
+  "model_name": "external-agent-same-model",
+  "next_gate_command": "python3 scripts/prepare_real_repo_issue_gate.py --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl --base-predictions output/private-swebench/base-agent.predictions.jsonl --planner-predictions output/private-swebench/tml-planner.predictions.jsonl --output benchmarks/real-repo-issue-gate-preflight.json",
+  "output_dir": "output/private-swebench",
+  "performance_claim_allowed": false,
+  "ran_official_harness": false,
+  "raw_dir": "output/private-swebench/raw-agent-output",
+  "same_agent_command_for_conditions": true,
+  "same_instance_order": true,
+  "same_timeout_s": 1800,
+  "schema": "trajectory-memory-ledger.real_repo_prediction_generation.v1",
+  "skill_memory_count": 6,
+  "skill_roots": [
+    "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages"
+  ],
+  "status": "dry_run_prompt_generation_ready",
+  "test_patch_used": false
+}

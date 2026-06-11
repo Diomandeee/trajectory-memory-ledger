@@ -477,6 +477,36 @@ Boundary: the manifest freezes the public instance set and the preflight records
 why this machine should not run the official harness. Neither artifact measures
 planner performance.
 
+Prepare the base/planner prediction-generation prompts:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py --dry-run
+```
+
+Checked dry-run result:
+
+- instances: `50`
+- conditions: `base_agent`, `base_agent_tml_planner`
+- private prompts written under ignored `output/private-swebench/raw-agent-output`
+- prompt files written: `100`
+- planner retrieval: `3` TML skill memory packages retrieved for each planner prompt
+- predictions written: `0`
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Real prediction generation requires an external agent command that reads
+`{prompt_file}` and writes a unified diff to stdout or `{raw_output_file}`:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --model-name same-agent-model \
+  --agent-command 'your-agent --prompt-file {prompt_file}'
+```
+
+That writes `output/private-swebench/base-agent.predictions.jsonl` and
+`output/private-swebench/tml-planner.predictions.jsonl` for the official
+SWE-bench harness.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash

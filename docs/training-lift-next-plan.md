@@ -37,8 +37,12 @@ Current execution state:
   `examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl`.
 - Local official harness execution is blocked: free disk is about `6.10 GiB`,
   `docker` is not installed, and the Python `swebench` module is not importable.
-- Base and planner prediction JSONL files still need to be generated on, or
-  transferred from, the machine that will run the official harness.
+- Prediction-generation dry-run is wired for all 50 instances:
+  `scripts/generate_real_repo_issue_predictions.py --dry-run` writes 100
+  private prompt files and no predictions.
+- Base and planner prediction JSONL files still need to be generated with a
+  real external agent command on, or transferred from, the machine that will run
+  the official harness.
 
 Only continue adapter work if one of two things happens:
 

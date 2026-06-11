@@ -7,7 +7,7 @@ prepared external proof gate:
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
 4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, two real adapter-conditioned reports over a six-task held-out Python stdlib task set, and a 60-task repair-router/planner gate. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data on the six-task gate, but the 60-task replication falsifies the broad adapter claim for the current E2B recipe. The strongest checked downstream result is now router/planner-level: a public-only anticipatory repair planner reaches 60/60 on `python-stdlib-heldout-v1-60`, with `synthetic_rows=0`, `read_hidden_task_specs=false`, `hidden_tests_sent_to_model=false`, and zero regressions against both the 57/60 E4B overlay and the E2B base.
-5. Prepared real-repo issue-resolution gate: `scripts/prepare_real_repo_issue_gate.py` validates same-instance SWE-bench-style prediction files, parses official harness reports when present, compares base agent versus base+TML planner, and refuses a performance claim for missing reports or synthetic fixtures. `scripts/fetch_swebench_verified_mini_manifest.py` freezes a public-safe 50-row Verified Mini manifest, and `scripts/preflight_real_repo_issue_gate_env.py` records local harness readiness. The checked fixture and local preflight prove guardrails only; TML has not yet proven real-repo/SWE-bench issue-resolution lift.
+5. Prepared real-repo issue-resolution gate: `scripts/prepare_real_repo_issue_gate.py` validates same-instance SWE-bench-style prediction files, parses official harness reports when present, compares base agent versus base+TML planner, and refuses a performance claim for missing reports or synthetic fixtures. `scripts/fetch_swebench_verified_mini_manifest.py` freezes a public-safe 50-row Verified Mini manifest, `scripts/preflight_real_repo_issue_gate_env.py` records local harness readiness, and `scripts/generate_real_repo_issue_predictions.py` controls same-command base/planner prediction generation. The checked fixture, manifest, local preflight, and dry-run prove guardrails only; TML has not yet proven real-repo/SWE-bench issue-resolution lift.
 
 ## Daemon Benchmark
 
@@ -964,3 +964,46 @@ Boundary:
 - The preflight explains why this machine should not run the official harness.
 - The next required artifacts are real base/planner prediction JSONL files and
   official harness reports from a Docker-capable machine.
+
+### Prediction-Generation Dry Run
+
+The prediction wrapper controls the same-model, same-command base/planner patch
+generation step:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py --dry-run
+```
+
+Checked dry-run report:
+
+| Field | Value |
+|---|---|
+| Status | `dry_run_prompt_generation_ready` |
+| Instances | 50 |
+| Conditions | `base_agent`, `base_agent_tml_planner` |
+| Prompt files written | 100 private ignored files |
+| Base retrieved skills | 0 per instance |
+| Planner retrieved skills | 3 per instance |
+| Predictions written | 0 |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+The real command path is:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --model-name same-agent-model \
+  --agent-command 'your-agent --prompt-file {prompt_file}'
+```
+
+The command template is reused for both conditions. The wrapper supplies
+`{prompt_file}`, `{raw_output_file}`, `{condition}`, `{instance_id}`, and
+`{model_name}`. It writes official prediction JSONL files only when not in
+dry-run mode.
+
+Boundary:
+
+- This is prediction-generation plumbing, not issue-resolution evidence.
+- It does not run repository tests.
+- It does not create a TML performance claim.
+- Official SWE-bench harness reports are still required.
