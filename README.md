@@ -592,6 +592,29 @@ Checked handoff result:
 Boundary: this creates an ignored private scorer bundle with prediction JSONL
 and exact harness commands. It still does not score the patches.
 
+Audit scorer targets:
+
+```bash
+python3 scripts/audit_real_repo_scorer_targets.py \
+  --output benchmarks/real-repo-scorer-target-audit-2026-06-11.json \
+  --gcloud-account <account> \
+  --gcloud-project <project>
+```
+
+Checked scorer audit result:
+
+- status: `no_ready_official_scorer`
+- ready targets: `0`
+- local: blocked by disk, Docker, and missing `swebench`
+- Mac4: blocked by disk and missing `swebench`
+- Mac5: blocked by disk, Docker, and missing `swebench`
+- cloud-vm: unreachable
+- Modal CLI / sb-cli: unavailable
+- public report redacts cloud account/project identifiers
+
+Boundary: this explains why the official scorer has not run. It is not scoring
+evidence.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash

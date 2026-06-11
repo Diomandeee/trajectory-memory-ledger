@@ -1,0 +1,276 @@
+{
+  "claim_boundary": "This audit checks scorer readiness only. It does not run SWE-bench and cannot prove planner performance.",
+  "cloud_cli": {
+    "modal": {
+      "available": false,
+      "label": "modal",
+      "path": null
+    },
+    "sb_cli": {
+      "available": false,
+      "label": "sb-cli",
+      "path": null
+    }
+  },
+  "created_at": "2026-06-11T02:56:01.415601+00:00",
+  "gcloud": {
+    "account_count": 3,
+    "auth_list": [
+      {
+        "account": "account_1",
+        "status": ""
+      },
+      {
+        "account": "account_2",
+        "status": ""
+      },
+      {
+        "account": "account_3",
+        "status": "ACTIVE"
+      }
+    ],
+    "auth_list_returncode": 0,
+    "available": true,
+    "config": {
+      "core": {
+        "account": "account_3",
+        "disable_usage_reporting": "True",
+        "project": "project_1"
+      }
+    },
+    "config_returncode": 0,
+    "project_count": 12,
+    "project_results": [
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_1",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_2",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_3",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_4",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_5",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_6",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_7",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_8",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_9",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_10",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_11",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_3",
+        "ok": false,
+        "project": "project_12",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) There was a problem refreshing your current auth tokens: Reauthentication failed. cannot prompt during non-interactive execution.\nPlease run:\n\n  $ gcloud auth login\n\nto obtain new credentials.\n\nIf you have already logged in with a different account, run:\n\n  $ gcloud config set account ACCOUNT\n\nto select an already authenticated account to use.\n",
+        "stdout_json_count": null
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_1",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_1 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_1 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_1 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_1 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_1\n- '@type': type.googleapis.com/google.rpc.ErrorI",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_2",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_2 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_2 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_2 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_2 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=discord",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_3",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_3 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_3 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_3 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_3 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_3\n- '",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_4",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_4 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_4 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_4 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_4 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googlea",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_5",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_5 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_5 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_5 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_5 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_5\n- '@type': type.googleapis.com/google.rpc.E",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_6",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_6 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_6 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_6 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_6 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_6\n- '@type': type.googleapis.com/google.",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_7",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_7 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_7 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_7 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_7 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_7\n- '@type': type.go",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_8",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_8 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_8 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_8 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_8 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=peak-ca",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_9",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_9 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_9 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_9 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_9 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_9\n- '",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_10",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_10 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_10 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_10 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_10 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_10\n- '",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_11",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_11 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_11 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_11 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_11 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=sil",
+        "stdout_json_count": 0
+      },
+      {
+        "account": "account_2",
+        "ok": false,
+        "project": "project_12",
+        "stderr_or_error": "ERROR: (gcloud.compute.instances.list) PERMISSION_DENIED: Compute Engine API has not been used in project project_12 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_12 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. This command is authenticated as account_2 which is the active account specified by the [core/account] property.\nCompute Engine API has not been used in project project_12 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_12 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\nGoogle developers console API activation\nhttps://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=project_12\n- '@type': ty",
+        "stdout_json_count": 0
+      }
+    ],
+    "redacted_identifiers": true
+  },
+  "local": {
+    "blockers": [
+      "free disk 5.87 GiB below required 120.00 GiB",
+      "docker executable not found",
+      "python module 'swebench' is not importable"
+    ],
+    "docker_error": "docker executable not found",
+    "docker_ok": false,
+    "docker_path": null,
+    "docker_server_version": null,
+    "free_disk_gb": 5.865,
+    "status": "blocked",
+    "swebench_importable": false,
+    "target": "local"
+  },
+  "min_free_disk_gb": 120.0,
+  "next_gate": "Run the handoff bundle on a ready Docker scorer, or provision/repair one with enough disk and swebench installed.",
+  "performance_claim_allowed": false,
+  "ran_official_harness": false,
+  "ready_targets": [],
+  "remotes": [
+    {
+      "blockers": [
+        "free disk 12.91 GiB below required 120.00 GiB",
+        "python module 'swebench' is not importable"
+      ],
+      "docker_error": null,
+      "docker_ok": true,
+      "docker_path": "/opt/homebrew/bin/docker",
+      "docker_server_version": "\"29.2.0\"",
+      "free_disk_gb": 12.911,
+      "status": "blocked",
+      "swebench_importable": false,
+      "target": "mac4"
+    },
+    {
+      "blockers": [
+        "free disk 16.16 GiB below required 120.00 GiB",
+        "docker executable not found",
+        "python module 'swebench' is not importable"
+      ],
+      "docker_error": null,
+      "docker_ok": false,
+      "docker_path": null,
+      "docker_server_version": null,
+      "free_disk_gb": 16.158,
+      "status": "blocked",
+      "swebench_importable": false,
+      "target": "mac5"
+    },
+    {
+      "blockers": [
+        "ssh unreachable"
+      ],
+      "error": "ssh: connect to host 100.114.92.88 port 22: Operation timed out",
+      "status": "unreachable",
+      "target": "cloud-vm"
+    }
+  ],
+  "schema": "trajectory-memory-ledger.real_repo_scorer_target_audit.v1",
+  "status": "no_ready_official_scorer"
+}

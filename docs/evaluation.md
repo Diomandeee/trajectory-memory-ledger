@@ -1154,3 +1154,46 @@ Boundary:
 - This handoff reduces scorer setup friction.
 - It still does not run the official harness.
 - It contains private patch predictions only under ignored `output/private-*`.
+
+### Scorer Target Audit
+
+The current machines and cloud CLIs are audited with:
+
+```bash
+python3 scripts/audit_real_repo_scorer_targets.py \
+  --output benchmarks/real-repo-scorer-target-audit-2026-06-11.json \
+  --gcloud-account <account> \
+  --gcloud-project <project>
+```
+
+The checked public report redacts cloud account and project identifiers.
+
+Checked audit result:
+
+| Field | Value |
+|---|---|
+| Status | `no_ready_official_scorer` |
+| Ready targets | 0 |
+| Local | blocked |
+| Mac4 | blocked |
+| Mac5 | blocked |
+| cloud-vm | unreachable |
+| Modal CLI | unavailable |
+| sb-cli | unavailable |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+Main blockers:
+
+- local: about `5.87 GiB` free, no Docker, no `swebench`
+- Mac4: Docker exists, but about `12.91 GiB` free and no `swebench`
+- Mac5: about `16.16 GiB` free, no Docker, no `swebench`
+- cloud-vm: SSH unreachable
+- active GCloud account: non-interactive reauthentication required
+- alternate GCloud account: visible projects have Compute disabled for read-only instance listing
+
+Boundary:
+
+- This audit proves why no official scorer was used in this run.
+- It does not score patches.
+- It does not make a planner-performance claim.

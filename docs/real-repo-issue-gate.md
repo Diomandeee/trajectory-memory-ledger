@@ -177,6 +177,20 @@ records same ids/model, and writes an ignored private runner at
 `output/private-swebench/scorer-handoff-codex-real-smoke-1/run_official_harness.sh`.
 It still does not run SWE-bench or allow a performance claim.
 
+Audit available scorer targets:
+
+```bash
+python3 scripts/audit_real_repo_scorer_targets.py \
+  --output benchmarks/real-repo-scorer-target-audit-2026-06-11.json \
+  --gcloud-account <account> \
+  --gcloud-project <project>
+```
+
+The checked audit reports `no_ready_official_scorer`: local, Mac4, and Mac5 are
+blocked by disk/package/Docker gaps, cloud-vm is unreachable, and local cloud
+CLIs are not ready to submit an official job. Cloud account/project identifiers
+are redacted in the public report.
+
 Run the official harness for both prediction files:
 
 ```bash
