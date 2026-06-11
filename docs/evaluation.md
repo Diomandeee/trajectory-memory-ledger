@@ -1236,3 +1236,37 @@ Boundary:
 - It does not provision a machine, install anything on the current machine, or
   submit a cloud job.
 - It does not score patches.
+
+### Patch-Apply Smoke
+
+The generated one-instance Codex patches can be checked against the real base
+commit without a checkout or Docker by using a private Git index:
+
+```bash
+python3 scripts/check_real_repo_prediction_patch_apply.py \
+  --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl \
+  --base-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl \
+  --planner-predictions output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl \
+  --private-dir output/private-swebench/patch-apply-check-codex-real-smoke-1 \
+  --report benchmarks/real-repo-patch-apply-codex-real-smoke-2026-06-11.json
+```
+
+Checked patch-apply result:
+
+| Field | Value |
+|---|---|
+| Status | `patch_apply_check_passed` |
+| Base patches apply | 1/1 |
+| Planner patches apply | 1/1 |
+| Base patch size | 1883 chars, 2 files |
+| Planner patch size | 1938 chars, 2 files |
+| Official harness run | false |
+| Repository tests run | false |
+| Performance claim allowed | false |
+
+Boundary:
+
+- This checks only whether generated patches apply to the base commit.
+- It does not run Django tests.
+- It does not measure issue resolution.
+- It does not replace the official SWE-bench harness.

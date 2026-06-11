@@ -69,6 +69,11 @@ Current execution state:
   `benchmarks/real-repo-scorer-bootstrap-codex-real-smoke-2026-06-11.json` and
   ignored private scripts for bootstrapping an x86_64 Docker scorer, syncing the
   handoff, running the handoff, and referencing the Modal path.
+- Patch-apply smoke is complete:
+  `scripts/check_real_repo_prediction_patch_apply.py` validates that the
+  one-instance base and TML-planner patches both apply cleanly to the
+  `django__django-11790` base commit. This is not test execution or issue
+  resolution.
 - Full base and planner prediction JSONL files still need to be generated for
   the 50-row Verified Mini subset on, or transferred to, the machine that will
   run the official harness.

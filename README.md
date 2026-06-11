@@ -635,6 +635,29 @@ Checked bootstrap result:
 Boundary: this prepares a future scorer machine. It does not provision a
 machine, submit a cloud job, or score patches.
 
+Check one-instance patch applicability:
+
+```bash
+python3 scripts/check_real_repo_prediction_patch_apply.py \
+  --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl \
+  --base-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl \
+  --planner-predictions output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl \
+  --private-dir output/private-swebench/patch-apply-check-codex-real-smoke-1 \
+  --report benchmarks/real-repo-patch-apply-codex-real-smoke-2026-06-11.json
+```
+
+Checked patch-apply result:
+
+- status: `patch_apply_check_passed`
+- base patch applies: 1/1
+- planner patch applies: 1/1
+- official harness run: `false`
+- repository tests run: `false`
+- performance claim allowed: `false`
+
+Boundary: this proves only that both generated patches apply cleanly to the
+real base commit. It does not prove either patch fixes the issue.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash

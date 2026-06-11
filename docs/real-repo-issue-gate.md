@@ -205,6 +205,21 @@ private ignored packet contains scripts to bootstrap an x86_64 Docker scorer,
 sync the existing private handoff, run the handoff, and reference the Modal
 `--modal true` path. It does not run or submit anything.
 
+Check whether the generated patches apply to the real base commit:
+
+```bash
+python3 scripts/check_real_repo_prediction_patch_apply.py \
+  --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl \
+  --base-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl \
+  --planner-predictions output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl \
+  --private-dir output/private-swebench/patch-apply-check-codex-real-smoke-1 \
+  --report benchmarks/real-repo-patch-apply-codex-real-smoke-2026-06-11.json
+```
+
+The checked report has `status=patch_apply_check_passed`: both the base and
+planner patches apply to `django__django-11790` at the base commit. This is
+patch applicability only; no repository tests or official harness ran.
+
 Run the official harness for both prediction files:
 
 ```bash
