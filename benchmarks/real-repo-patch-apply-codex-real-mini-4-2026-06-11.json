@@ -1,0 +1,119 @@
+{
+  "claim_boundary": "Patch-apply checks are not SWE-bench results. They validate whether model patches apply to the base commit, but they do not run tests or measure issue resolution.",
+  "conditions": {
+    "base_agent": {
+      "all_patches_apply": true,
+      "instance_count": 4,
+      "patch_apply_fail_count": 0,
+      "patch_apply_pass_count": 4,
+      "per_instance": [
+        {
+          "condition": "base_agent",
+          "error": null,
+          "instance_id": "django__django-11790",
+          "patch_applies": true,
+          "patch_chars": 1883,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent/django__django-11790.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent/django__django-11790.patch",
+          "repo": "django/django"
+        },
+        {
+          "condition": "base_agent",
+          "error": null,
+          "instance_id": "django__django-11815",
+          "patch_applies": true,
+          "patch_chars": 5365,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent/django__django-11815.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent/django__django-11815.patch",
+          "repo": "django/django"
+        },
+        {
+          "condition": "base_agent",
+          "error": null,
+          "instance_id": "django__django-11848",
+          "patch_applies": true,
+          "patch_chars": 2607,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent/django__django-11848.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent/django__django-11848.patch",
+          "repo": "django/django"
+        },
+        {
+          "condition": "base_agent",
+          "error": null,
+          "instance_id": "django__django-11880",
+          "patch_applies": true,
+          "patch_chars": 1499,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent/django__django-11880.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent/django__django-11880.patch",
+          "repo": "django/django"
+        }
+      ]
+    },
+    "base_agent_tml_planner": {
+      "all_patches_apply": true,
+      "instance_count": 4,
+      "patch_apply_fail_count": 0,
+      "patch_apply_pass_count": 4,
+      "per_instance": [
+        {
+          "condition": "base_agent_tml_planner",
+          "error": null,
+          "instance_id": "django__django-11790",
+          "patch_applies": true,
+          "patch_chars": 1938,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent_tml_planner/django__django-11790.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent_tml_planner/django__django-11790.patch",
+          "repo": "django/django"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "error": null,
+          "instance_id": "django__django-11815",
+          "patch_applies": true,
+          "patch_chars": 4711,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent_tml_planner/django__django-11815.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent_tml_planner/django__django-11815.patch",
+          "repo": "django/django"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "error": null,
+          "instance_id": "django__django-11848",
+          "patch_applies": true,
+          "patch_chars": 2431,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent_tml_planner/django__django-11848.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent_tml_planner/django__django-11848.patch",
+          "repo": "django/django"
+        },
+        {
+          "condition": "base_agent_tml_planner",
+          "error": null,
+          "instance_id": "django__django-11880",
+          "patch_applies": true,
+          "patch_chars": 1402,
+          "patch_file_count": 2,
+          "private_index_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/indexes/base_agent_tml_planner/django__django-11880.index",
+          "private_patch_path": "output/private-swebench/patch-apply-check-codex-real-mini-4/patches/base_agent_tml_planner/django__django-11880.patch",
+          "repo": "django/django"
+        }
+      ]
+    }
+  },
+  "created_at": "2026-06-11T04:27:12.225263+00:00",
+  "errors": [],
+  "instances_jsonl": "examples/evaluation/swebench-verified-mini-public-manifest-codex-merged-4-2026-06-11.jsonl",
+  "performance_claim_allowed": false,
+  "private_dir": "output/private-swebench/patch-apply-check-codex-real-mini-4",
+  "ran_official_harness": false,
+  "ran_repository_tests": false,
+  "repo_cache_dir": "output/private-swebench/repo-worktrees/cache",
+  "schema": "trajectory-memory-ledger.real_repo_prediction_patch_apply.v1",
+  "status": "patch_apply_check_passed"
+}

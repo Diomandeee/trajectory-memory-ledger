@@ -1257,6 +1257,31 @@ Boundary:
 - It proves patch applicability only.
 - It still does not run SWE-bench, hidden tests, or measure planner lift.
 
+### Incremental Four-Instance Packet
+
+The next incremental batch adds `django__django-11880` and merges the first
+four private Codex batches.
+
+Checked four-instance packet:
+
+| Field | Value |
+|---|---|
+| Selected new instance | `django__django-11880` |
+| Merged instance count | 4 |
+| Base patch apply | 4/4 |
+| Planner patch apply | 4/4 |
+| Gate status | `waiting_for_official_harness_results` |
+| Handoff status | `handoff_ready_waiting_for_official_harness` |
+| Admission status | `waiting_for_official_reports` |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+Boundary:
+
+- This grows the future scorer input set to four real Django issues.
+- It proves patch applicability only.
+- It still does not run SWE-bench, hidden tests, or measure planner lift.
+
 ### Scorer Target Audit
 
 The current machines and cloud CLIs are audited with:

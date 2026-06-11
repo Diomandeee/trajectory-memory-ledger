@@ -1,0 +1,149 @@
+{
+  "claim_boundary": "Merged predictions are scorer inputs only. This does not run SWE-bench and cannot prove issue resolution.",
+  "conditions": {
+    "base_agent": {
+      "fingerprint": {
+        "path": "output/private-swebench/codex-real-mini-merged-4/base-agent.predictions.jsonl",
+        "sha256": "b7db1f064a8c74535984c517a386dc256b7317ea15a836460f241405db27d152",
+        "size_bytes": 12063
+      },
+      "path": "output/private-swebench/codex-real-mini-merged-4/base-agent.predictions.jsonl",
+      "prediction_count": 4
+    },
+    "base_agent_tml_planner": {
+      "fingerprint": {
+        "path": "output/private-swebench/codex-real-mini-merged-4/tml-planner.predictions.jsonl",
+        "sha256": "6ed17d3108e1a0e64afed21cd23ff6010c16c8a0fe81d9779a1853e817dec691",
+        "size_bytes": 11170
+      },
+      "path": "output/private-swebench/codex-real-mini-merged-4/tml-planner.predictions.jsonl",
+      "prediction_count": 4
+    }
+  },
+  "created_at": "2026-06-11T04:26:50.335261+00:00",
+  "instance_count": 4,
+  "instance_ids": [
+    "django__django-11790",
+    "django__django-11815",
+    "django__django-11848",
+    "django__django-11880"
+  ],
+  "output_dir": "output/private-swebench/codex-real-mini-merged-4",
+  "performance_claim_allowed": false,
+  "public_manifest_output": "examples/evaluation/swebench-verified-mini-public-manifest-codex-merged-4-2026-06-11.jsonl",
+  "ran_official_harness": false,
+  "same_prediction_instance_ids": true,
+  "schema": "trajectory-memory-ledger.real_repo_prediction_batch_merge.v1",
+  "source_batches": {
+    "output/private-swebench/codex-real-smoke-1": {
+      "base_agent": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl",
+          "sha256": "8b418c8f82c5f6447ed1a422d1350c05d9262fbe938ab17ec340c45f9061b637",
+          "size_bytes": 2018
+        },
+        "instance_ids": [
+          "django__django-11790"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl",
+        "prediction_count": 1
+      },
+      "base_agent_tml_planner": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl",
+          "sha256": "8296f89dcf7760ab87a53a726b0b896c12b455cad6415bf34b5dbf76128b430c",
+          "size_bytes": 2078
+        },
+        "instance_ids": [
+          "django__django-11790"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl",
+        "prediction_count": 1
+      }
+    },
+    "output/private-swebench/codex-real-smoke-2": {
+      "base_agent": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-2/base-agent.predictions.jsonl",
+          "sha256": "be44c8c634a6b2462bdc19e5a8ad73460ec54a0ec161621c6ef7c25947c9666b",
+          "size_bytes": 5647
+        },
+        "instance_ids": [
+          "django__django-11815"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-2/base-agent.predictions.jsonl",
+        "prediction_count": 1
+      },
+      "base_agent_tml_planner": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-2/tml-planner.predictions.jsonl",
+          "sha256": "2dad912e3baf112825b058c997e807f3b2329bed3bf00e749fdce95ddbd53e05",
+          "size_bytes": 4974
+        },
+        "instance_ids": [
+          "django__django-11815"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-2/tml-planner.predictions.jsonl",
+        "prediction_count": 1
+      }
+    },
+    "output/private-swebench/codex-real-smoke-3": {
+      "base_agent": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-3/base-agent.predictions.jsonl",
+          "sha256": "8957504e754cf1d2885bd307f39635d5e370933089f0d18150e978977ea952fe",
+          "size_bytes": 2768
+        },
+        "instance_ids": [
+          "django__django-11848"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-3/base-agent.predictions.jsonl",
+        "prediction_count": 1
+      },
+      "base_agent_tml_planner": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-3/tml-planner.predictions.jsonl",
+          "sha256": "938dea567c236242a366ab77939fb082fd89974fb4f820aac448c0d4266c3bc2",
+          "size_bytes": 2584
+        },
+        "instance_ids": [
+          "django__django-11848"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-3/tml-planner.predictions.jsonl",
+        "prediction_count": 1
+      }
+    },
+    "output/private-swebench/codex-real-smoke-4": {
+      "base_agent": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-4/base-agent.predictions.jsonl",
+          "sha256": "a9eda1b795d7705feb21a3ccefcc831f3bd72839c3de3768fc85c403f10477f6",
+          "size_bytes": 1630
+        },
+        "instance_ids": [
+          "django__django-11880"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-4/base-agent.predictions.jsonl",
+        "prediction_count": 1
+      },
+      "base_agent_tml_planner": {
+        "fingerprint": {
+          "path": "output/private-swebench/codex-real-smoke-4/tml-planner.predictions.jsonl",
+          "sha256": "1e01ea3bc45a724dd773863cf15e504a098fdaf30d917148b1b068a1a17b237e",
+          "size_bytes": 1534
+        },
+        "instance_ids": [
+          "django__django-11880"
+        ],
+        "path": "output/private-swebench/codex-real-smoke-4/tml-planner.predictions.jsonl",
+        "prediction_count": 1
+      }
+    }
+  },
+  "status": "merged_predictions_ready",
+  "subset_manifest": {
+    "path": "output/private-swebench/codex-real-mini-merged-4/instances.jsonl",
+    "sha256": "8c1f97e09b0457075311df3a069b254481c8e502f4b9c3e2bbd9ef9b997fdb92",
+    "size_bytes": 11106
+  }
+}

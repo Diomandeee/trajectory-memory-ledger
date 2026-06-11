@@ -665,6 +665,26 @@ Checked three-instance packet:
 Boundary: this is still scorer-input preparation and patch-apply evidence only.
 It does not measure resolved rate, regressions, hidden tests, or planner lift.
 
+The next incremental batch adds `django__django-11880` and merges the first
+four private Codex batches into
+`output/private-swebench/codex-real-mini-merged-4`.
+
+Checked four-instance packet:
+
+- instances: `django__django-11790`, `django__django-11815`,
+  `django__django-11848`, `django__django-11880`
+- fourth Codex prediction smoke: base patch `1499` chars, planner patch `1402` chars
+- merged packet: `4` instances, same base/planner ids
+- gate status: `waiting_for_official_harness_results`
+- handoff status: `handoff_ready_waiting_for_official_harness`
+- admission status: `waiting_for_official_reports`
+- patch apply: base `4/4`, planner `4/4`
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Boundary: this is still scorer-input preparation and patch-apply evidence only.
+It does not measure resolved rate, regressions, hidden tests, or planner lift.
+
 Audit scorer targets:
 
 ```bash

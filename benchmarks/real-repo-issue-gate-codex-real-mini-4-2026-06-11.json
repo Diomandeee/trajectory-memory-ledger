@@ -1,0 +1,98 @@
+{
+  "comparison": null,
+  "conditions": {
+    "base_agent": {
+      "instance_ids": [
+        "django__django-11790",
+        "django__django-11815",
+        "django__django-11848",
+        "django__django-11880"
+      ],
+      "model_names": [
+        "codex-gpt-5.4"
+      ],
+      "path": "output/private-swebench/codex-real-mini-merged-4/base-agent.predictions.jsonl",
+      "prediction_count": 4,
+      "sha256": "b7db1f064a8c74535984c517a386dc256b7317ea15a836460f241405db27d152",
+      "size_bytes": 12063,
+      "synthetic_rows": 0
+    },
+    "base_agent_tml_planner": {
+      "instance_ids": [
+        "django__django-11790",
+        "django__django-11815",
+        "django__django-11848",
+        "django__django-11880"
+      ],
+      "model_names": [
+        "codex-gpt-5.4"
+      ],
+      "path": "output/private-swebench/codex-real-mini-merged-4/tml-planner.predictions.jsonl",
+      "prediction_count": 4,
+      "sha256": "6ed17d3108e1a0e64afed21cd23ff6010c16c8a0fe81d9779a1853e817dec691",
+      "size_bytes": 11170,
+      "synthetic_rows": 0
+    }
+  },
+  "contract": {
+    "hidden_tests_may_not_be_used_for_generation": true,
+    "minimum_real_instances_for_broad_claim": 300,
+    "minimum_real_instances_for_pilot_claim": 50,
+    "official_harness_required_for_performance_claim": true,
+    "planner_may_not_use_harness_results_until_after_both_runs": true,
+    "planner_may_use_ledger_memory_before_patch_generation": true,
+    "same_budget_label": "same-model-same-budget-same-timeout",
+    "same_harness_required": true,
+    "same_model_names_recorded": true,
+    "same_prediction_instance_ids": true,
+    "same_timeout_required": true
+  },
+  "created_at": "2026-06-11T04:27:10.673413+00:00",
+  "dataset": {
+    "instance_ids": [
+      "django__django-11790",
+      "django__django-11815",
+      "django__django-11848",
+      "django__django-11880"
+    ],
+    "instances_fingerprint": {
+      "path": "examples/evaluation/swebench-verified-mini-public-manifest-codex-merged-4-2026-06-11.jsonl",
+      "sha256": "8c1f97e09b0457075311df3a069b254481c8e502f4b9c3e2bbd9ef9b997fdb92",
+      "size_bytes": 11106
+    },
+    "instances_jsonl": "examples/evaluation/swebench-verified-mini-public-manifest-codex-merged-4-2026-06-11.jsonl",
+    "manifest_instance_count": 4,
+    "name": "princeton-nlp/SWE-bench_Verified",
+    "prediction_instance_count": 4,
+    "split": "test",
+    "subset_label": "verified-mini-codex-real-mini-4",
+    "synthetic_manifest_rows": 0
+  },
+  "gate_kind": "swebench_style_real_repo_issue_resolution",
+  "harness_reports": {
+    "base_agent": null,
+    "base_agent_tml_planner": null
+  },
+  "official_harness_commands": {
+    "base_agent": "python -m swebench.harness.run_evaluation \\\n  --dataset_name princeton-nlp/SWE-bench_Verified \\\n  --split test \\\n  --predictions_path output/private-swebench/codex-real-mini-merged-4/base-agent.predictions.jsonl \\\n  --max_workers 1 \\\n  --timeout 1800 \\\n  --run_id tml_base_codex_real_mini_4 \\\n  --report_dir evaluation_results",
+    "base_agent_tml_planner": "python -m swebench.harness.run_evaluation \\\n  --dataset_name princeton-nlp/SWE-bench_Verified \\\n  --split test \\\n  --predictions_path output/private-swebench/codex-real-mini-merged-4/tml-planner.predictions.jsonl \\\n  --max_workers 1 \\\n  --timeout 1800 \\\n  --run_id tml_planner_codex_real_mini_4 \\\n  --report_dir evaluation_results",
+    "mac_arm_note": "On macOS ARM, official SWE-bench docs say to add --namespace '' so images build locally."
+  },
+  "official_sources": [
+    "https://www.swebench.com/SWE-bench/guides/evaluation/",
+    "https://github.com/SWE-bench/SWE-bench",
+    "https://www.swebench.com/verified.html",
+    "https://www.swebench.com/lite.html"
+  ],
+  "performance_claim": {
+    "allowed": false,
+    "honest_interpretation": "Prediction coverage can be checked, but real-repo performance is unmeasured until both conditions have official SWE-bench harness reports.",
+    "status": "waiting_for_official_harness_results"
+  },
+  "preflight": {
+    "errors": [],
+    "ok": true,
+    "warnings": []
+  },
+  "schema": "trajectory-memory-ledger.real_repo_issue_gate.v1"
+}
