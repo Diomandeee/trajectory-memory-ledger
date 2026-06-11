@@ -213,6 +213,12 @@ handoff, verifies admission is still waiting for official reports, and confirms
 both base and planner patches apply on both instances. It still does not run
 SWE-bench or allow a performance claim.
 
+The checked three-instance packet adds `django__django-11848`, merges the first
+three private Codex prediction batches, packages a fingerprint-locked
+three-instance handoff, verifies admission is still waiting for official
+reports, and confirms base `3/3` plus planner `3/3` patch applicability. It
+still does not run SWE-bench or allow a performance claim.
+
 Audit available scorer targets:
 
 ```bash

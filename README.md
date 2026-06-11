@@ -645,6 +645,26 @@ Boundary: this expands the future scorer input set from one real issue to two
 real issues and proves both generated patch sets apply. It still does not run
 SWE-bench, hidden tests, or measure issue resolution.
 
+The next incremental batch adds `django__django-11848` and merges the first
+three private Codex batches into
+`output/private-swebench/codex-real-mini-merged-3`.
+
+Checked three-instance packet:
+
+- instances: `django__django-11790`, `django__django-11815`,
+  `django__django-11848`
+- third Codex prediction smoke: base patch `2607` chars, planner patch `2431` chars
+- merged packet: `3` instances, same base/planner ids
+- gate status: `waiting_for_official_harness_results`
+- handoff status: `handoff_ready_waiting_for_official_harness`
+- admission status: `waiting_for_official_reports`
+- patch apply: base `3/3`, planner `3/3`
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Boundary: this is still scorer-input preparation and patch-apply evidence only.
+It does not measure resolved rate, regressions, hidden tests, or planner lift.
+
 Audit scorer targets:
 
 ```bash

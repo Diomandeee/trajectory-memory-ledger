@@ -1232,6 +1232,31 @@ Boundary:
 - It still does not run the official SWE-bench Docker harness or measure
   issue-resolution lift.
 
+### Incremental Three-Instance Packet
+
+The next incremental batch adds `django__django-11848` and merges the first
+three private Codex batches.
+
+Checked three-instance packet:
+
+| Field | Value |
+|---|---|
+| Selected new instance | `django__django-11848` |
+| Merged instance count | 3 |
+| Base patch apply | 3/3 |
+| Planner patch apply | 3/3 |
+| Gate status | `waiting_for_official_harness_results` |
+| Handoff status | `handoff_ready_waiting_for_official_harness` |
+| Admission status | `waiting_for_official_reports` |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+Boundary:
+
+- This grows the future scorer input set to three real Django issues.
+- It proves patch applicability only.
+- It still does not run SWE-bench, hidden tests, or measure planner lift.
+
 ### Scorer Target Audit
 
 The current machines and cloud CLIs are audited with:

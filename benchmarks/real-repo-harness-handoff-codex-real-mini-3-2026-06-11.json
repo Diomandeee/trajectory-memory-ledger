@@ -1,0 +1,76 @@
+{
+  "claim_boundary": "This handoff only packages prediction inputs and official harness commands. It does not run SWE-bench and cannot prove planner performance.",
+  "created_at": "2026-06-11T04:14:23.794324+00:00",
+  "dataset_name": "princeton-nlp/SWE-bench_Verified",
+  "environment_status": {
+    "docker_error": null,
+    "docker_path": null,
+    "docker_server_version": null,
+    "free_disk_gb": 5.318,
+    "swebench_importable": false,
+    "workspace": "."
+  },
+  "errors": [],
+  "fingerprint_manifest_path": "output/private-swebench/scorer-handoff-codex-real-mini-3/input-fingerprints.json",
+  "harness_commands": {
+    "base_agent": "python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Verified --split test --predictions_path output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/base-agent.predictions.jsonl --max_workers 1 --timeout 1800 --run_id tml_base_codex_real_mini_3 --report_dir evaluation_results --instance_ids django__django-11790 django__django-11815 django__django-11848",
+    "base_agent_tml_planner": "python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Verified --split test --predictions_path output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/tml-planner.predictions.jsonl --max_workers 1 --timeout 1800 --run_id tml_planner_codex_real_mini_3 --report_dir evaluation_results --instance_ids django__django-11790 django__django-11815 django__django-11848"
+  },
+  "input_fingerprints": {
+    "base_predictions": {
+      "path": "output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/base-agent.predictions.jsonl",
+      "relative_path": "inputs/base-agent.predictions.jsonl",
+      "sha256": "7b8ed04528d8a0b308837d30098e02d927dab227a068da234e6834a32ca050ea",
+      "size_bytes": 10433
+    },
+    "instances_jsonl": {
+      "path": "output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/instances.jsonl",
+      "relative_path": "inputs/instances.jsonl",
+      "sha256": "b26af149279e139112622893806a3f7e44e7fcde394e05c1256ad3853f2767d0",
+      "size_bytes": 9337
+    },
+    "planner_predictions": {
+      "path": "output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/tml-planner.predictions.jsonl",
+      "relative_path": "inputs/tml-planner.predictions.jsonl",
+      "sha256": "c58da498c984e8a6c45e6b20f0f059f504bf339cae5393e5af6377f2f15e65b6",
+      "size_bytes": 9636
+    }
+  },
+  "input_paths": {
+    "base_predictions": "output/private-swebench/codex-real-mini-merged-3/base-agent.predictions.jsonl",
+    "instances_jsonl": "examples/evaluation/swebench-verified-mini-public-manifest-codex-merged-3-2026-06-11.jsonl",
+    "planner_predictions": "output/private-swebench/codex-real-mini-merged-3/tml-planner.predictions.jsonl"
+  },
+  "instance_count": 3,
+  "instance_ids": [
+    "django__django-11790",
+    "django__django-11815",
+    "django__django-11848"
+  ],
+  "model_names": {
+    "base": [
+      "codex-gpt-5.4"
+    ],
+    "planner": [
+      "codex-gpt-5.4"
+    ]
+  },
+  "next_gate": "Run the private handoff runner on a Docker machine with enough disk, then summarize official reports.",
+  "performance_claim_allowed": false,
+  "private_bundle_paths": {
+    "base_predictions": "output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/base-agent.predictions.jsonl",
+    "instances_jsonl": "output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/instances.jsonl",
+    "planner_predictions": "output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/tml-planner.predictions.jsonl"
+  },
+  "private_handoff_dir": "output/private-swebench/scorer-handoff-codex-real-mini-3",
+  "ran_official_harness": false,
+  "runner_path": "output/private-swebench/scorer-handoff-codex-real-mini-3/run_official_harness.sh",
+  "same_model_names_recorded": true,
+  "same_prediction_instance_ids": true,
+  "schema": "trajectory-memory-ledger.real_repo_harness_handoff.v1",
+  "split": "test",
+  "status": "handoff_ready_waiting_for_official_harness",
+  "subset_label": "verified-mini-codex-real-mini-3",
+  "summarize_command": "python3 scripts/prepare_real_repo_issue_gate.py --dataset-name princeton-nlp/SWE-bench_Verified --split test --subset-label verified-mini-codex-real-mini-3 --instances-jsonl output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/instances.jsonl --base-predictions output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/base-agent.predictions.jsonl --planner-predictions output/private-swebench/scorer-handoff-codex-real-mini-3/inputs/tml-planner.predictions.jsonl --base-report evaluation_results/tml_base_codex_real_mini_3 --planner-report evaluation_results/tml_planner_codex_real_mini_3 --output benchmarks/real-repo-issue-gate-verified-mini-codex-real-mini-3.json",
+  "warnings": []
+}

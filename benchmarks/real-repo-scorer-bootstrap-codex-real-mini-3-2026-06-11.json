@@ -1,0 +1,31 @@
+{
+  "claim_boundary": "This packet prepares scorer setup scripts only. It does not run SWE-bench and cannot prove planner performance.",
+  "created_at": "2026-06-11T04:14:39.894837+00:00",
+  "next_gate": "Run rsync_handoff_to_scorer.sh with SCORER_HOST set, run bootstrap_ubuntu_x86_scorer.sh on the scorer if needed, then run run_handoff_on_scorer.sh on the scorer.",
+  "official_sources": [
+    "https://github.com/SWE-bench/SWE-bench",
+    "https://www.swebench.com/SWE-bench/guides/evaluation/",
+    "https://www.swebench.com/SWE-bench/reference/harness/"
+  ],
+  "performance_claim_allowed": false,
+  "private_bootstrap_dir": "output/private-swebench/scorer-bootstrap-codex-real-mini-3",
+  "private_handoff_dir": "output/private-swebench/scorer-handoff-codex-real-mini-3",
+  "ran_official_harness": false,
+  "recommended_scorer": {
+    "architecture": "x86_64",
+    "cpu_cores": 8,
+    "docker_required": true,
+    "free_storage_gb": 120,
+    "ram_gb": 16,
+    "swebench_install": "git clone https://github.com/SWE-bench/SWE-bench.git && pip install -e SWE-bench"
+  },
+  "schema": "trajectory-memory-ledger.real_repo_scorer_bootstrap.v1",
+  "scripts": {
+    "README": "output/private-swebench/scorer-bootstrap-codex-real-mini-3/README.md",
+    "bootstrap_ubuntu_x86_scorer": "output/private-swebench/scorer-bootstrap-codex-real-mini-3/bootstrap_ubuntu_x86_scorer.sh",
+    "modal_command_reference": "output/private-swebench/scorer-bootstrap-codex-real-mini-3/modal_command_reference.sh",
+    "rsync_handoff_to_scorer": "output/private-swebench/scorer-bootstrap-codex-real-mini-3/rsync_handoff_to_scorer.sh",
+    "run_handoff_on_scorer": "output/private-swebench/scorer-bootstrap-codex-real-mini-3/run_handoff_on_scorer.sh"
+  },
+  "status": "scorer_bootstrap_packet_ready"
+}

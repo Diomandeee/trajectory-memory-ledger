@@ -1,0 +1,112 @@
+{
+  "agent_command_recorded": true,
+  "claim_boundary": "Prediction generation is not performance evidence. Only official SWE-bench harness reports can measure real-repo issue resolution.",
+  "condition_reports": {
+    "base_agent": {
+      "all_predictions_written": true,
+      "instance_count": 1,
+      "per_instance": [
+        {
+          "command": "codex exec --ephemeral --sandbox danger-full-access --model gpt-5.4 --cd \"/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11848\" --output-last-message \"/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent/django__django-11848.raw.txt\" - < \"/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent/django__django-11848.prompt.md\"",
+          "condition": "base_agent",
+          "dry_run": false,
+          "duration_s": 205.004,
+          "instance_id": "django__django-11848",
+          "output_chars": 2606,
+          "patch_chars": 2607,
+          "patch_extracted": true,
+          "prompt_chars": 3590,
+          "prompt_path": "output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent/django__django-11848.prompt.md",
+          "raw_output_path": "output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent/django__django-11848.raw.txt",
+          "repo": "django/django",
+          "repo_prepared": true,
+          "repo_worktree": "output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11848",
+          "repo_worktree_path": "output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11848",
+          "retrieved_skill_count": 0,
+          "retrieved_skills": [],
+          "returncode": 0,
+          "status": "command_succeeded",
+          "stderr_path": "output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent/django__django-11848.raw.stderr.txt",
+          "stdout_chars": 2607
+        }
+      ],
+      "prediction_count": 1,
+      "prediction_path": "output/private-swebench/codex-real-smoke-3/base-agent.predictions.jsonl"
+    },
+    "base_agent_tml_planner": {
+      "all_predictions_written": true,
+      "instance_count": 1,
+      "per_instance": [
+        {
+          "command": "codex exec --ephemeral --sandbox danger-full-access --model gpt-5.4 --cd \"/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11848\" --output-last-message \"/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent_tml_planner/django__django-11848.raw.txt\" - < \"/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent_tml_planner/django__django-11848.prompt.md\"",
+          "condition": "base_agent_tml_planner",
+          "dry_run": false,
+          "duration_s": 322.434,
+          "instance_id": "django__django-11848",
+          "output_chars": 2430,
+          "patch_chars": 2431,
+          "patch_extracted": true,
+          "prompt_chars": 12007,
+          "prompt_path": "output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent_tml_planner/django__django-11848.prompt.md",
+          "raw_output_path": "output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent_tml_planner/django__django-11848.raw.txt",
+          "repo": "django/django",
+          "repo_prepared": true,
+          "repo_worktree": "output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11848",
+          "repo_worktree_path": "output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11848",
+          "retrieved_skill_count": 3,
+          "retrieved_skills": [
+            {
+              "name": "python_stdlib_parse_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_parse_trajectory_delta",
+              "score": 23
+            },
+            {
+              "name": "python_stdlib_collection_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_collection_trajectory_delta",
+              "score": 21
+            },
+            {
+              "name": "python_stdlib_date_trajectory_delta",
+              "path": "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages/python_stdlib_date_trajectory_delta",
+              "score": 21
+            }
+          ],
+          "returncode": 0,
+          "status": "command_succeeded",
+          "stderr_path": "output/private-swebench/codex-real-smoke-3/raw-agent-output/base_agent_tml_planner/django__django-11848.raw.stderr.txt",
+          "stdout_chars": 2431
+        }
+      ],
+      "prediction_count": 1,
+      "prediction_path": "output/private-swebench/codex-real-smoke-3/tml-planner.predictions.jsonl"
+    }
+  },
+  "conditions": [
+    "base_agent",
+    "base_agent_tml_planner"
+  ],
+  "created_at": "2026-06-11T04:13:49.369822+00:00",
+  "dry_run": false,
+  "gold_patch_used": false,
+  "hidden_eval_fields_used": false,
+  "instance_count": 1,
+  "instances_jsonl": "examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-3-2026-06-11.jsonl",
+  "model_name": "codex-gpt-5.4",
+  "next_gate_command": "python3 scripts/prepare_real_repo_issue_gate.py --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-3-2026-06-11.jsonl --base-predictions output/private-swebench/codex-real-smoke-3/base-agent.predictions.jsonl --planner-predictions output/private-swebench/codex-real-smoke-3/tml-planner.predictions.jsonl --output benchmarks/real-repo-issue-gate-preflight.json",
+  "output_dir": "output/private-swebench/codex-real-smoke-3",
+  "performance_claim_allowed": false,
+  "prepare_repos": true,
+  "ran_official_harness": false,
+  "raw_dir": "output/private-swebench/codex-real-smoke-3/raw-agent-output",
+  "repo_work_dir": "output/private-swebench/repo-worktrees",
+  "same_agent_command_for_conditions": true,
+  "same_instance_order": true,
+  "same_timeout_s": 1800,
+  "schema": "trajectory-memory-ledger.real_repo_prediction_generation.v1",
+  "skill_memory_count": 6,
+  "skill_roots": [
+    "examples/skills/python-stdlib-heldout-v1/anticipatory-public-repair-planner-vs-base/packages"
+  ],
+  "status": "predictions_ready_for_official_harness",
+  "test_patch_used": false
+}
