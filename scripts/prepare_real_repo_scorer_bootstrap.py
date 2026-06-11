@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shlex
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,7 @@ def main() -> int:
         raise SystemExit(f"{handoff_dir}: missing base predictions")
     if not (handoff_dir / "inputs" / "tml-planner.predictions.jsonl").exists():
         raise SystemExit(f"{handoff_dir}: missing planner predictions")
+    handoff_metadata = read_handoff_metadata(handoff_dir)
 
     scripts = {
         "bootstrap_ubuntu_x86_scorer": args.output_dir / "bootstrap_ubuntu_x86_scorer.sh",
@@ -37,8 +39,8 @@ def main() -> int:
     write_bootstrap_script(scripts["bootstrap_ubuntu_x86_scorer"], args)
     write_rsync_script(scripts["rsync_handoff_to_scorer"], args)
     write_run_script(scripts["run_handoff_on_scorer"], args)
-    write_modal_script(scripts["modal_command_reference"], args)
-    write_readme(scripts["README"], args)
+    write_modal_script(scripts["modal_command_reference"], handoff_metadata)
+    write_readme(scripts["README"], args, handoff_metadata)
 
     for path in scripts.values():
         if path.suffix == ".sh":
@@ -54,6 +56,7 @@ def main() -> int:
         ),
         "private_bootstrap_dir": str(args.output_dir),
         "private_handoff_dir": str(handoff_dir),
+        "handoff_metadata": handoff_metadata,
         "recommended_scorer": {
             "architecture": "x86_64",
             "free_storage_gb": args.min_free_gb,
@@ -95,6 +98,86 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-cpu-cores", type=int, default=8)
     parser.add_argument("--max-workers", type=int, default=1)
     return parser.parse_args()
+
+
+def read_handoff_metadata(handoff_dir: Path) -> dict[str, Any]:
+    runner = handoff_dir / "run_official_harness.sh"
+    commands = extract_harness_commands(runner)
+    if len(commands) != 2:
+        raise SystemExit(f"{runner}: expected 2 run_evaluation commands, found {len(commands)}")
+    base = parse_run_evaluation_command(commands[0])
+    planner = parse_run_evaluation_command(commands[1])
+    for field in ("dataset_name", "split", "max_workers", "timeout", "report_dir", "instance_ids"):
+        if base[field] != planner[field]:
+            raise SystemExit(f"{runner}: base/planner command mismatch for {field}")
+    if not str(base["predictions_path"]).endswith("base-agent.predictions.jsonl"):
+        raise SystemExit(f"{runner}: first command does not look like base predictions")
+    if not str(planner["predictions_path"]).endswith("tml-planner.predictions.jsonl"):
+        raise SystemExit(f"{runner}: second command does not look like planner predictions")
+    return {
+        "dataset_name": base["dataset_name"],
+        "split": base["split"],
+        "max_workers": int(base["max_workers"]),
+        "timeout": int(base["timeout"]),
+        "report_dir": base["report_dir"],
+        "instance_ids": base["instance_ids"],
+        "instance_count": len(base["instance_ids"]),
+        "base_run_id": base["run_id"],
+        "planner_run_id": planner["run_id"],
+        "base_predictions_path": base["predictions_path"],
+        "planner_predictions_path": planner["predictions_path"],
+        "namespace": base.get("namespace"),
+    }
+
+
+def extract_harness_commands(runner: Path) -> list[str]:
+    commands: list[str] = []
+    for line in runner.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("python -m swebench.harness.run_evaluation "):
+            commands.append(stripped)
+    return commands
+
+
+def parse_run_evaluation_command(command: str) -> dict[str, Any]:
+    parts = shlex.split(command)
+    expected_prefix = ["python", "-m", "swebench.harness.run_evaluation"]
+    if parts[:3] != expected_prefix:
+        raise SystemExit(f"unexpected run_evaluation command: {command}")
+    values: dict[str, Any] = {}
+    index = 3
+    while index < len(parts):
+        flag = parts[index]
+        if not flag.startswith("--"):
+            raise SystemExit(f"unexpected positional argument in command: {flag}")
+        name = flag[2:].replace("-", "_")
+        index += 1
+        if name == "instance_ids":
+            ids: list[str] = []
+            while index < len(parts) and not parts[index].startswith("--"):
+                ids.append(parts[index])
+                index += 1
+            values[name] = ids
+            continue
+        if index >= len(parts) or parts[index].startswith("--"):
+            values[name] = True
+            continue
+        values[name] = parts[index]
+        index += 1
+    required = {
+        "dataset_name",
+        "split",
+        "predictions_path",
+        "max_workers",
+        "timeout",
+        "run_id",
+        "report_dir",
+        "instance_ids",
+    }
+    missing = sorted(required - set(values))
+    if missing:
+        raise SystemExit(f"run_evaluation command missing fields: {missing}")
+    return values
 
 
 def write_bootstrap_script(path: Path, args: argparse.Namespace) -> None:
@@ -155,7 +238,7 @@ raise SystemExit(0 if importlib.util.find_spec("swebench") else 1)
 PY
 
 echo "[tml] scorer bootstrap ready"
-echo "[tml] next: run output/private-swebench/scorer-handoff-codex-real-smoke-1/run_official_harness.sh from repo root"
+echo "[tml] next: run {args.handoff_dir}/run_official_harness.sh from repo root"
 """
     path.write_text(text, encoding="utf-8")
 
@@ -194,7 +277,19 @@ cd "$REMOTE_WORK_DIR/$REPO_DIR"
     path.write_text(text, encoding="utf-8")
 
 
-def write_modal_script(path: Path, args: argparse.Namespace) -> None:
+def write_modal_script(path: Path, handoff_metadata: dict[str, Any]) -> None:
+    base_command = render_run_evaluation_command(
+        handoff_metadata,
+        predictions_path=str(handoff_metadata["base_predictions_path"]),
+        run_id=str(handoff_metadata["base_run_id"]),
+        modal=True,
+    )
+    planner_command = render_run_evaluation_command(
+        handoff_metadata,
+        predictions_path=str(handoff_metadata["planner_predictions_path"]),
+        run_id=str(handoff_metadata["planner_run_id"]),
+        modal=True,
+    )
     text = f"""#!/usr/bin/env bash
 set -euo pipefail
 
@@ -203,32 +298,51 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 . .venv-swebench/bin/activate
 
-python -m swebench.harness.run_evaluation \\
-  --dataset_name princeton-nlp/SWE-bench_Verified \\
-  --split test \\
-  --predictions_path {args.handoff_dir}/inputs/base-agent.predictions.jsonl \\
-  --max_workers {args.max_workers} \\
-  --timeout 1800 \\
-  --run_id tml_base_codex_real_smoke_1 \\
-  --report_dir evaluation_results \\
-  --instance_ids django__django-11790 \\
-  --modal true
+{base_command}
 
-python -m swebench.harness.run_evaluation \\
-  --dataset_name princeton-nlp/SWE-bench_Verified \\
-  --split test \\
-  --predictions_path {args.handoff_dir}/inputs/tml-planner.predictions.jsonl \\
-  --max_workers {args.max_workers} \\
-  --timeout 1800 \\
-  --run_id tml_planner_codex_real_smoke_1 \\
-  --report_dir evaluation_results \\
-  --instance_ids django__django-11790 \\
-  --modal true
+{planner_command}
 """
     path.write_text(text, encoding="utf-8")
 
 
-def write_readme(path: Path, args: argparse.Namespace) -> None:
+def render_run_evaluation_command(
+    handoff_metadata: dict[str, Any],
+    *,
+    predictions_path: str,
+    run_id: str,
+    modal: bool,
+) -> str:
+    parts = [
+        "python",
+        "-m",
+        "swebench.harness.run_evaluation",
+        "--dataset_name",
+        str(handoff_metadata["dataset_name"]),
+        "--split",
+        str(handoff_metadata["split"]),
+        "--predictions_path",
+        predictions_path,
+        "--max_workers",
+        str(handoff_metadata["max_workers"]),
+        "--timeout",
+        str(handoff_metadata["timeout"]),
+        "--run_id",
+        run_id,
+        "--report_dir",
+        str(handoff_metadata["report_dir"]),
+    ]
+    instance_ids = [str(instance_id) for instance_id in handoff_metadata["instance_ids"]]
+    if instance_ids:
+        parts.extend(["--instance_ids", *instance_ids])
+    if handoff_metadata.get("namespace") is not None:
+        parts.extend(["--namespace", str(handoff_metadata["namespace"])])
+    if modal:
+        parts.extend(["--modal", "true"])
+    return " ".join(shlex.quote(part) for part in parts)
+
+
+def write_readme(path: Path, args: argparse.Namespace, handoff_metadata: dict[str, Any]) -> None:
+    instance_ids = ", ".join(str(instance_id) for instance_id in handoff_metadata["instance_ids"])
     text = f"""# TML SWE-bench Scorer Bootstrap Packet
 
 This private packet prepares a clean Docker scorer for the existing TML
@@ -241,6 +355,14 @@ Recommended scorer shape:
 - at least {args.min_ram_gb} GB RAM
 - at least {args.min_cpu_cores} CPU cores
 - Docker Engine installed and running
+
+Handoff scope:
+
+- Dataset: `{handoff_metadata["dataset_name"]}`
+- Split: `{handoff_metadata["split"]}`
+- Base run id: `{handoff_metadata["base_run_id"]}`
+- Planner run id: `{handoff_metadata["planner_run_id"]}`
+- Instances: {instance_ids}
 
 Flow:
 

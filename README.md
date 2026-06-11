@@ -685,6 +685,16 @@ Checked four-instance packet:
 Boundary: this is still scorer-input preparation and patch-apply evidence only.
 It does not measure resolved rate, regressions, hidden tests, or planner lift.
 
+The four-instance scorer bootstrap report
+`benchmarks/real-repo-scorer-bootstrap-codex-real-mini-4-2026-06-11.json`
+records handoff metadata derived from
+`output/private-swebench/scorer-handoff-codex-real-mini-4/run_official_harness.sh`:
+dataset `princeton-nlp/SWE-bench_Verified`, split `test`, run IDs
+`tml_base_codex_real_mini_4` and `tml_planner_codex_real_mini_4`, and all four
+instance IDs. The ignored private `modal_command_reference.sh` is generated
+from the same metadata, so Docker and Modal references target the same
+four-instance scorer input set.
+
 Post-four-instance scorer audit:
 
 - report: `benchmarks/real-repo-scorer-target-audit-post-four-instance-2026-06-11.json`

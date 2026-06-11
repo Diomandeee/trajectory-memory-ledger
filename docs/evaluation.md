@@ -1282,6 +1282,15 @@ Boundary:
 - It proves patch applicability only.
 - It still does not run SWE-bench, hidden tests, or measure planner lift.
 
+The regenerated four-instance scorer bootstrap report
+`benchmarks/real-repo-scorer-bootstrap-codex-real-mini-4-2026-06-11.json`
+now includes handoff metadata parsed from the private
+`run_official_harness.sh`: dataset, split, timeout, max workers, report
+directory, run IDs, prediction paths, and all four instance IDs. The private
+`modal_command_reference.sh` is generated from that metadata and uses
+`--modal true` while preserving the same `tml_base_codex_real_mini_4` /
+`tml_planner_codex_real_mini_4` scope.
+
 ### Post-Four-Instance Scorer Audit
 
 After the four-instance handoff was prepared, the current scorer targets were

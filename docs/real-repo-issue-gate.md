@@ -225,6 +225,12 @@ four-instance handoff, verifies admission is still waiting for official
 reports, and confirms base `4/4` plus planner `4/4` patch applicability. It
 still does not run SWE-bench or allow a performance claim.
 
+The four-instance scorer bootstrap report records the handoff metadata parsed
+from `run_official_harness.sh`, including the `tml_base_codex_real_mini_4` and
+`tml_planner_codex_real_mini_4` run IDs plus all four instance IDs. The private
+Docker runner and Modal reference therefore point at the same four-instance
+input set.
+
 The post-four live scorer audit is
 `benchmarks/real-repo-scorer-target-audit-post-four-instance-2026-06-11.json`.
 It still reports `no_ready_official_scorer`: local has only `4.56 GiB` free and
