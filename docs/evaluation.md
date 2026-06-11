@@ -7,7 +7,7 @@ prepared external proof gate:
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
 4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, two real adapter-conditioned reports over a six-task held-out Python stdlib task set, and a 60-task repair-router/planner gate. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data on the six-task gate, but the 60-task replication falsifies the broad adapter claim for the current E2B recipe. The strongest checked downstream result is now router/planner-level: a public-only anticipatory repair planner reaches 60/60 on `python-stdlib-heldout-v1-60`, with `synthetic_rows=0`, `read_hidden_task_specs=false`, `hidden_tests_sent_to_model=false`, and zero regressions against both the 57/60 E4B overlay and the E2B base.
-5. Prepared real-repo issue-resolution gate: `scripts/prepare_real_repo_issue_gate.py` validates same-instance SWE-bench-style prediction files, parses official harness reports when present, compares base agent versus base+TML planner, and refuses a performance claim for missing reports or synthetic fixtures. The checked fixture proves the guardrail only; TML has not yet proven real-repo/SWE-bench issue-resolution lift.
+5. Prepared real-repo issue-resolution gate: `scripts/prepare_real_repo_issue_gate.py` validates same-instance SWE-bench-style prediction files, parses official harness reports when present, compares base agent versus base+TML planner, and refuses a performance claim for missing reports or synthetic fixtures. `scripts/fetch_swebench_verified_mini_manifest.py` freezes a public-safe 50-row Verified Mini manifest, and `scripts/preflight_real_repo_issue_gate_env.py` records local harness readiness. The checked fixture and local preflight prove guardrails only; TML has not yet proven real-repo/SWE-bench issue-resolution lift.
 
 ## Daemon Benchmark
 
@@ -918,3 +918,49 @@ Boundary:
   conditions under the same model, budget, timeout, instance ids, and harness.
 - A 50-issue Verified pilot can justify continuing; Lite or Verified scale is
   the paper-grade threshold for broad real-repo issue-resolution lift.
+
+### Verified Mini Manifest And Local Preflight
+
+The repository now freezes a public-safe 50-row SWE-bench Verified Mini manifest:
+
+```bash
+python3 scripts/fetch_swebench_verified_mini_manifest.py
+```
+
+Checked manifest report:
+
+| Field | Value |
+|---|---|
+| Source dataset | `MariusHobbhahn/swe-bench-verified-mini` |
+| Dataset SHA | `b316c349947c29963fce3f4a65967c9807a4b673` |
+| Rows | 50 |
+| Output | `examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl` |
+| Omitted eval fields | `patch`, `test_patch`, `FAIL_TO_PASS`, `PASS_TO_PASS` |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+The local environment preflight is:
+
+```bash
+python3 scripts/preflight_real_repo_issue_gate_env.py
+```
+
+Checked local preflight result:
+
+| Field | Value |
+|---|---|
+| Status | `blocked_local_official_harness_unavailable` |
+| Free disk | 6.10 GiB |
+| Configured disk floor | 10.00 GiB |
+| Docker | not found |
+| Python `swebench` module | not importable |
+| Manifest present | true |
+| Base predictions present | false |
+| Planner predictions present | false |
+
+Boundary:
+
+- The manifest is public prompt metadata only, not a benchmark result.
+- The preflight explains why this machine should not run the official harness.
+- The next required artifacts are real base/planner prediction JSONL files and
+  official harness reports from a Docker-capable machine.

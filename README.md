@@ -51,6 +51,7 @@ This repository contains:
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`: public prompts for the five shared failures left by the 55/60 task repair router
 - `examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl`: non-synthetic 60-task router rows after overlaying only E4B chat candidates that passed focused executable evaluation
 - `examples/evaluation/executable-candidates-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.jsonl`: 60-task router rows after public-only anticipatory repair planning
+- `examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl`: 50-row public-safe SWE-bench Verified Mini manifest, with gold patches and test oracle fields omitted
 - `examples/evaluation/real-repo-gate/`: synthetic fixture rows proving the SWE-bench-style claim guard, not performance
 - `examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/`: generated harness skill packages from the 60-task E2B adapter comparison
 - `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`: generated harness skill packages from the promoted narrow math repair router
@@ -454,6 +455,27 @@ Checked fixture result:
 - `performance_claim.allowed`: `false`
 
 Boundary: this proves the real-repo gate wiring and the claim guard. It does not prove SWE-bench or real repository issue-resolution lift. The actual proof requires official SWE-bench Lite/Verified-style harness reports for the same base agent and base+TML planner on the same real instances, model, budget, timeout, and harness.
+
+Freeze the public-safe Verified Mini manifest and run the local environment
+preflight:
+
+```bash
+python3 scripts/fetch_swebench_verified_mini_manifest.py
+python3 scripts/preflight_real_repo_issue_gate_env.py
+```
+
+Checked `2026-06-11` outputs:
+
+- public manifest rows: `50`
+- source dataset: `MariusHobbhahn/swe-bench-verified-mini`
+- hidden/gold fields omitted: `patch`, `test_patch`, `FAIL_TO_PASS`, `PASS_TO_PASS`
+- local preflight status: `blocked_local_official_harness_unavailable`
+- local blockers: free disk `6.10 GiB` below the configured `10.00 GiB` floor, `docker` not found, Python module `swebench` not importable
+- prediction files still required: `output/private-swebench/base-agent.predictions.jsonl` and `output/private-swebench/tml-planner.predictions.jsonl`
+
+Boundary: the manifest freezes the public instance set and the preflight records
+why this machine should not run the official harness. Neither artifact measures
+planner performance.
 
 Run the stronger Gemma 4 base-model sanity gate:
 

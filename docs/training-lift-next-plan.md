@@ -31,6 +31,15 @@ The next valid downstream-lift claim requires a SWE-bench-style real-repo issue 
 
 with the same model, same budget, same timeouts, same instance ids, and same official harness.
 
+Current execution state:
+
+- A public-safe 50-row Verified Mini manifest is frozen at
+  `examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl`.
+- Local official harness execution is blocked: free disk is about `6.10 GiB`,
+  `docker` is not installed, and the Python `swebench` module is not importable.
+- Base and planner prediction JSONL files still need to be generated on, or
+  transferred from, the machine that will run the official harness.
+
 Only continue adapter work if one of two things happens:
 
 1. The TML planner beats base on a real-repo pilot and the failures show a trainable pattern.

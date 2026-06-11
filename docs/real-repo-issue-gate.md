@@ -53,6 +53,36 @@ python3 scripts/prepare_real_repo_issue_gate.py \
   --output benchmarks/real-repo-issue-gate-preflight.json
 ```
 
+Freeze the public-safe Verified Mini manifest:
+
+```bash
+python3 scripts/fetch_swebench_verified_mini_manifest.py
+```
+
+This writes
+`examples/evaluation/swebench-verified-mini-public-manifest-2026-06-11.jsonl`
+and a report under `benchmarks/`. The manifest keeps only public generation
+fields such as `repo`, `instance_id`, `base_commit`, `problem_statement`,
+`hints_text`, `created_at`, `version`, and `environment_setup_commit`. It omits
+`patch`, `test_patch`, `FAIL_TO_PASS`, and `PASS_TO_PASS`.
+
+Check local harness readiness:
+
+```bash
+python3 scripts/preflight_real_repo_issue_gate_env.py
+```
+
+The checked local `2026-06-11` preflight is blocked:
+
+- free disk is `6.10 GiB`, below the configured `10.00 GiB` floor,
+- `docker` is not installed,
+- the Python `swebench` module is not importable,
+- the public manifest exists,
+- base/planner prediction JSONL files do not exist yet.
+
+This is not a failure of TML. It says the official harness run belongs on a
+Docker-capable machine with enough disk and generated prediction files.
+
 Run the official harness for both prediction files:
 
 ```bash
@@ -118,10 +148,11 @@ synthetic_fixture_not_performance_evidence
 
 ## Current Status
 
-As of this artifact, TML has not yet run the real-repo gate. The proven result
-remains narrower: the anticipatory planner reaches 60/60 on the local Python
-stdlib executable suite. That is useful planner evidence, but it does not prove
-SWE-bench issue-resolution lift.
+As of this artifact, TML has not yet run the real-repo gate. The public-safe
+Verified Mini manifest is frozen, and this local machine has a blocked harness
+preflight. The proven result remains narrower: the anticipatory planner reaches
+60/60 on the local Python stdlib executable suite. That is useful planner
+evidence, but it does not prove SWE-bench issue-resolution lift.
 
 The next honest decision is simple:
 
