@@ -74,6 +74,11 @@ Current execution state:
   one-instance base and TML-planner patches both apply cleanly to the
   `django__django-11790` base commit. This is not test execution or issue
   resolution.
+- Local public-test smoke is complete:
+  `scripts/run_real_repo_local_test_smoke.py` runs the two changed Django auth
+  form tests in the patched base and planner worktrees; both conditions pass.
+  This is not the full Django suite, hidden SWE-bench tests, or official issue
+  resolution.
 - Full base and planner prediction JSONL files still need to be generated for
   the 50-row Verified Mini subset on, or transferred to, the machine that will
   run the official harness.

@@ -658,6 +658,33 @@ Checked patch-apply result:
 Boundary: this proves only that both generated patches apply cleanly to the
 real base commit. It does not prove either patch fixes the issue.
 
+Run the narrow local public-test smoke:
+
+```bash
+python3 scripts/run_real_repo_local_test_smoke.py \
+  --instance-id django__django-11790 \
+  --repo django/django \
+  --base-worktree output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11790 \
+  --planner-worktree output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11790 \
+  --dependency-path output/private-swebench/django-test-deps \
+  --test-label auth_tests.test_forms.AuthenticationFormTest.test_username_field_max_length_matches_user_model \
+  --test-label auth_tests.test_forms.AuthenticationFormTest.test_username_field_max_length_defaults_to_254 \
+  --report benchmarks/real-repo-local-test-smoke-codex-real-smoke-2026-06-11.json
+```
+
+Checked local public-test result:
+
+- status: `local_test_smoke_passed`
+- base condition: passed
+- planner condition: passed
+- conditions passed: 2/2
+- official harness run: `false`
+- hidden tests run: `false`
+- performance claim allowed: `false`
+
+Boundary: this is a narrow local public-test smoke. It is not the full Django
+suite and not official SWE-bench scoring.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash

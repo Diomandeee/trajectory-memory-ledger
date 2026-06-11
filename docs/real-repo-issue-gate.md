@@ -220,6 +220,24 @@ The checked report has `status=patch_apply_check_passed`: both the base and
 planner patches apply to `django__django-11790` at the base commit. This is
 patch applicability only; no repository tests or official harness ran.
 
+Run the narrow local public-test smoke:
+
+```bash
+python3 scripts/run_real_repo_local_test_smoke.py \
+  --instance-id django__django-11790 \
+  --repo django/django \
+  --base-worktree output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11790 \
+  --planner-worktree output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11790 \
+  --dependency-path output/private-swebench/django-test-deps \
+  --test-label auth_tests.test_forms.AuthenticationFormTest.test_username_field_max_length_matches_user_model \
+  --test-label auth_tests.test_forms.AuthenticationFormTest.test_username_field_max_length_defaults_to_254 \
+  --report benchmarks/real-repo-local-test-smoke-codex-real-smoke-2026-06-11.json
+```
+
+The checked report has `status=local_test_smoke_passed`: both the base and
+planner patched worktrees pass the two changed Django auth form tests. This is
+not a full repository test suite and not the official SWE-bench harness.
+
 Run the official harness for both prediction files:
 
 ```bash
