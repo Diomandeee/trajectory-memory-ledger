@@ -1,0 +1,107 @@
+{
+  "claim_boundary": "This audit checks scorer readiness only. It does not run SWE-bench and cannot prove planner performance.",
+  "cloud_cli": {
+    "modal": {
+      "available": false,
+      "label": "modal",
+      "path": null
+    },
+    "sb_cli": {
+      "available": false,
+      "label": "sb-cli",
+      "path": null
+    }
+  },
+  "created_at": "2026-06-11T04:35:04.362164+00:00",
+  "gcloud": {
+    "account_count": 3,
+    "auth_list": [
+      {
+        "account": "account_1",
+        "status": ""
+      },
+      {
+        "account": "account_2",
+        "status": ""
+      },
+      {
+        "account": "account_3",
+        "status": "ACTIVE"
+      }
+    ],
+    "auth_list_returncode": 0,
+    "available": true,
+    "config": {
+      "core": {
+        "account": "account_3",
+        "disable_usage_reporting": "True",
+        "project": "project_1"
+      }
+    },
+    "config_returncode": 0,
+    "project_count": 1,
+    "project_results": [],
+    "redacted_identifiers": true
+  },
+  "local": {
+    "blockers": [
+      "free disk 4.56 GiB below required 120.00 GiB",
+      "docker executable not found",
+      "python module 'swebench' is not importable"
+    ],
+    "docker_error": "docker executable not found",
+    "docker_ok": false,
+    "docker_path": null,
+    "docker_server_version": null,
+    "free_disk_gb": 4.56,
+    "status": "blocked",
+    "swebench_importable": false,
+    "target": "local"
+  },
+  "min_free_disk_gb": 120.0,
+  "next_gate": "Run the handoff bundle on a ready Docker scorer, or provision/repair one with enough disk and swebench installed.",
+  "performance_claim_allowed": false,
+  "ran_official_harness": false,
+  "ready_targets": [],
+  "remotes": [
+    {
+      "blockers": [
+        "free disk 12.45 GiB below required 120.00 GiB",
+        "python module 'swebench' is not importable"
+      ],
+      "docker_error": null,
+      "docker_ok": true,
+      "docker_path": "/opt/homebrew/bin/docker",
+      "docker_server_version": "\"29.2.0\"",
+      "free_disk_gb": 12.446,
+      "status": "blocked",
+      "swebench_importable": false,
+      "target": "mac4"
+    },
+    {
+      "blockers": [
+        "free disk 16.04 GiB below required 120.00 GiB",
+        "docker executable not found",
+        "python module 'swebench' is not importable"
+      ],
+      "docker_error": null,
+      "docker_ok": false,
+      "docker_path": null,
+      "docker_server_version": null,
+      "free_disk_gb": 16.035,
+      "status": "blocked",
+      "swebench_importable": false,
+      "target": "mac5"
+    },
+    {
+      "blockers": [
+        "ssh unreachable"
+      ],
+      "error": "ssh: connect to host 100.114.92.88 port 22: Operation timed out",
+      "status": "unreachable",
+      "target": "cloud-vm"
+    }
+  ],
+  "schema": "trajectory-memory-ledger.real_repo_scorer_target_audit.v1",
+  "status": "no_ready_official_scorer"
+}

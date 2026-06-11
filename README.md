@@ -685,6 +685,36 @@ Checked four-instance packet:
 Boundary: this is still scorer-input preparation and patch-apply evidence only.
 It does not measure resolved rate, regressions, hidden tests, or planner lift.
 
+Post-four-instance scorer audit:
+
+- report: `benchmarks/real-repo-scorer-target-audit-post-four-instance-2026-06-11.json`
+- status: `no_ready_official_scorer`
+- ready targets: `0`
+- local: blocked by `4.56 GiB` free disk, no Docker, and missing `swebench`
+- Mac4: blocked by `12.45 GiB` free disk and missing `swebench`
+- Mac5: reachable, but blocked by `16.04 GiB` free disk, no Docker, and missing `swebench`
+- cloud-vm: unreachable over SSH
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Boundary: this is a current readiness audit only. It explains why the
+fingerprint-locked handoff has not been scored by the official harness.
+
+Four-instance local public-test smoke:
+
+- `django__django-11790`: base passed, planner passed
+- `django__django-11815`: base passed, planner passed
+- `django__django-11848`: base passed, planner passed
+- `django__django-11880`: base passed, planner passed
+- reports: `benchmarks/real-repo-local-test-smoke-codex-real-mini-4-django-*-2026-06-11.json`
+- official harness run: `false`
+- hidden tests run: `false`
+- performance claim allowed: `false`
+
+Boundary: this proves only that both patched worktrees pass selected local
+public/touched Django tests. It is not the full Django suite, not hidden
+SWE-bench tests, and not an official resolved-rate measurement.
+
 Audit scorer targets:
 
 ```bash

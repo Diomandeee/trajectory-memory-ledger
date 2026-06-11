@@ -225,6 +225,27 @@ four-instance handoff, verifies admission is still waiting for official
 reports, and confirms base `4/4` plus planner `4/4` patch applicability. It
 still does not run SWE-bench or allow a performance claim.
 
+The post-four live scorer audit is
+`benchmarks/real-repo-scorer-target-audit-post-four-instance-2026-06-11.json`.
+It still reports `no_ready_official_scorer`: local has only `4.56 GiB` free and
+no Docker or `swebench`; Mac4 has Docker but only `12.45 GiB` free and no
+`swebench`; Mac5 is reachable but has only `16.04 GiB` free, no Docker, and no
+`swebench`; cloud-vm remains unreachable. No official harness ran.
+
+The same four patched worktree pairs also passed selected local public/touched
+Django tests:
+
+- `django__django-11790`: base passed, planner passed
+- `django__django-11815`: base passed, planner passed
+- `django__django-11848`: base passed, planner passed
+- `django__django-11880`: base passed, planner passed
+
+Those reports are
+`benchmarks/real-repo-local-test-smoke-codex-real-mini-4-django-*-2026-06-11.json`.
+They are supporting evidence only: no hidden tests, full Django suite, or
+official SWE-bench scorer ran, so no resolved-rate or planner-lift claim is
+allowed.
+
 Audit available scorer targets:
 
 ```bash

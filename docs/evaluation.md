@@ -1282,6 +1282,63 @@ Boundary:
 - It proves patch applicability only.
 - It still does not run SWE-bench, hidden tests, or measure planner lift.
 
+### Post-Four-Instance Scorer Audit
+
+After the four-instance handoff was prepared, the current scorer targets were
+re-audited without installing packages, pulling Docker images, provisioning
+cloud resources, or running the harness.
+
+Checked audit report:
+
+| Field | Value |
+|---|---|
+| Report | `benchmarks/real-repo-scorer-target-audit-post-four-instance-2026-06-11.json` |
+| Status | `no_ready_official_scorer` |
+| Ready targets | 0 |
+| Local | blocked: `4.56 GiB` free, no Docker, no `swebench` |
+| Mac4 | blocked: `12.45 GiB` free, Docker present, no `swebench` |
+| Mac5 | blocked: `16.04 GiB` free, no Docker, no `swebench` |
+| cloud-vm | unreachable |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+Boundary:
+
+- This is current scorer-readiness evidence only.
+- It does not run SWE-bench.
+- It does not score patches or measure planner lift.
+
+### Four-Instance Local Public-Test Smoke
+
+Because no official scorer target was ready, the already prepared private
+Django worktrees were checked with selected local public/touched Django tests.
+These tests are supporting evidence only and keep `performance_claim_allowed`
+false.
+
+Checked local smoke reports:
+
+| Instance | Labels | Base | Planner |
+|---|---|---|---|
+| `django__django-11790` | `auth_tests.test_forms.AuthenticationFormTest.test_username_field_max_length_matches_user_model`, `auth_tests.test_forms.AuthenticationFormTest.test_username_field_max_length_defaults_to_254` | passed | passed |
+| `django__django-11815` | `migrations.test_writer.WriterTests.test_serialize_enums` | passed | passed |
+| `django__django-11848` | `utils_tests.test_http.HttpDateProcessingTests` | passed | passed |
+| `django__django-11880` | `forms_tests.field_tests.test_base.BasicFieldsTests`, `forms_tests.tests.test_forms.FormsTestCase` | passed | passed |
+
+Reports:
+
+- `benchmarks/real-repo-local-test-smoke-codex-real-mini-4-django-11790-2026-06-11.json`
+- `benchmarks/real-repo-local-test-smoke-codex-real-mini-4-django-11815-2026-06-11.json`
+- `benchmarks/real-repo-local-test-smoke-codex-real-mini-4-django-11848-2026-06-11.json`
+- `benchmarks/real-repo-local-test-smoke-codex-real-mini-4-django-11880-2026-06-11.json`
+
+Boundary:
+
+- This proves selected local public/touched tests pass in both patched
+  worktrees for the four prepared instances.
+- It is not the full Django suite.
+- It is not hidden SWE-bench evaluation.
+- It is not official issue-resolution evidence.
+
 ### Scorer Target Audit
 
 The current machines and cloud CLIs are audited with:

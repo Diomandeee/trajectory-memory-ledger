@@ -1,0 +1,44 @@
+{
+  "all_conditions_passed": true,
+  "claim_boundary": "This is a narrow local public-test smoke. It does not run Docker, hidden tests, or the official SWE-bench harness, and cannot prove issue resolution.",
+  "command_template": "{python} tests/runtests.py {test_labels} --verbosity 2",
+  "condition_count": 2,
+  "condition_pass_count": 2,
+  "conditions": {
+    "base_agent": {
+      "command": "python3.11 tests/runtests.py migrations.test_writer.WriterTests.test_serialize_enums --verbosity 2",
+      "condition": "base_agent",
+      "duration_s": 0.923,
+      "passed": true,
+      "returncode": 0,
+      "stderr_tail": "test_serialize_enums (migrations.test_writer.WriterTests.test_serialize_enums) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nOK\n",
+      "stdout_tail": "Testing against Django installed in '/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11815/django'\nImporting application migrations\nSkipping setup of unused database(s): default, other.\nSystem check identified no issues (0 silenced).\n",
+      "worktree": "/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/repo-worktrees/worktrees/base_agent/django__django-11815"
+    },
+    "base_agent_tml_planner": {
+      "command": "python3.11 tests/runtests.py migrations.test_writer.WriterTests.test_serialize_enums --verbosity 2",
+      "condition": "base_agent_tml_planner",
+      "duration_s": 1.075,
+      "passed": true,
+      "returncode": 0,
+      "stderr_tail": "test_serialize_enums (migrations.test_writer.WriterTests.test_serialize_enums) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nOK\n",
+      "stdout_tail": "Testing against Django installed in '/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11815/django'\nImporting application migrations\nSkipping setup of unused database(s): default, other.\nSystem check identified no issues (0 silenced).\n",
+      "worktree": "/Users/mohameddiomande/Desktop/trajectory-memory-ledger/output/private-swebench/repo-worktrees/worktrees/base_agent_tml_planner/django__django-11815"
+    }
+  },
+  "created_at": "2026-06-11T04:37:30.343451+00:00",
+  "dependency_paths": [
+    "output/private-swebench/django-test-deps"
+  ],
+  "instance_id": "django__django-11815",
+  "performance_claim_allowed": false,
+  "ran_hidden_tests": false,
+  "ran_official_harness": false,
+  "ran_repository_full_test_suite": false,
+  "repo": "django/django",
+  "schema": "trajectory-memory-ledger.real_repo_local_test_smoke.v1",
+  "status": "local_test_smoke_passed",
+  "test_labels": [
+    "migrations.test_writer.WriterTests.test_serialize_enums"
+  ]
+}
