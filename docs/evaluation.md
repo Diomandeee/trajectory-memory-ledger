@@ -7,7 +7,7 @@ prepared external proof gate:
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
 4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, two real adapter-conditioned reports over a six-task held-out Python stdlib task set, and a 60-task repair-router/planner gate. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data on the six-task gate, but the 60-task replication falsifies the broad adapter claim for the current E2B recipe. The strongest checked downstream result is now router/planner-level: a public-only anticipatory repair planner reaches 60/60 on `python-stdlib-heldout-v1-60`, with `synthetic_rows=0`, `read_hidden_task_specs=false`, `hidden_tests_sent_to_model=false`, and zero regressions against both the 57/60 E4B overlay and the E2B base.
-5. Prepared real-repo issue-resolution gate: `scripts/prepare_real_repo_issue_gate.py` validates same-instance SWE-bench-style prediction files, parses official harness reports when present, compares base agent versus base+TML planner, and refuses a performance claim for missing reports or synthetic fixtures. `scripts/fetch_swebench_verified_mini_manifest.py` freezes a public-safe 50-row Verified Mini manifest, `scripts/preflight_real_repo_issue_gate_env.py` records local harness readiness, and `scripts/generate_real_repo_issue_predictions.py` controls same-command base/planner prediction generation. The checked fixture, manifest, local preflight, and dry-run prove guardrails only; TML has not yet proven real-repo/SWE-bench issue-resolution lift.
+5. Prepared real-repo issue-resolution gate: `scripts/prepare_real_repo_issue_gate.py` validates same-instance SWE-bench-style prediction files, parses official harness reports when present, compares base agent versus base+TML planner, and refuses a performance claim for missing reports or synthetic fixtures. `scripts/fetch_swebench_verified_mini_manifest.py` freezes a public-safe 50-row Verified Mini manifest, `scripts/preflight_real_repo_issue_gate_env.py` records local harness readiness, and `scripts/generate_real_repo_issue_predictions.py` controls same-command base/planner prediction generation. The checked fixture, manifest, local preflight, dry-run, repo-prep smoke, and one-instance Codex prediction smoke prove guardrails and patch generation only; TML has not yet proven real-repo/SWE-bench issue-resolution lift.
 
 ## Daemon Benchmark
 
@@ -1043,3 +1043,72 @@ Boundary:
 - It does not run SWE-bench tests.
 - Local disk fell to about 5.2 GiB free after the private repo-prep cache, so
   this local machine should not be expanded to the full 50-instance run.
+
+### One-Instance Codex Real Prediction Smoke
+
+The first real patch-generation smoke used Codex non-interactively on the first
+Verified Mini manifest row:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --prepare-repos \
+  --max-instances 1 \
+  --model-name codex-gpt-5.4 \
+  --timeout-s 1800 \
+  --output-dir output/private-swebench/codex-real-smoke-1 \
+  --raw-dir output/private-swebench/codex-real-smoke-1/raw-agent-output \
+  --report benchmarks/real-repo-prediction-generation-codex-real-smoke-2026-06-11.json \
+  --agent-command 'codex exec --ephemeral --sandbox danger-full-access --model gpt-5.4 --cd "{repo_worktree}" --output-last-message "{raw_output_file}" - < "{prompt_file}"'
+```
+
+Checked generation report:
+
+| Field | Value |
+|---|---|
+| Status | `predictions_ready_for_official_harness` |
+| Instance | `django__django-11790` |
+| Base prediction rows | 1 |
+| Planner prediction rows | 1 |
+| Base patch chars | 1883 |
+| Planner patch chars | 1938 |
+| Base duration | 111.541s |
+| Planner duration | 132.104s |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+Both generated patches touched:
+
+- `django/contrib/auth/forms.py`
+- `tests/auth_tests/test_forms.py`
+
+The matching one-row public-safe manifest is
+`examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl`.
+The matching gate report is
+`benchmarks/real-repo-issue-gate-codex-real-smoke-2026-06-11.json`.
+
+Checked gate preflight:
+
+| Field | Value |
+|---|---|
+| Preflight OK | true |
+| Manifest instances | 1 |
+| Prediction instances | 1 |
+| Same prediction ids | true |
+| Same model name | true |
+| Performance claim | `waiting_for_official_harness_results` |
+
+The matching local environment preflight is
+`benchmarks/real-repo-issue-gate-local-preflight-codex-real-smoke-2026-06-11.json`.
+It confirms the one-row prediction files exist, but local scoring is blocked by:
+
+- free disk `6.02 GiB` below the configured `10.00 GiB` floor
+- no local Docker executable
+- no importable local `swebench` module
+
+Boundary:
+
+- This generates real base/planner patches on one real repository issue.
+- It does not apply either patch in the official SWE-bench Docker harness.
+- It does not measure resolution rate, regressions, or test pass/fail.
+- It cannot support a planner-performance claim until both prediction files are
+  scored by official harness reports.

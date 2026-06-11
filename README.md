@@ -530,6 +530,42 @@ Checked repo-prep smoke result:
 Boundary: this proves the prediction wrapper can provide actual base-commit
 repository context to an agent. It still does not test planner performance.
 
+Run a one-instance real Codex prediction smoke:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --prepare-repos \
+  --max-instances 1 \
+  --model-name codex-gpt-5.4 \
+  --timeout-s 1800 \
+  --output-dir output/private-swebench/codex-real-smoke-1 \
+  --raw-dir output/private-swebench/codex-real-smoke-1/raw-agent-output \
+  --report benchmarks/real-repo-prediction-generation-codex-real-smoke-2026-06-11.json \
+  --agent-command 'codex exec --ephemeral --sandbox danger-full-access --model gpt-5.4 --cd "{repo_worktree}" --output-last-message "{raw_output_file}" - < "{prompt_file}"'
+```
+
+Checked real prediction smoke result:
+
+- instance: `django__django-11790`
+- base prediction: 1 row, `1883` patch chars, `2` files, command succeeded in `111.541s`
+- planner prediction: 1 row, `1938` patch chars, `2` files, command succeeded in `132.104s`
+- same model name recorded: true
+- official harness run: `false`
+- performance claim allowed: `false`
+
+The matching gate preflight is
+`benchmarks/real-repo-issue-gate-codex-real-smoke-2026-06-11.json`.
+It validates same-instance, same-model prediction coverage for the one-row
+smoke and reports `waiting_for_official_harness_results`. The matching local
+environment preflight is
+`benchmarks/real-repo-issue-gate-local-preflight-codex-real-smoke-2026-06-11.json`;
+the prediction files exist, but this machine is blocked from official scoring
+by insufficient disk, missing Docker, and missing `swebench`.
+
+Boundary: this is the first real patch-generation artifact for the gate. It is
+not a resolved-rate result and does not prove TML improves real-repo issue
+resolution.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash
@@ -611,7 +647,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, a focused E4B chat overlay router reached 57/60 with zero regressions, and a public-only anticipatory repair planner reached 60/60 by admitting the three remaining shared-failure repairs after public checks. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router/planner repair pipeline. It has proven router-level repair lift on the 60-task executable gate, but it has not yet proven SWE-bench-style real-repo issue-resolution lift or broad adapter-level downstream coding-agent performance lift. The repository now includes the real-repo gate needed to prove or falsify that next claim.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, a focused E4B chat overlay router reached 57/60 with zero regressions, and a public-only anticipatory repair planner reached 60/60 by admitting the three remaining shared-failure repairs after public checks. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router/planner repair pipeline. It has proven router-level repair lift on the 60-task executable gate, and it can now generate same-model base/planner real-repo patches for a one-instance SWE-bench-style smoke. It has not yet proven SWE-bench-style real-repo issue-resolution lift or broad adapter-level downstream coding-agent performance lift, because the generated patches have not been scored by official harness reports.
 
 ## License
 

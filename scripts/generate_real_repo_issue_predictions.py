@@ -380,12 +380,12 @@ def run_agent_command(
     if command_template is None:
         raise SystemExit("--agent-command is required")
     command = command_template.format(
-        prompt_file=str(prompt_path),
-        raw_output_file=str(raw_output_path),
+        prompt_file=str(prompt_path.resolve()),
+        raw_output_file=str(raw_output_path.resolve()),
         condition=condition,
         instance_id=instance_id,
         model_name=model_name,
-        repo_worktree=str(repo_worktree) if repo_worktree else "",
+        repo_worktree=str(repo_worktree.resolve()) if repo_worktree else "",
     )
     result = subprocess.run(
         command,

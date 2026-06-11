@@ -1,0 +1,43 @@
+{
+  "blockers": [
+    "free disk 6.02 GiB below required 10.00 GiB",
+    "docker executable not found",
+    "python module 'swebench' is not importable"
+  ],
+  "claim_boundary": "This preflight only checks local execution readiness. It is not a SWE-bench harness run and cannot prove planner performance.",
+  "created_at": "2026-06-11T02:31:45.881572+00:00",
+  "docker": {
+    "error": "docker executable not found",
+    "info_ok": false,
+    "path": null
+  },
+  "free_disk_gb": 6.016,
+  "min_free_disk_gb": 10.0,
+  "performance_claim_allowed": false,
+  "prediction_inputs": {
+    "base_predictions": {
+      "exists": true,
+      "path": "output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl",
+      "size_bytes": 2018
+    },
+    "instances_jsonl": {
+      "exists": true,
+      "path": "examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl",
+      "size_bytes": 1029
+    },
+    "planner_predictions": {
+      "exists": true,
+      "path": "output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl",
+      "size_bytes": 2078
+    }
+  },
+  "python_modules": {
+    "datasets": true,
+    "swebench": false
+  },
+  "ran_official_harness": false,
+  "schema": "trajectory-memory-ledger.real_repo_gate_env_preflight.v1",
+  "status": "blocked_local_official_harness_unavailable",
+  "warnings": [],
+  "workspace": "."
+}

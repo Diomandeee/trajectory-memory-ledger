@@ -122,6 +122,41 @@ python3 scripts/generate_real_repo_issue_predictions.py \
 The checked smoke prepares `django__django-11790` for both conditions and still
 writes no predictions. It exists to prove repository-context plumbing only.
 
+The first real prediction smoke uses the same wrapper with Codex:
+
+```bash
+python3 scripts/generate_real_repo_issue_predictions.py \
+  --prepare-repos \
+  --max-instances 1 \
+  --model-name codex-gpt-5.4 \
+  --timeout-s 1800 \
+  --output-dir output/private-swebench/codex-real-smoke-1 \
+  --raw-dir output/private-swebench/codex-real-smoke-1/raw-agent-output \
+  --report benchmarks/real-repo-prediction-generation-codex-real-smoke-2026-06-11.json \
+  --agent-command 'codex exec --ephemeral --sandbox danger-full-access --model gpt-5.4 --cd "{repo_worktree}" --output-last-message "{raw_output_file}" - < "{prompt_file}"'
+```
+
+That checked smoke generated one base prediction and one TML-planner prediction
+for `django__django-11790`. Both prediction files are under ignored
+`output/private-swebench/codex-real-smoke-1`. The public report records patch
+sizes and command status, but not the private raw model traces.
+
+Validate the one-instance smoke inputs:
+
+```bash
+python3 scripts/prepare_real_repo_issue_gate.py \
+  --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl \
+  --base-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl \
+  --planner-predictions output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl \
+  --output benchmarks/real-repo-issue-gate-codex-real-smoke-2026-06-11.json \
+  --subset-label verified-mini-codex-real-smoke-1 \
+  --base-run-id tml_base_codex_real_smoke_1 \
+  --planner-run-id tml_planner_codex_real_smoke_1
+```
+
+The checked gate report has `preflight.ok=true`, same prediction ids, same model
+name, and `performance_claim.status=waiting_for_official_harness_results`.
+
 Run the official harness for both prediction files:
 
 ```bash
@@ -187,11 +222,14 @@ synthetic_fixture_not_performance_evidence
 
 ## Current Status
 
-As of this artifact, TML has not yet run the real-repo gate. The public-safe
-Verified Mini manifest is frozen, and this local machine has a blocked harness
-preflight. The proven result remains narrower: the anticipatory planner reaches
-60/60 on the local Python stdlib executable suite. That is useful planner
-evidence, but it does not prove SWE-bench issue-resolution lift.
+As of this artifact, TML has run one real patch-generation smoke for
+`django__django-11790`: base and planner prediction JSONL files exist, and the
+gate validates same-instance/same-model coverage. TML has not yet run the
+official SWE-bench Docker harness on those predictions. The proven result
+therefore remains narrower: the anticipatory planner reaches 60/60 on the local
+Python stdlib executable suite, and the real-repo lane has produced patches but
+not resolved-rate evidence. That is useful planner and plumbing evidence, but
+it does not prove SWE-bench issue-resolution lift.
 
 The next honest decision is simple:
 

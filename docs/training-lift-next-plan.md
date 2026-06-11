@@ -44,9 +44,19 @@ Current execution state:
   `scripts/generate_real_repo_issue_predictions.py --dry-run --prepare-repos --max-instances 1`
   prepares condition-specific `django__django-11790` worktrees at the base
   commit, but writes no predictions and runs no harness.
-- Base and planner prediction JSONL files still need to be generated with a
-  real external agent command on, or transferred from, the machine that will run
-  the official harness.
+- One-instance Codex real prediction smoke is complete:
+  `scripts/generate_real_repo_issue_predictions.py --prepare-repos --max-instances 1`
+  with `codex-gpt-5.4` generated one base prediction and one TML-planner
+  prediction for `django__django-11790`. The gate preflight validates same ids
+  and same model name, but reports `waiting_for_official_harness_results`.
+- Local official harness scoring remains blocked even with predictions present:
+  free disk is about `6.02 GiB`, Docker is missing, and Python `swebench` is not
+  importable. Mac4 has Docker but only about `13 GiB` free and no `swebench`;
+  the official SWE-bench README recommends roughly `120GB` free storage for
+  Docker evaluation and notes ARM support is experimental.
+- Full base and planner prediction JSONL files still need to be generated for
+  the 50-row Verified Mini subset on, or transferred to, the machine that will
+  run the official harness.
 
 Only continue adapter work if one of two things happens:
 
