@@ -1112,3 +1112,45 @@ Boundary:
 - It does not measure resolution rate, regressions, or test pass/fail.
 - It cannot support a planner-performance claim until both prediction files are
   scored by official harness reports.
+
+### Official Harness Handoff
+
+The one-instance Codex predictions are packaged for transfer to a proper Docker
+scorer with:
+
+```bash
+python3 scripts/prepare_real_repo_harness_handoff.py \
+  --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl \
+  --base-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl \
+  --planner-predictions output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl \
+  --output-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --report benchmarks/real-repo-harness-handoff-codex-real-smoke-2026-06-11.json \
+  --subset-label verified-mini-codex-real-smoke-1 \
+  --base-run-id tml_base_codex_real_smoke_1 \
+  --planner-run-id tml_planner_codex_real_smoke_1
+```
+
+Checked handoff report:
+
+| Field | Value |
+|---|---|
+| Status | `handoff_ready_waiting_for_official_harness` |
+| Instance count | 1 |
+| Same prediction ids | true |
+| Same model name | true |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+The private ignored bundle contains:
+
+- `inputs/instances.jsonl`
+- `inputs/base-agent.predictions.jsonl`
+- `inputs/tml-planner.predictions.jsonl`
+- `run_official_harness.sh`
+- `README.md`
+
+Boundary:
+
+- This handoff reduces scorer setup friction.
+- It still does not run the official harness.
+- It contains private patch predictions only under ignored `output/private-*`.

@@ -1,0 +1,53 @@
+{
+  "claim_boundary": "This handoff only packages prediction inputs and official harness commands. It does not run SWE-bench and cannot prove planner performance.",
+  "created_at": "2026-06-11T02:45:59.796116+00:00",
+  "dataset_name": "princeton-nlp/SWE-bench_Verified",
+  "environment_status": {
+    "docker_error": null,
+    "docker_path": null,
+    "docker_server_version": null,
+    "free_disk_gb": 5.988,
+    "swebench_importable": false,
+    "workspace": "."
+  },
+  "errors": [],
+  "harness_commands": {
+    "base_agent": "python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Verified --split test --predictions_path output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/base-agent.predictions.jsonl --max_workers 1 --timeout 1800 --run_id tml_base_codex_real_smoke_1 --report_dir evaluation_results --instance_ids django__django-11790",
+    "base_agent_tml_planner": "python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Verified --split test --predictions_path output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/tml-planner.predictions.jsonl --max_workers 1 --timeout 1800 --run_id tml_planner_codex_real_smoke_1 --report_dir evaluation_results --instance_ids django__django-11790"
+  },
+  "input_paths": {
+    "base_predictions": "output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl",
+    "instances_jsonl": "examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl",
+    "planner_predictions": "output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl"
+  },
+  "instance_count": 1,
+  "instance_ids": [
+    "django__django-11790"
+  ],
+  "model_names": {
+    "base": [
+      "codex-gpt-5.4"
+    ],
+    "planner": [
+      "codex-gpt-5.4"
+    ]
+  },
+  "next_gate": "Run the private handoff runner on a Docker machine with enough disk, then summarize official reports.",
+  "performance_claim_allowed": false,
+  "private_bundle_paths": {
+    "base_predictions": "output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/base-agent.predictions.jsonl",
+    "instances_jsonl": "output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/instances.jsonl",
+    "planner_predictions": "output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/tml-planner.predictions.jsonl"
+  },
+  "private_handoff_dir": "output/private-swebench/scorer-handoff-codex-real-smoke-1",
+  "ran_official_harness": false,
+  "runner_path": "output/private-swebench/scorer-handoff-codex-real-smoke-1/run_official_harness.sh",
+  "same_model_names_recorded": true,
+  "same_prediction_instance_ids": true,
+  "schema": "trajectory-memory-ledger.real_repo_harness_handoff.v1",
+  "split": "test",
+  "status": "handoff_ready_waiting_for_official_harness",
+  "subset_label": "verified-mini-codex-real-smoke-1",
+  "summarize_command": "python3 scripts/prepare_real_repo_issue_gate.py --dataset-name princeton-nlp/SWE-bench_Verified --split test --subset-label verified-mini-codex-real-smoke-1 --instances-jsonl output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/instances.jsonl --base-predictions output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/base-agent.predictions.jsonl --planner-predictions output/private-swebench/scorer-handoff-codex-real-smoke-1/inputs/tml-planner.predictions.jsonl --base-report evaluation_results/tml_base_codex_real_smoke_1 --planner-report evaluation_results/tml_planner_codex_real_smoke_1 --output benchmarks/real-repo-issue-gate-verified-mini-codex-real-smoke-1.json",
+  "warnings": []
+}

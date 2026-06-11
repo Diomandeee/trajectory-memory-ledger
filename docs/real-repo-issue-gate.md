@@ -157,6 +157,26 @@ python3 scripts/prepare_real_repo_issue_gate.py \
 The checked gate report has `preflight.ok=true`, same prediction ids, same model
 name, and `performance_claim.status=waiting_for_official_harness_results`.
 
+Package the same predictions for a Docker scorer:
+
+```bash
+python3 scripts/prepare_real_repo_harness_handoff.py \
+  --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl \
+  --base-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl \
+  --planner-predictions output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl \
+  --output-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --report benchmarks/real-repo-harness-handoff-codex-real-smoke-2026-06-11.json \
+  --subset-label verified-mini-codex-real-smoke-1 \
+  --base-run-id tml_base_codex_real_smoke_1 \
+  --planner-run-id tml_planner_codex_real_smoke_1
+```
+
+The checked handoff report has
+`status=handoff_ready_waiting_for_official_harness`, validates the one instance,
+records same ids/model, and writes an ignored private runner at
+`output/private-swebench/scorer-handoff-codex-real-smoke-1/run_official_harness.sh`.
+It still does not run SWE-bench or allow a performance claim.
+
 Run the official harness for both prediction files:
 
 ```bash

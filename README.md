@@ -566,6 +566,32 @@ Boundary: this is the first real patch-generation artifact for the gate. It is
 not a resolved-rate result and does not prove TML improves real-repo issue
 resolution.
 
+Package the one-instance predictions for an official Docker scorer:
+
+```bash
+python3 scripts/prepare_real_repo_harness_handoff.py \
+  --instances-jsonl examples/evaluation/swebench-verified-mini-public-manifest-codex-smoke-1-2026-06-11.jsonl \
+  --base-predictions output/private-swebench/codex-real-smoke-1/base-agent.predictions.jsonl \
+  --planner-predictions output/private-swebench/codex-real-smoke-1/tml-planner.predictions.jsonl \
+  --output-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --report benchmarks/real-repo-harness-handoff-codex-real-smoke-2026-06-11.json \
+  --subset-label verified-mini-codex-real-smoke-1 \
+  --base-run-id tml_base_codex_real_smoke_1 \
+  --planner-run-id tml_planner_codex_real_smoke_1
+```
+
+Checked handoff result:
+
+- status: `handoff_ready_waiting_for_official_harness`
+- instance count: `1`
+- same prediction ids: true
+- same model names: true
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Boundary: this creates an ignored private scorer bundle with prediction JSONL
+and exact harness commands. It still does not score the patches.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash

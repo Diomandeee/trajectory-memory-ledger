@@ -54,6 +54,12 @@ Current execution state:
   importable. Mac4 has Docker but only about `13 GiB` free and no `swebench`;
   the official SWE-bench README recommends roughly `120GB` free storage for
   Docker evaluation and notes ARM support is experimental.
+- The one-instance predictions are packaged for an official scorer:
+  `scripts/prepare_real_repo_harness_handoff.py` writes an ignored private
+  bundle under `output/private-swebench/scorer-handoff-codex-real-smoke-1` and a
+  public report
+  `benchmarks/real-repo-harness-handoff-codex-real-smoke-2026-06-11.json`.
+  This is still only a handoff, not a harness run.
 - Full base and planner prediction JSONL files still need to be generated for
   the 50-row Verified Mini subset on, or transferred to, the machine that will
   run the official harness.
