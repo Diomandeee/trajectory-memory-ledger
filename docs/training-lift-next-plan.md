@@ -62,6 +62,12 @@ Current execution state:
   The report records SHA-256 fingerprints for the manifest and prediction
   JSONL files, and the private runner verifies them before the harness starts.
   This is still only a handoff, not a harness run.
+- Official result admission is prepared:
+  `scripts/prepare_real_repo_official_result_admission.py` verifies the frozen
+  handoff fingerprints and writes
+  `benchmarks/real-repo-official-result-admission-codex-real-smoke-2026-06-11.json`.
+  Current status is `waiting_for_official_reports`, with all three handoff
+  inputs verified and no performance claim allowed.
 - Scorer-target audit is now recorded:
   `scripts/audit_real_repo_scorer_targets.py` writes
   `benchmarks/real-repo-scorer-target-audit-2026-06-11.json`, with redacted

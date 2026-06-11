@@ -1163,6 +1163,37 @@ Boundary:
 - It still does not run the official harness.
 - It contains private patch predictions only under ignored `output/private-*`.
 
+### Official Result Admission
+
+Official result reports are admitted with:
+
+```bash
+python3 scripts/prepare_real_repo_official_result_admission.py \
+  --handoff-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --report benchmarks/real-repo-official-result-admission-codex-real-smoke-2026-06-11.json \
+  --subset-label verified-mini-codex-real-smoke-1 \
+  --base-run-id tml_base_codex_real_smoke_1 \
+  --planner-run-id tml_planner_codex_real_smoke_1
+```
+
+Checked admission report:
+
+| Field | Value |
+|---|---|
+| Status | `waiting_for_official_reports` |
+| Handoff fingerprints verified | true |
+| Verified scorer inputs | 3 |
+| Official reports present | false |
+| Performance claim allowed | false |
+
+Boundary:
+
+- This verifies that the current scorer handoff still matches its SHA-256
+  fingerprint manifest.
+- It records the expected base and planner report directories for later import.
+- It does not run SWE-bench, and without official reports it cannot measure
+  issue resolution.
+
 ### Scorer Target Audit
 
 The current machines and cloud CLIs are audited with:

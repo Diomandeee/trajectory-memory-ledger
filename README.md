@@ -596,6 +596,28 @@ and exact harness commands. The private runner verifies those input
 fingerprints before calling the official harness. It still does not score the
 patches.
 
+Prepare official result admission:
+
+```bash
+python3 scripts/prepare_real_repo_official_result_admission.py \
+  --handoff-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --report benchmarks/real-repo-official-result-admission-codex-real-smoke-2026-06-11.json \
+  --subset-label verified-mini-codex-real-smoke-1 \
+  --base-run-id tml_base_codex_real_smoke_1 \
+  --planner-run-id tml_planner_codex_real_smoke_1
+```
+
+Checked admission result:
+
+- status: `waiting_for_official_reports`
+- handoff fingerprints verified: true
+- verified scorer inputs: `3`
+- missing reports: base and planner `evaluation_results` directories
+- performance claim allowed: `false`
+
+Boundary: this verifies the frozen handoff identity and records the exact
+report paths needed later. It still does not run SWE-bench or score patches.
+
 Audit scorer targets:
 
 ```bash

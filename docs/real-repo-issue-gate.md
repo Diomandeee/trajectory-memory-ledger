@@ -180,6 +180,22 @@ It also writes `input-fingerprints.json`; the private runner verifies the
 manifest and both prediction files before launching the official harness. It
 still does not run SWE-bench or allow a performance claim.
 
+Prepare official result admission:
+
+```bash
+python3 scripts/prepare_real_repo_official_result_admission.py \
+  --handoff-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --report benchmarks/real-repo-official-result-admission-codex-real-smoke-2026-06-11.json \
+  --subset-label verified-mini-codex-real-smoke-1 \
+  --base-run-id tml_base_codex_real_smoke_1 \
+  --planner-run-id tml_planner_codex_real_smoke_1
+```
+
+The checked admission report has `status=waiting_for_official_reports`,
+verifies all three handoff input fingerprints, and records the missing base and
+planner official report directories. When those reports exist, the same script
+runs `prepare_real_repo_issue_gate.py` and emits the official comparison.
+
 Audit available scorer targets:
 
 ```bash
