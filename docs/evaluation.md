@@ -1197,3 +1197,42 @@ Boundary:
 - This audit proves why no official scorer was used in this run.
 - It does not score patches.
 - It does not make a planner-performance claim.
+
+### Scorer Bootstrap Packet
+
+The existing handoff can be paired with a private scorer bootstrap packet:
+
+```bash
+python3 scripts/prepare_real_repo_scorer_bootstrap.py \
+  --handoff-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --output-dir output/private-swebench/scorer-bootstrap-codex-real-smoke-1 \
+  --report benchmarks/real-repo-scorer-bootstrap-codex-real-smoke-2026-06-11.json
+```
+
+Checked bootstrap report:
+
+| Field | Value |
+|---|---|
+| Status | `scorer_bootstrap_packet_ready` |
+| Recommended architecture | `x86_64` |
+| Recommended free storage | 120 GB |
+| Recommended RAM | 16 GB |
+| Recommended CPU cores | 8 |
+| Docker required | true |
+| Official harness run | false |
+| Performance claim allowed | false |
+
+The ignored private packet contains:
+
+- `bootstrap_ubuntu_x86_scorer.sh`
+- `rsync_handoff_to_scorer.sh`
+- `run_handoff_on_scorer.sh`
+- `modal_command_reference.sh`
+- `README.md`
+
+Boundary:
+
+- This reduces setup friction once a valid scorer exists.
+- It does not provision a machine, install anything on the current machine, or
+  submit a cloud job.
+- It does not score patches.

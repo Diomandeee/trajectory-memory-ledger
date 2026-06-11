@@ -64,6 +64,11 @@ Current execution state:
   `scripts/audit_real_repo_scorer_targets.py` writes
   `benchmarks/real-repo-scorer-target-audit-2026-06-11.json`, with redacted
   cloud identifiers. Current status is `no_ready_official_scorer`.
+- Scorer bootstrap packet is now prepared:
+  `scripts/prepare_real_repo_scorer_bootstrap.py` writes
+  `benchmarks/real-repo-scorer-bootstrap-codex-real-smoke-2026-06-11.json` and
+  ignored private scripts for bootstrapping an x86_64 Docker scorer, syncing the
+  handoff, running the handoff, and referencing the Modal path.
 - Full base and planner prediction JSONL files still need to be generated for
   the 50-row Verified Mini subset on, or transferred to, the machine that will
   run the official harness.

@@ -191,6 +191,20 @@ blocked by disk/package/Docker gaps, cloud-vm is unreachable, and local cloud
 CLIs are not ready to submit an official job. Cloud account/project identifiers
 are redacted in the public report.
 
+Prepare bootstrap scripts for a future scorer:
+
+```bash
+python3 scripts/prepare_real_repo_scorer_bootstrap.py \
+  --handoff-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --output-dir output/private-swebench/scorer-bootstrap-codex-real-smoke-1 \
+  --report benchmarks/real-repo-scorer-bootstrap-codex-real-smoke-2026-06-11.json
+```
+
+The checked bootstrap report has `status=scorer_bootstrap_packet_ready`. The
+private ignored packet contains scripts to bootstrap an x86_64 Docker scorer,
+sync the existing private handoff, run the handoff, and reference the Modal
+`--modal true` path. It does not run or submit anything.
+
 Run the official harness for both prediction files:
 
 ```bash

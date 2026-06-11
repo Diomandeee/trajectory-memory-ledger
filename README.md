@@ -615,6 +615,26 @@ Checked scorer audit result:
 Boundary: this explains why the official scorer has not run. It is not scoring
 evidence.
 
+Prepare scorer bootstrap scripts:
+
+```bash
+python3 scripts/prepare_real_repo_scorer_bootstrap.py \
+  --handoff-dir output/private-swebench/scorer-handoff-codex-real-smoke-1 \
+  --output-dir output/private-swebench/scorer-bootstrap-codex-real-smoke-1 \
+  --report benchmarks/real-repo-scorer-bootstrap-codex-real-smoke-2026-06-11.json
+```
+
+Checked bootstrap result:
+
+- status: `scorer_bootstrap_packet_ready`
+- recommended scorer: x86_64, 120 GB free storage, 16 GB RAM, 8 CPU cores, Docker
+- generated private scripts: bootstrap scorer, sync handoff, run handoff, Modal command reference
+- official harness run: `false`
+- performance claim allowed: `false`
+
+Boundary: this prepares a future scorer machine. It does not provision a
+machine, submit a cloud job, or score patches.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash
