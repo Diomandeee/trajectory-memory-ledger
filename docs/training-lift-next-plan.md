@@ -1,6 +1,6 @@
 # Next Training-Lift Plan
 
-The first adapter-conditioned executable result was negative: three Gemma 3 1B MLX LoRA adapters all scored 0/6. The stronger Gemma 4 lane changed the picture. Gemma 4 E2B QAT scored 3/6 as a base model, Gemma 4 12B QAT scored 5/6 as a base model, and the Gemma 4 E2B 512-row/4096-token adapter run scored `random` 3/6, `reward_selected` 5/6, and `full_ledger` 2/6. The next lift experiment should replicate that positive reward-selected signal at a stronger tier and larger task scale instead of repeating the weak setup.
+The first adapter-conditioned executable result was negative: three Gemma 3 1B MLX LoRA adapters all scored 0/6. The stronger Gemma 4 lane changed the picture. Gemma 4 E2B QAT scored 3/6 as a base model, Gemma 4 12B QAT scored 5/6 as a base model, and the Gemma 4 E2B 512-row/4096-token adapter run scored `random` 3/6, `reward_selected` 5/6, and `full_ledger` 2/6. The 60-task replication then rejected the broad E2B adapter claim while proving a stronger router/planner result. The next useful proof is therefore not "train a bigger adapter by default." It is base agent versus base+TML planner on real repository issues.
 
 ## Diagnosis
 
@@ -24,7 +24,23 @@ The stronger local baselines show the held-out executable set is not impossible:
 
 ## Next Gate
 
-The next valid downstream-lift claim requires replicating the reward-selected advantage on a larger executable task set and, ideally, a stronger model family.
+The next valid downstream-lift claim requires a SWE-bench-style real-repo issue gate before any broader adapter claim. Use `docs/real-repo-issue-gate.md` and `scripts/prepare_real_repo_issue_gate.py` to compare:
+
+- `base_agent`
+- `base_agent_tml_planner`
+
+with the same model, same budget, same timeouts, same instance ids, and same official harness.
+
+Only continue adapter work if one of two things happens:
+
+1. The TML planner beats base on a real-repo pilot and the failures show a trainable pattern.
+2. The planner fails, but the failed traces produce high-quality repair episodes that are clearly useful for adapter training.
+
+If the real-repo gate ties or loses and the traces are not useful, stop the adapter chase.
+
+## Adapter Replication Protocol
+
+If the real-repo gate justifies more training, the next adapter experiment should replicate the reward-selected advantage on a larger executable task set and, ideally, a stronger model family.
 
 Minimum protocol:
 

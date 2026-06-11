@@ -1,11 +1,13 @@
 # Evaluation
 
-Trajectory Memory Ledger currently has four levels of evidence:
+Trajectory Memory Ledger currently has four levels of measured evidence plus one
+prepared external proof gate:
 
 1. Artifact correctness: the Rust runtime builds, passes tests, passes clippy, performs one-shot ingestion, normalizes schema-v2 records, scores trajectories, handles `(date, seq)` cursor rollover, and appends under a file lock.
 2. Corpus and reward evidence: the originating deployment corpus contains 7,468 scored trajectories, 67,409 observed tool events, 73,470 recovered tool steps, and 3,678 exported ChatML examples. Reward-selected trajectories are substantially stronger than a deterministic random control on the current selection metric.
 3. Held-out coding-agent model-quality evidence: the repository now includes a real KARL V7 benchmark over 10 models and 5 held-out coding-agent session contexts. It measures scored response quality, not executed task completion.
 4. Executed downstream task completion: the executable benchmark runner now has a checked synthetic smoke report, real prompt-conditioned model-output reports, Gemma 4 E2B/12B QAT base-model sanity reports, two real adapter-conditioned reports over a six-task held-out Python stdlib task set, and a 60-task repair-router/planner gate. The first Gemma 3 1B/256-token adapter lane was negative at 0/6 for every condition. The stronger Gemma 4 E2B/512-row/4096-token adapter lane is positive for reward-selected data on the six-task gate, but the 60-task replication falsifies the broad adapter claim for the current E2B recipe. The strongest checked downstream result is now router/planner-level: a public-only anticipatory repair planner reaches 60/60 on `python-stdlib-heldout-v1-60`, with `synthetic_rows=0`, `read_hidden_task_specs=false`, `hidden_tests_sent_to_model=false`, and zero regressions against both the 57/60 E4B overlay and the E2B base.
+5. Prepared real-repo issue-resolution gate: `scripts/prepare_real_repo_issue_gate.py` validates same-instance SWE-bench-style prediction files, parses official harness reports when present, compares base agent versus base+TML planner, and refuses a performance claim for missing reports or synthetic fixtures. The checked fixture proves the guardrail only; TML has not yet proven real-repo/SWE-bench issue-resolution lift.
 
 ## Daemon Benchmark
 
@@ -869,3 +871,50 @@ Boundary:
 - This proves the anticipatory repair planner on the checked 60-task executable gate.
 - It is a router/planner result, not broad adapter-level model improvement.
 - The planner repairs are deterministic public-recipe candidates, not a trained-model replacement claim.
+
+## Real-Repo Issue-Resolution Gate
+
+The next honest proof is a base-agent versus base+TML-planner comparison on
+real repository issues. The repository therefore includes
+`scripts/prepare_real_repo_issue_gate.py` and a documented protocol in
+`docs/real-repo-issue-gate.md`.
+
+The script accepts SWE-bench prediction JSONL rows with `instance_id`,
+`model_name_or_path`, and `model_patch`. It validates that both conditions cover
+the same instance ids, records the same-model/same-budget contract, emits the
+official harness commands, and, when official reports are present, compares
+resolved counts and fixed/regressed instance ids.
+
+Checked fixture:
+
+```bash
+python3 scripts/prepare_real_repo_issue_gate.py \
+  --dataset-name fixture/SWE-bench-style \
+  --subset-label synthetic-fixture \
+  --instances-jsonl examples/evaluation/real-repo-gate/fixture-instances.jsonl \
+  --base-predictions examples/evaluation/real-repo-gate/base-predictions.fixture.jsonl \
+  --planner-predictions examples/evaluation/real-repo-gate/planner-predictions.fixture.jsonl \
+  --base-report examples/evaluation/real-repo-gate/base-results.fixture.json \
+  --planner-report examples/evaluation/real-repo-gate/planner-results.fixture.json \
+  --allow-synthetic-fixture \
+  --output benchmarks/real-repo-issue-gate-fixture-2026-06-11.json
+```
+
+Fixture output:
+
+| Field | Value |
+|---|---|
+| Base fixture resolved | 1/2 |
+| Planner fixture resolved | 2/2 |
+| Resolved delta | +1 |
+| Performance claim allowed | false |
+| Claim status | `synthetic_fixture_not_performance_evidence` |
+
+Boundary:
+
+- This validates the real-repo proof lane and claim guard.
+- It is not SWE-bench performance evidence.
+- A real claim requires official SWE-bench Lite/Verified-style reports for both
+  conditions under the same model, budget, timeout, instance ids, and harness.
+- A 50-issue Verified pilot can justify continuing; Lite or Verified scale is
+  the paper-grade threshold for broad real-repo issue-resolution lift.

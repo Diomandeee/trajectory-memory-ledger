@@ -1,0 +1,132 @@
+{
+  "comparison": {
+    "base_resolved_instances": 1,
+    "evaluated_instances": 2,
+    "fixed_by_planner_ids": [
+      "fixture__repo-2"
+    ],
+    "planner_resolved_instances": 2,
+    "regressed_by_planner_ids": [],
+    "resolution_rate_delta": 0.5,
+    "resolved_delta": 1,
+    "resolved_id_sets_available": true,
+    "shared_resolved_ids": [
+      "fixture__repo-1"
+    ]
+  },
+  "conditions": {
+    "base_agent": {
+      "instance_ids": [
+        "fixture__repo-1",
+        "fixture__repo-2"
+      ],
+      "model_names": [
+        "same-agent-model"
+      ],
+      "path": "examples/evaluation/real-repo-gate/base-predictions.fixture.jsonl",
+      "prediction_count": 2,
+      "synthetic_rows": 2
+    },
+    "base_agent_tml_planner": {
+      "instance_ids": [
+        "fixture__repo-1",
+        "fixture__repo-2"
+      ],
+      "model_names": [
+        "same-agent-model"
+      ],
+      "path": "examples/evaluation/real-repo-gate/planner-predictions.fixture.jsonl",
+      "prediction_count": 2,
+      "synthetic_rows": 2
+    }
+  },
+  "contract": {
+    "hidden_tests_may_not_be_used_for_generation": true,
+    "minimum_real_instances_for_broad_claim": 300,
+    "minimum_real_instances_for_pilot_claim": 50,
+    "official_harness_required_for_performance_claim": true,
+    "planner_may_not_use_harness_results_until_after_both_runs": true,
+    "planner_may_use_ledger_memory_before_patch_generation": true,
+    "same_budget_label": "same-model-same-budget-same-timeout",
+    "same_harness_required": true,
+    "same_model_names_recorded": true,
+    "same_prediction_instance_ids": true,
+    "same_timeout_required": true
+  },
+  "created_at": "2026-06-11T01:48:29.602221+00:00",
+  "dataset": {
+    "instance_ids": [
+      "fixture__repo-1",
+      "fixture__repo-2"
+    ],
+    "instances_jsonl": "examples/evaluation/real-repo-gate/fixture-instances.jsonl",
+    "manifest_instance_count": 2,
+    "name": "fixture/SWE-bench-style",
+    "prediction_instance_count": 2,
+    "split": "test",
+    "subset_label": "synthetic-fixture",
+    "synthetic_manifest_rows": 2
+  },
+  "gate_kind": "swebench_style_real_repo_issue_resolution",
+  "harness_reports": {
+    "base_agent": {
+      "completed_instances": 2,
+      "error_count": null,
+      "patch_applied_instances": null,
+      "path": "examples/evaluation/real-repo-gate/base-results.fixture.json",
+      "resolution_rate": 0.5,
+      "resolved_ids": [
+        "fixture__repo-1"
+      ],
+      "resolved_instances": 1,
+      "source_files": [
+        "examples/evaluation/real-repo-gate/base-results.fixture.json"
+      ],
+      "submitted_instances": 2,
+      "synthetic": true,
+      "tests_passed_instances": null,
+      "total_instances": 2
+    },
+    "base_agent_tml_planner": {
+      "completed_instances": 2,
+      "error_count": null,
+      "patch_applied_instances": null,
+      "path": "examples/evaluation/real-repo-gate/planner-results.fixture.json",
+      "resolution_rate": 1.0,
+      "resolved_ids": [
+        "fixture__repo-1",
+        "fixture__repo-2"
+      ],
+      "resolved_instances": 2,
+      "source_files": [
+        "examples/evaluation/real-repo-gate/planner-results.fixture.json"
+      ],
+      "submitted_instances": 2,
+      "synthetic": true,
+      "tests_passed_instances": null,
+      "total_instances": 2
+    }
+  },
+  "official_harness_commands": {
+    "base_agent": "python -m swebench.harness.run_evaluation \\\n  --dataset_name fixture/SWE-bench-style \\\n  --split test \\\n  --predictions_path examples/evaluation/real-repo-gate/base-predictions.fixture.jsonl \\\n  --max_workers 1 \\\n  --timeout 1800 \\\n  --run_id tml_base_real_repo_gate \\\n  --report_dir evaluation_results",
+    "base_agent_tml_planner": "python -m swebench.harness.run_evaluation \\\n  --dataset_name fixture/SWE-bench-style \\\n  --split test \\\n  --predictions_path examples/evaluation/real-repo-gate/planner-predictions.fixture.jsonl \\\n  --max_workers 1 \\\n  --timeout 1800 \\\n  --run_id tml_planner_real_repo_gate \\\n  --report_dir evaluation_results",
+    "mac_arm_note": "On macOS ARM, official SWE-bench docs say to add --namespace '' so images build locally."
+  },
+  "official_sources": [
+    "https://www.swebench.com/SWE-bench/guides/evaluation/",
+    "https://github.com/SWE-bench/SWE-bench",
+    "https://www.swebench.com/verified.html",
+    "https://www.swebench.com/lite.html"
+  ],
+  "performance_claim": {
+    "allowed": false,
+    "honest_interpretation": "The fixture exercises the gate and comparison logic only. It is not evidence that TML improves real repository issue resolution.",
+    "status": "synthetic_fixture_not_performance_evidence"
+  },
+  "preflight": {
+    "errors": [],
+    "ok": true,
+    "warnings": []
+  },
+  "schema": "trajectory-memory-ledger.real_repo_issue_gate.v1"
+}

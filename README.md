@@ -33,6 +33,7 @@ This repository contains:
 - `docs/evaluation.md`: benchmark results and downstream evaluation protocol
 - `docs/harness-skills.md`: SkillDAG/SkillOpt/MUSE-style harness skills layer
 - `docs/training-lift-next-plan.md`: next controlled downstream-lift protocol
+- `docs/real-repo-issue-gate.md`: SWE-bench-style base-vs-TML planner proof gate
 - `examples/`: synthetic event and trajectory examples
 - `examples/evaluation/karl-v7-heldout-coding-agent-model-scores.jsonl`: privacy-preserving aggregate rows from a real held-out coding-agent model-quality benchmark
 - `examples/evaluation/executable-taskset-python-stdlib-smoke.jsonl`: canonical executable smoke task specs
@@ -50,6 +51,7 @@ This repository contains:
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`: public prompts for the five shared failures left by the 55/60 task repair router
 - `examples/evaluation/executable-candidates-skillgraph-task-plus-e4b-chat-overlay-router-heldout-v1-2026-06-10.jsonl`: non-synthetic 60-task router rows after overlaying only E4B chat candidates that passed focused executable evaluation
 - `examples/evaluation/executable-candidates-skillgraph-anticipatory-public-repair-planner-heldout-v1-2026-06-10.jsonl`: 60-task router rows after public-only anticipatory repair planning
+- `examples/evaluation/real-repo-gate/`: synthetic fixture rows proving the SWE-bench-style claim guard, not performance
 - `examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/`: generated harness skill packages from the 60-task E2B adapter comparison
 - `examples/skills/python-stdlib-heldout-v1/math-repair-router-vs-base/`: generated harness skill packages from the promoted narrow math repair router
 - `examples/skills/python-stdlib-heldout-v1/task-repair-router-vs-base/`: generated harness skill packages from the promoted task-level repair router
@@ -429,6 +431,30 @@ Checked anticipatory planner result:
 
 Boundary: this proves the anticipatory repair planner on the 60-task executable gate as a router/planner result. It is not evidence that a trained adapter can replace the base model globally.
 
+Run the real-repo issue-resolution proof gate preflight:
+
+```bash
+python3 scripts/prepare_real_repo_issue_gate.py \
+  --dataset-name fixture/SWE-bench-style \
+  --subset-label synthetic-fixture \
+  --instances-jsonl examples/evaluation/real-repo-gate/fixture-instances.jsonl \
+  --base-predictions examples/evaluation/real-repo-gate/base-predictions.fixture.jsonl \
+  --planner-predictions examples/evaluation/real-repo-gate/planner-predictions.fixture.jsonl \
+  --base-report examples/evaluation/real-repo-gate/base-results.fixture.json \
+  --planner-report examples/evaluation/real-repo-gate/planner-results.fixture.json \
+  --allow-synthetic-fixture \
+  --output benchmarks/real-repo-issue-gate-fixture-2026-06-11.json
+```
+
+Checked fixture result:
+
+- script parses same-instance prediction files and harness-style reports
+- synthetic fixture comparison shows planner `2/2` versus base `1/2`
+- `performance_claim.status`: `synthetic_fixture_not_performance_evidence`
+- `performance_claim.allowed`: `false`
+
+Boundary: this proves the real-repo gate wiring and the claim guard. It does not prove SWE-bench or real repository issue-resolution lift. The actual proof requires official SWE-bench Lite/Verified-style harness reports for the same base agent and base+TML planner on the same real instances, model, budget, timeout, and harness.
+
 Run the stronger Gemma 4 base-model sanity gate:
 
 ```bash
@@ -510,7 +536,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, a focused E4B chat overlay router reached 57/60 with zero regressions, and a public-only anticipatory repair planner reached 60/60 by admitting the three remaining shared-failure repairs after public checks. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router/planner repair pipeline. It has proven router-level repair lift on the 60-task executable gate, but it has not yet proven broad adapter-level downstream coding-agent performance lift.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, a focused E4B chat overlay router reached 57/60 with zero regressions, and a public-only anticipatory repair planner reached 60/60 by admitting the three remaining shared-failure repairs after public checks. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router/planner repair pipeline. It has proven router-level repair lift on the 60-task executable gate, but it has not yet proven SWE-bench-style real-repo issue-resolution lift or broad adapter-level downstream coding-agent performance lift. The repository now includes the real-repo gate needed to prove or falsify that next claim.
 
 ## License
 
