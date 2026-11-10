@@ -75,7 +75,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--remote-host",
         action="append",
-        default=["mac4", "mac5", "cloud-vm"],
+        default=["compute", "trainer", "cloud-host"],
     )
     parser.add_argument("--gcloud-project", action="append", default=[])
     parser.add_argument("--gcloud-account", action="append", default=[])

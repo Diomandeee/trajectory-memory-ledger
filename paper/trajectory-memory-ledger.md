@@ -30,7 +30,7 @@ The current empirical evidence supports seven measured claims and one scope boun
 | Executable benchmark runner works | Proven for harness mechanics | 3 Python stdlib smoke tasks x 3 conditions, isolated temp workspaces, verifier commands, pass/fail aggregation | Smoke rows are synthetic |
 | Real executable model-output evaluation | Proven for prompt-conditioned model outputs | Claude Sonnet and Gemini 2.5 Flash, 6 held-out tasks x 3 context conditions each, 36 non-synthetic rows total | Measures executable pass/fail for generated candidates |
 | Reward-selected context improves over full-ledger context | Partially supported | Gemini 2.5 Flash: `reward_selected` 5/6 vs `full_ledger` 4/6 | Single backend and small task set |
-| Reward-selected training data improves adapter validation loss over random | Supported for the private split | Mac5 MLX LoRA run: `reward_selected` validation loss 1.484 vs `random` 2.031, a 26.93% reduction | Validation loss is not executable task completion |
+| Reward-selected training data improves adapter validation loss over random | Supported for the private split | Trainer MLX LoRA run: `reward_selected` validation loss 1.484 vs `random` 2.031, a 26.93% reduction | Validation loss is not executable task completion |
 | Stronger local base-model sanity is non-zero | Supported | Gemma 4 E2B QAT base: 3/6; Gemma 4 12B QAT base: 5/6 on the same hidden-test executable task set | Not ledger-trained, not evidence of reward-selected lift |
 | Reward-selected trajectory data improves executable coding-task completion over random | Supported only on the small Gemma 4 E2B adapter gate | Gemma 4 E2B 512-row/4096-token adapters: `reward_selected` 5/6 vs `random` 3/6 and `full_ledger` 2/6 | The broad adapter claim did not replicate on the 60-task suite |
 | The 60-task E2B reward-selected adapter improves over base | Not supported | E2B base 50/60, E2B reward-selected adapter 46/60 | The failed adapter is useful as repair evidence, not as a global replacement |
@@ -485,11 +485,11 @@ The checked preflight selected 96 records per condition, split into 86 train row
 | `reward_selected` | 0.7408 | 1.6182 |
 | `full_ledger` | 0.6787 | 0.8774 |
 
-The preflight found 2,920 eligible private records after minimum-tool, prompt, plan, and held-out leakage filters. It also recorded 2,138 held-out leakage-risk exclusions, 749 missing-prompt exclusions, and 1,663 too-few-tool exclusions. The initial remote trainer probe timed out on `mac5`; a local preflight then recorded a fallback status of `ready_for_local_adapter_training`. Mac5 later became reachable, so the adapter run was executed there.
+The preflight found 2,920 eligible private records after minimum-tool, prompt, plan, and held-out leakage filters. It also recorded 2,138 held-out leakage-risk exclusions, 749 missing-prompt exclusions, and 1,663 too-few-tool exclusions. The initial remote trainer probe timed out on `trainer`; a local preflight then recorded a fallback status of `ready_for_local_adapter_training`. Trainer later became reachable, so the adapter run was executed there.
 
 ### 9.2 Adapter Training
 
-The Mac5 run trained three MLX LoRA adapters from `mlx-community/gemma-3-1b-it-4bit`. The checked public summary is `benchmarks/training-lift-adapter-training-mlx-gemma3-1b-mac5-2026-06-10.json`. Adapter weights, raw training rows, and raw generation logs remain in ignored private output directories.
+The Trainer run trained three MLX LoRA adapters from `mlx-community/gemma-3-1b-it-4bit`. The checked public summary is `benchmarks/training-lift-adapter-training-mlx-gemma3-1b-trainer-2026-06-10.json`. Adapter weights, raw training rows, and raw generation logs remain in ignored private output directories.
 
 Training settings:
 
@@ -514,14 +514,14 @@ Relative to `random`, `reward_selected` reduces validation loss by 26.93%, and `
 
 ### 9.3 Executable Adapter Evaluation
 
-Candidate generation used `scripts/generate_executable_candidates_mlx_adapter.py` with only the public prompts in `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl`. The checked candidate generation report is `benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json`; it records `synthetic_rows=0` and `hidden_tests_sent_to_model=false`.
+Candidate generation used `scripts/generate_executable_candidates_mlx_adapter.py` with only the public prompts in `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl`. The checked candidate generation report is `benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json`; it records `synthetic_rows=0` and `hidden_tests_sent_to_model=false`.
 
 The candidates were materialized against the hidden-test task specs and executed with:
 
 ```bash
 cargo run --bin executable-task-bench -- \
-  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
-  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json \
   --require-real
 ```
 
@@ -537,7 +537,7 @@ This is a real downstream executable evaluation, and it is negative. The trainin
 
 ### 9.4 Gemma 4 E2B 512-Row Adapter Rerun
 
-The stronger local adapter lane uses `mlx-community/gemma-4-E2B-it-qat-4bit` on Mac5. It reuses the same leakage-filtered private pool but increases selected rows per condition from 96 to 512 and increases training context from 256 to 4096 tokens. The public-safe split report is `benchmarks/training-lift-preflight-gemma4-12b-smoke-2026-06-10.json`; despite the filename, the splits were reused for the E2B adapter run after local 12B LoRA training was blocked by current MLX-LM support for the `gemma4_unified` model type.
+The stronger local adapter lane uses `mlx-community/gemma-4-E2B-it-qat-4bit` on the trainer. It reuses the same leakage-filtered private pool but increases selected rows per condition from 96 to 512 and increases training context from 256 to 4096 tokens. The public-safe split report is `benchmarks/training-lift-preflight-gemma4-12b-smoke-2026-06-10.json`; despite the filename, the splits were reused for the E2B adapter run after local 12B LoRA training was blocked by current MLX-LM support for the `gemma4_unified` model type.
 
 Training settings:
 
@@ -563,7 +563,7 @@ Aggregate training result:
 
 The validation objective ranks `full_ledger` first, `random` second, and `reward_selected` third. This differs from the earlier Gemma 3 result and shows why validation loss alone cannot carry the downstream claim.
 
-Candidate generation used the same public held-out prompts with `scripts/generate_executable_candidates_mlx_adapter.py`, `--prompt-format raw-python`, `--max-tokens 1024`, and one public-only repair attempt. Hidden verifier tests were not sent to the model. The checked candidate-generation report is `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`.
+Candidate generation used the same public held-out prompts with `scripts/generate_executable_candidates_mlx_adapter.py`, `--prompt-format raw-python`, `--max-tokens 1024`, and one public-only repair attempt. Hidden verifier tests were not sent to the model. The checked candidate-generation report is `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-trainer-2026-06-10.json`.
 
 Checked executable result:
 
@@ -718,21 +718,21 @@ python3 scripts/generate_executable_candidates_mlx_adapter.py \
   --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
   --model mlx-community/gemma-3-1b-it-4bit \
   --adapter-root output/private-adapters-gemma3-1b-2026-06-10 \
-  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
   --raw-dir output/private-generation-raw-gemma3-1b-clean-2026-06-10 \
-  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json \
   --max-tokens 1024 \
   --timeout-s 360 \
   --seed 42
 
 cargo run --bin materialize-executable-bench -- \
   --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
-  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
-  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl
+  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl
 
 cargo run --bin executable-task-bench -- \
-  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
-  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json \
   --require-real
 ```
 
@@ -744,21 +744,21 @@ python3 scripts/generate_executable_candidates_mlx_vlm.py \
   --model-path ~/Desktop/tml-gemma4-models/gemma-4-E2B-it-qat-4bit \
   --model-label mlx-community/gemma-4-E2B-it-qat-4bit \
   --condition gemma4_e2b_qat_base \
-  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
   --raw-dir output/private-generation-raw-gemma4-e2b-qat-base-2026-06-10 \
-  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.json \
   --max-tokens 2048 \
   --temperature 0.0 \
   --repair-attempts 2
 
 cargo run --bin materialize-executable-bench -- \
   --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
-  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
-  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl
+  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl
 
 cargo run --bin executable-task-bench -- \
-  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
-  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.json \
   --require-real
 ```
 

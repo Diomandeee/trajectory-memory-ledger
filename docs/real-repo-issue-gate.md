@@ -196,15 +196,15 @@ verifies all three handoff input fingerprints, and records the missing base and
 planner official report directories. When those reports exist, the same script
 runs `prepare_real_repo_issue_gate.py` and emits the official comparison.
 
-The first partial official Mac4 scorer result is preserved separately:
+The first partial official Compute machine scorer result is preserved separately:
 
 ```bash
 python3 scripts/prepare_real_repo_official_result_admission.py \
   --handoff-dir output/private-swebench/scorer-handoff-codex-real-mini-4 \
-  --report benchmarks/real-repo-official-result-admission-codex-real-mini-4-partial-mac4-2026-06-11.json \
-  --base-report output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_base_codex_real_mini_4.json \
-  --planner-report output/private-swebench/official-mac4-codex-real-mini-4/summaries/codex-gpt-5.4.tml_planner_codex_real_mini_4.json \
-  --failure-log-dir output/private-swebench/official-mac4-codex-real-mini-4/planner-run-logs \
+  --report benchmarks/real-repo-official-result-admission-codex-real-mini-4-partial-compute-2026-06-11.json \
+  --base-report output/private-swebench/official-compute-codex-real-mini-4/summaries/codex-gpt-5.4.tml_base_codex_real_mini_4.json \
+  --planner-report output/private-swebench/official-compute-codex-real-mini-4/summaries/codex-gpt-5.4.tml_planner_codex_real_mini_4.json \
+  --failure-log-dir output/private-swebench/official-compute-codex-real-mini-4/planner-run-logs \
   --subset-label verified-mini-codex-real-mini-4 \
   --base-run-id tml_base_codex_real_mini_4 \
   --planner-run-id tml_planner_codex_real_mini_4
@@ -256,12 +256,11 @@ input set.
 
 The post-four live scorer audit is
 `benchmarks/real-repo-scorer-target-audit-post-four-instance-2026-06-11.json`.
-It reported `no_ready_official_scorer` before the Mac4 HD2 bootstrap: local had
-only `4.56 GiB` free and no Docker or `swebench`; Mac4 had Docker but only
-`12.45 GiB` free on internal storage and no global `swebench`; Mac5 was
+It reported `no_ready_official_scorer` before the Compute machine HD2 bootstrap: local had
+only `4.56 GiB` free and no Docker or `swebench`; Compute machine had Docker but only
+`12.45 GiB` free on internal storage and no global `swebench`; Trainer was
 reachable but had only `16.04 GiB` free, no Docker, and no `swebench`;
-cloud-vm remained unreachable. The later storage-candidate audit found HD2 on
-Mac4 and enabled the partial official base run, but Docker/Colima still wrote
+cloud-host remained unreachable. The later storage-candidate audit found HD2 on the compute machine and enabled the partial official base run, but Docker/Colima still wrote
 through the nearly full internal containerd storage and failed before planner
 tests.
 
@@ -289,12 +288,12 @@ python3 scripts/audit_real_repo_scorer_targets.py \
 ```
 
 The checked storage-candidate audit reports `no_ready_official_scorer`: local,
-Mac4, Mac5, and Mac2 are blocked by disk/package/Docker gaps, cloud-vm is
+Compute machine, Trainer, and the studio machine are blocked by disk/package/Docker gaps, cloud-host is
 unreachable, and local cloud CLIs are not ready to submit an official job.
-Cloud account/project identifiers are redacted in the public report. Mac2 was
-explicitly checked after the partial Mac4 run; it has only about `13.43 GiB`
+Cloud account/project identifiers are redacted in the public report. Studio machine was
+explicitly checked after the partial Compute machine run; it has only about `13.43 GiB`
 free, no Docker, no `swebench`, and no external volume, so it can hold small
-artifacts but is not a scorer target. Mac4 still has HD2 space, but its
+artifacts but is not a scorer target. Compute machine still has HD2 space, but its
 internal Docker/Colima storage hit containerd I/O errors during the planner
 run, so do not run more official Docker scoring there until Docker storage is
 repaired or moved.
@@ -417,7 +416,7 @@ As of this artifact, TML has generated four real Codex prediction pairs for
 all base and planner patches apply; and both conditions pass the selected
 local public/touched Django smoke tests for each instance.
 
-The first official SWE-bench evidence is partial. Mac4 completed the base
+The first official SWE-bench evidence is partial. Compute machine completed the base
 condition through the official harness with `4/4` resolved and `0` errors. The
 planner condition did not produce an official report because the scorer failed
 inside Docker/containerd before tests. Therefore the real-repo proof is still

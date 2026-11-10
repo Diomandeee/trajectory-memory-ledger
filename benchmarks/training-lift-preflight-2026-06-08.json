@@ -17,7 +17,7 @@
   "private_trajectory_store_path_recorded": false,
   "remote_preflight": {
     "exit_code": 255,
-    "remote_host": "mac5",
+    "remote_host": "trainer",
     "status": "ssh_failed",
     "stderr_preview": "ssh: connect to host [REDACTED_IP] port 22: Operation timed out",
     "training_reachable": false

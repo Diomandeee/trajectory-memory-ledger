@@ -76,7 +76,7 @@
       "free_disk_gb": 12.446,
       "status": "blocked",
       "swebench_importable": false,
-      "target": "mac4"
+      "target": "compute"
     },
     {
       "blockers": [
@@ -91,15 +91,15 @@
       "free_disk_gb": 16.035,
       "status": "blocked",
       "swebench_importable": false,
-      "target": "mac5"
+      "target": "trainer"
     },
     {
       "blockers": [
         "ssh unreachable"
       ],
-      "error": "ssh: connect to host 100.114.92.88 port 22: Operation timed out",
+      "error": "ssh: connect to host <private-host> port 22: Operation timed out",
       "status": "unreachable",
-      "target": "cloud-vm"
+      "target": "cloud-host"
     }
   ],
   "schema": "trajectory-memory-ledger.real_repo_scorer_target_audit.v1",

@@ -279,10 +279,10 @@ python3 scripts/prepare_training_lift_experiment.py \
   --report benchmarks/training-lift-preflight-2026-06-08.json \
   --sample-size 96 \
   --probe-remote \
-  --remote-host mac5
+  --remote-host trainer
 ```
 
-The script writes private train/validation JSONL files under ignored `output/private-*` paths and writes only aggregate hashes/statistics to the checked report. The initial `2026-06-08` remote preflight had status `blocked_remote_training_unreachable`; a second local preflight recorded a Mac5-free fallback with status `ready_for_local_adapter_training`.
+The script writes private train/validation JSONL files under ignored `output/private-*` paths and writes only aggregate hashes/statistics to the checked report. The initial `2026-06-08` remote preflight had status `blocked_remote_training_unreachable`; a second local preflight recorded a trainer-free fallback with status `ready_for_local_adapter_training`.
 
 | Condition | Selected records | Train | Validation | Mean reward | Mean advantage |
 |---|---:|---:|---:|---:|---:|
@@ -298,7 +298,7 @@ Additional preflight facts:
 | Held-out leakage-risk exclusions | 2,138 |
 | Missing prompt exclusions | 749 |
 | Too-few-tool exclusions | 1,663 |
-| Remote trainer probe | `mac5` SSH failed with timeout |
+| Remote trainer probe | `trainer` SSH failed with timeout |
 
 The local fallback preflight was run as:
 
@@ -325,9 +325,9 @@ Local preflight result:
 | Memory | 16.0 GB |
 | Free disk | 6.97 GB |
 
-This meant the adapter experiment could proceed without Mac5 if needed, but Mac5 later became reachable and was used for the checked adapter run.
+This meant the adapter experiment could proceed without the trainer if needed, but Trainer later became reachable and was used for the checked adapter run.
 
-Mac5 later became reachable, so the three adapters were trained there using `mlx-community/gemma-3-1b-it-4bit`. Adapter weights, raw training rows, and raw generation logs remain under ignored private output directories and are not checked in.
+Trainer later became reachable, so the three adapters were trained there using `mlx-community/gemma-3-1b-it-4bit`. Adapter weights, raw training rows, and raw generation logs remain under ignored private output directories and are not checked in.
 
 Training settings:
 
@@ -357,9 +357,9 @@ python3 scripts/generate_executable_candidates_mlx_adapter.py \
   --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
   --model mlx-community/gemma-3-1b-it-4bit \
   --adapter-root output/private-adapters-gemma3-1b-2026-06-10 \
-  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
   --raw-dir output/private-generation-raw-gemma3-1b-clean-2026-06-10 \
-  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json \
   --max-tokens 1024 \
   --timeout-s 360 \
   --seed 42
@@ -372,12 +372,12 @@ Materialization and execution:
 ```bash
 cargo run --bin materialize-executable-bench -- \
   --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
-  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
-  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl
+  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl
 
 cargo run --bin executable-task-bench -- \
-  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
-  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json \
   --require-real
 ```
 
@@ -400,7 +400,7 @@ Interpretation:
 
 The first local adapter result was all-zero, but that did not isolate the cause. It combined a very small base model, a small private split, 256-token training context, and limited generation behavior. Stronger base-model sanity runs were added so the repository can distinguish "the benchmark is impossible" from "the previous training recipe was too weak."
 
-Candidate generation used `mlx-community/gemma-4-E2B-it-qat-4bit` and `mlx-community/gemma-4-12B-it-qat-4bit` through `mlx-vlm` on Mac5. The script loads the MLX-VLM model once, applies the instruct chat template, sends only public task prompts and starter files, records raw generations outside the public candidate JSONL, and writes a report with `hidden_tests_sent_to_model=false`.
+Candidate generation used `mlx-community/gemma-4-E2B-it-qat-4bit` and `mlx-community/gemma-4-12B-it-qat-4bit` through `mlx-vlm` on the trainer. The script loads the MLX-VLM model once, applies the instruct chat template, sends only public task prompts and starter files, records raw generations outside the public candidate JSONL, and writes a report with `hidden_tests_sent_to_model=false`.
 
 ```bash
 python3 scripts/generate_executable_candidates_mlx_vlm.py \
@@ -408,9 +408,9 @@ python3 scripts/generate_executable_candidates_mlx_vlm.py \
   --model-path ~/Desktop/tml-gemma4-models/gemma-4-E2B-it-qat-4bit \
   --model-label mlx-community/gemma-4-E2B-it-qat-4bit \
   --condition gemma4_e2b_qat_base \
-  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
   --raw-dir output/private-generation-raw-gemma4-e2b-qat-base-2026-06-10 \
-  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.json \
   --max-tokens 2048 \
   --temperature 0.0 \
   --repair-attempts 2
@@ -428,19 +428,19 @@ Generation report:
 | Max generation tokens | 2048 |
 | Public compatibility failures before hidden tests | 0/6 |
 
-The 12B run used the same protocol with `mlx-community/gemma-4-12B-it-qat-4bit`, `max_tokens=4096`, `synthetic_rows=0`, and `hidden_tests_sent_to_model=false`. It loaded successfully on Mac5. One public compatibility failure remained before hidden-test materialization: `py_redact_secrets` produced malformed Python even after two public-only repair attempts.
+The 12B run used the same protocol with `mlx-community/gemma-4-12B-it-qat-4bit`, `max_tokens=4096`, `synthetic_rows=0`, and `hidden_tests_sent_to_model=false`. It loaded successfully on the trainer. One public compatibility failure remained before hidden-test materialization: `py_redact_secrets` produced malformed Python even after two public-only repair attempts.
 
 Materialization and execution:
 
 ```bash
 cargo run --bin materialize-executable-bench -- \
   --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
-  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
-  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl
+  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl
 
 cargo run --bin executable-task-bench -- \
-  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
-  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.json \
   --require-real
 ```
 
@@ -455,13 +455,13 @@ Interpretation:
 
 - The old all-zero local result should not be read as proof that the ledger idea failed. It was a negative result for the specific Gemma 3 1B adapter setup.
 - The Gemma 4 E2B QAT base model reaches 3/6 on the same hidden-test executable task set without ledger fine-tuning.
-- The Gemma 4 12B QAT base model reaches 5/6 on the same task set, confirming that Mac5 can run a materially stronger local baseline.
+- The Gemma 4 12B QAT base model reaches 5/6 on the same task set, confirming that the trainer can run a materially stronger local baseline.
 - The remaining 12B failure is a malformed redaction implementation, not a benchmark/system crash. It points toward a public-only repair/checking layer, not hidden-test leakage.
 - The next controlled lift experiment should start from Gemma 4 12B-class or stronger models, train with at least 4096-token context, use hundreds or thousands of rows per condition, and report both base-model and adapter-conditioned executable deltas.
 
 ### Gemma 4 E2B 512-Row Adapter Lift Gate
 
-The stronger adapter lane reuses the same private trajectory pool but increases the training scale and context length: 512 selected records per condition, 460 train rows and 52 validation rows, 4096-token training context, 500 MLX LoRA iterations, and raw-Python public-only candidate generation. Raw private rows, adapters, and raw generation logs remain under ignored `output/private-*` paths. The public-safe aggregate training report is `benchmarks/training-lift-adapter-training-mlx-gemma4-e2b-512x4096-mac5-2026-06-10.json`.
+The stronger adapter lane reuses the same private trajectory pool but increases the training scale and context length: 512 selected records per condition, 460 train rows and 52 validation rows, 4096-token training context, 500 MLX LoRA iterations, and raw-Python public-only candidate generation. Raw private rows, adapters, and raw generation logs remain under ignored `output/private-*` paths. The public-safe aggregate training report is `benchmarks/training-lift-adapter-training-mlx-gemma4-e2b-512x4096-trainer-2026-06-10.json`.
 
 Training settings:
 
@@ -487,7 +487,7 @@ Aggregate training result:
 
 The validation objective does not rank the conditions the same way as the hidden executable task result, so downstream completion must be measured directly.
 
-Candidate generation used `scripts/generate_executable_candidates_mlx_adapter.py` with `--prompt-format raw-python`, `--max-tokens 1024`, and one public-only repair attempt. Hidden tests were not sent to the model. The checked generation report is `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`.
+Candidate generation used `scripts/generate_executable_candidates_mlx_adapter.py` with `--prompt-format raw-python`, `--max-tokens 1024`, and one public-only repair attempt. Hidden tests were not sent to the model. The checked generation report is `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-trainer-2026-06-10.json`.
 
 Checked adapter-conditioned executable result:
 
@@ -545,8 +545,8 @@ Run:
 cargo run --bin skillgraph-evolve -- \
   --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
   --task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl \
-  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.json \
-  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.json \
+  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.json \
+  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.json \
   --output-dir examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base
 ```
 
@@ -599,8 +599,8 @@ Run:
 
 ```bash
 python3 scripts/apply_skillgraph_repair_router.py \
-  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
-  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.jsonl \
   --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
   --allow-status proposed \
   --condition skillgraph_math_repair_router \
@@ -658,8 +658,8 @@ Run:
 
 ```bash
 python3 scripts/apply_skillgraph_repair_router.py \
-  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
-  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.jsonl \
   --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
   --allow-status proposed quarantined \
   --no-require-no-skill-regressions \
@@ -719,7 +719,7 @@ The next repair cycle used the skillgraph as a repair map rather than a proof ar
 - `py_v1_normalize_segments`
 - `py_v1_split_filename_version`
 
-The focused public prompt subset is checked in at `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`. Candidate generation used `scripts/generate_executable_candidates_mlx_lm.py` with the in-process MLX-LM API, a Gemma chat template, `mlx-community/gemma-4-E4B-it-qat-4bit`, 512 generation tokens, and one public-only repair attempt. A Python 3.12 virtual environment on Mac5 was required because the default Python 3.9 MLX stack could not load Gemma 4 model types. The 12B local directory still failed under the updated stack because `gemma4_unified` was unsupported, so the checked stronger recipe is E4B chat, not 12B.
+The focused public prompt subset is checked in at `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`. Candidate generation used `scripts/generate_executable_candidates_mlx_lm.py` with the in-process MLX-LM API, a Gemma chat template, `mlx-community/gemma-4-E4B-it-qat-4bit`, 512 generation tokens, and one public-only repair attempt. A Python 3.12 virtual environment on the trainer was required because the default Python 3.9 MLX stack could not load Gemma 4 model types. The 12B local directory still failed under the updated stack because `gemma4_unified` was unsupported, so the checked stronger recipe is E4B chat, not 12B.
 
 Run shape:
 
@@ -1305,9 +1305,9 @@ Checked audit report:
 | Status | `no_ready_official_scorer` |
 | Ready targets | 0 |
 | Local | blocked: `4.56 GiB` free, no Docker, no `swebench` |
-| Mac4 | blocked: `12.45 GiB` free, Docker present, no `swebench` |
-| Mac5 | blocked: `16.04 GiB` free, no Docker, no `swebench` |
-| cloud-vm | unreachable |
+| Compute machine | blocked: `12.45 GiB` free, Docker present, no `swebench` |
+| Trainer | blocked: `16.04 GiB` free, no Docker, no `swebench` |
+| cloud-host | unreachable |
 | Official harness run | false |
 | Performance claim allowed | false |
 
@@ -1368,9 +1368,9 @@ Checked audit result:
 | Status | `no_ready_official_scorer` |
 | Ready targets | 0 |
 | Local | blocked |
-| Mac4 | blocked |
-| Mac5 | blocked |
-| cloud-vm | unreachable |
+| Compute machine | blocked |
+| Trainer | blocked |
+| cloud-host | unreachable |
 | Modal CLI | unavailable |
 | sb-cli | unavailable |
 | Official harness run | false |
@@ -1379,9 +1379,9 @@ Checked audit result:
 Main blockers:
 
 - local: about `5.87 GiB` free, no Docker, no `swebench`
-- Mac4: Docker exists, but about `12.91 GiB` free and no `swebench`
-- Mac5: about `16.16 GiB` free, no Docker, no `swebench`
-- cloud-vm: SSH unreachable
+- Compute machine: Docker exists, but about `12.91 GiB` free and no `swebench`
+- Trainer: about `16.16 GiB` free, no Docker, no `swebench`
+- cloud-host: SSH unreachable
 - active GCloud account: non-interactive reauthentication required
 - alternate GCloud account: visible projects have Compute disabled for read-only instance listing
 

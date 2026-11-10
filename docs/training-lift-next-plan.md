@@ -51,7 +51,7 @@ Current execution state:
   and same model name, but reports `waiting_for_official_harness_results`.
 - Local official harness scoring remains blocked even with predictions present:
   free disk is about `6.02 GiB`, Docker is missing, and Python `swebench` is not
-  importable. Mac4 has Docker but only about `13 GiB` free and no `swebench`;
+  importable. Compute machine has Docker but only about `13 GiB` free and no `swebench`;
   the official SWE-bench README recommends roughly `120GB` free storage for
   Docker evaluation and notes ARM support is experimental.
 - The one-instance predictions are packaged for an official scorer:
@@ -132,7 +132,7 @@ Recommended staged runs:
 | Main local | 2048 | 4096 or 8192 | First meaningful local lift attempt |
 | Cloud proof | 4096+ | 8192+ | Stronger QLoRA/LoRA run if local MLX training cannot handle Gemma 4 12B |
 
-If local MLX adapter training does not support the selected Gemma 4 model cleanly, do not fall back to Gemma 3 1B. Move the training run to a cloud GPU stack and keep Mac5 for generation/evaluation.
+If local MLX adapter training does not support the selected Gemma 4 model cleanly, do not fall back to Gemma 3 1B. Move the training run to a cloud GPU stack and keep Trainer for generation/evaluation.
 
 ## Evaluation Scale
 

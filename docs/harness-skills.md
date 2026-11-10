@@ -8,8 +8,8 @@ The key binary is `skillgraph-evolve`.
 cargo run --bin skillgraph-evolve -- \
   --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
   --task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl \
-  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.json \
-  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.json \
+  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.json \
+  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.json \
   --output-dir examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base
 ```
 
@@ -102,8 +102,8 @@ The next step is to test a proposed skill without adopting the failed adapter gl
 
 ```bash
 python3 scripts/apply_skillgraph_repair_router.py \
-  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
-  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.jsonl \
   --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
   --allow-status proposed \
   --condition skillgraph_math_repair_router \
@@ -148,8 +148,8 @@ The stronger repair-map test routes all fixed task ids from the failed adapter w
 
 ```bash
 python3 scripts/apply_skillgraph_repair_router.py \
-  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
-  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.jsonl \
   --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
   --allow-status proposed quarantined \
   --no-require-no-skill-regressions \

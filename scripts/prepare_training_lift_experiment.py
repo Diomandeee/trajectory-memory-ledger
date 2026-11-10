@@ -163,7 +163,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--train-grad-checkpoint", action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument("--train-grad-accumulation-steps", type=int)
     parser.add_argument("--train-clear-cache-threshold", type=float)
-    parser.add_argument("--remote-host", default="mac5")
+    parser.add_argument("--remote-host", default="trainer")
     parser.add_argument("--remote-timeout-s", type=int, default=3)
     parser.add_argument("--probe-remote", action="store_true")
     parser.add_argument("--probe-local", action="store_true")

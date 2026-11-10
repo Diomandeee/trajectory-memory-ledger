@@ -43,9 +43,9 @@ This repository contains:
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl`: public prompts used for real model-output generation
 - `examples/evaluation/executable-candidates-claude-sonnet-karl-context-2026-06-07.jsonl`: non-synthetic Claude Sonnet candidate rows
 - `examples/evaluation/executable-candidates-gemini-flash-karl-context-2026-06-07.jsonl`: non-synthetic Gemini 2.5 Flash candidate rows
-- `examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl`: non-synthetic MLX adapter candidate rows from the controlled training-lift split
-- `examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 E2B QAT base-model candidate rows
-- `examples/evaluation/executable-candidates-mlx-gemma4-12b-qat-base-mac5-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 12B QAT base-model candidate rows
+- `examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl`: non-synthetic MLX adapter candidate rows from the controlled training-lift split
+- `examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 E2B QAT base-model candidate rows
+- `examples/evaluation/executable-candidates-mlx-gemma4-12b-qat-base-trainer-2026-06-10.jsonl`: non-synthetic MLX-VLM Gemma 4 12B QAT base-model candidate rows
 - `examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl`: 60-task hidden-test executable held-out task specs
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl`: public prompts for the 60-task replication suite
 - `examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1-shared-failures.jsonl`: public prompts for the five shared failures left by the 55/60 task repair router
@@ -211,7 +211,7 @@ python3 scripts/prepare_training_lift_experiment.py \
   --report benchmarks/training-lift-preflight-2026-06-08.json \
   --sample-size 96 \
   --probe-remote \
-  --remote-host mac5
+  --remote-host trainer
 ```
 
 Checked preflight result:
@@ -219,8 +219,8 @@ Checked preflight result:
 - private random/reward-selected/full-ledger train/valid splits were generated locally
 - each condition has 96 selected records, split 86 train / 10 validation
 - mean reward: `random` 0.6750, `reward_selected` 0.7408, `full_ledger` 0.6787
-- remote trainer status: blocked, `mac5` SSH timed out
-- Mac5-free local trainer status: ready with `KMP_DUPLICATE_LIB_OK=TRUE`
+- remote trainer status: blocked, `trainer` SSH timed out
+- Local-only trainer status: ready with `KMP_DUPLICATE_LIB_OK=TRUE`
 - local trainer resources: 16 GB memory, 6.97 GB free disk at preflight time
 
 Run the trained-adapter executable gate after one MLX LoRA adapter has been trained per condition:
@@ -230,25 +230,25 @@ python3 scripts/generate_executable_candidates_mlx_adapter.py \
   --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v0.jsonl \
   --model mlx-community/gemma-3-1b-it-4bit \
   --adapter-root output/private-adapters-gemma3-1b-2026-06-10 \
-  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
   --raw-dir output/private-generation-raw-gemma3-1b-clean-2026-06-10 \
-  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --report benchmarks/executable-candidate-generation-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json \
   --max-tokens 1024 \
   --timeout-s 360 \
   --seed 42
 
 cargo run --bin materialize-executable-bench -- \
   --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
-  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
-  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl
+  --candidates examples/evaluation/executable-candidates-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl
 
 cargo run --bin executable-task-bench -- \
-  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.jsonl \
-  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-mac5-clean-2026-06-10.json \
+  --input examples/evaluation/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma3-1b-adapters-trainer-clean-2026-06-10.json \
   --require-real
 ```
 
-Checked Mac5 adapter-training result with `mlx-community/gemma-3-1b-it-4bit`:
+Checked the trainer adapter-training result with `mlx-community/gemma-3-1b-it-4bit`:
 
 - final validation loss: `reward_selected` 1.484, `full_ledger` 1.843, `random` 2.031
 - relative validation-loss reduction vs `random`: `reward_selected` 26.93%, `full_ledger` 9.26%
@@ -257,7 +257,7 @@ Checked Mac5 adapter-training result with `mlx-community/gemma-3-1b-it-4bit`:
 
 Boundary: this first adapter lane was a real negative result for the small Gemma 3 1B/256-token recipe, not for the ledger hypothesis overall.
 
-Checked Mac5 Gemma 4 E2B adapter result with 512 selected rows per condition, 460 train / 52 validation rows, 4096-token training context, raw-Python public-only generation, and the same hidden executable task set:
+Checked the trainer Gemma 4 E2B adapter result with 512 selected rows per condition, 460 train / 52 validation rows, 4096-token training context, raw-Python public-only generation, and the same hidden executable task set:
 
 - base model: `mlx-community/gemma-4-E2B-it-qat-4bit`
 - training iterations: 500 per condition
@@ -267,9 +267,9 @@ Checked Mac5 Gemma 4 E2B adapter result with 512 selected rows per condition, 46
 - reward-selected lift vs random: +2 tasks, +33.33 percentage points
 - reward-selected failed task: `py_chunked`
 - public artifacts:
-  - `benchmarks/training-lift-adapter-training-mlx-gemma4-e2b-512x4096-mac5-2026-06-10.json`
-  - `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`
-  - `benchmarks/executable-task-mlx-gemma4-e2b-adapters-512x4096-rawpython-mac5-2026-06-10.json`
+  - `benchmarks/training-lift-adapter-training-mlx-gemma4-e2b-512x4096-trainer-2026-06-10.json`
+  - `benchmarks/executable-candidate-generation-mlx-gemma4-e2b-adapters-512x4096-rawpython-trainer-2026-06-10.json`
+  - `benchmarks/executable-task-mlx-gemma4-e2b-adapters-512x4096-rawpython-trainer-2026-06-10.json`
 
 Boundary: this is now a positive downstream lift signal for reward-selected trajectory data under a matched Gemma 4 E2B adapter setup. Because the held-out set has only six tasks, it is not a final broad SWE-style claim. It proves that the evaluation path can detect nonzero trained-adapter differences and that the previous all-zero result was a weak-model/training-recipe failure.
 
@@ -291,8 +291,8 @@ Extract regression-gated harness skill packages from that larger result:
 cargo run --bin skillgraph-evolve -- \
   --public-tasks examples/evaluation/executable-public-tasks-python-stdlib-heldout-v1.jsonl \
   --task-specs examples/evaluation/executable-taskset-python-stdlib-heldout-v1.jsonl \
-  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.json \
-  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.json \
+  --baseline-report benchmarks/executable-task-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.json \
+  --comparison-report benchmarks/executable-task-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.json \
   --output-dir examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base
 ```
 
@@ -313,8 +313,8 @@ Apply the proposed math repair as a surgical router recipe:
 
 ```bash
 python3 scripts/apply_skillgraph_repair_router.py \
-  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
-  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.jsonl \
   --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
   --allow-status proposed \
   --condition skillgraph_math_repair_router \
@@ -340,8 +340,8 @@ Apply all positive task-level repairs while preserving base outputs for known ad
 
 ```bash
 python3 scripts/apply_skillgraph_repair_router.py \
-  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-mac5-2026-06-10.jsonl \
-  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-mac5-2026-06-10.jsonl \
+  --base-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-heldout-v1-trainer-2026-06-10.jsonl \
+  --comparison-candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-reward-selected-512x4096-rawpython-heldout-v1-trainer-2026-06-10.jsonl \
   --skills-jsonl examples/skills/python-stdlib-heldout-v1/e2b-reward-selected-vs-base/trajectory-skills.jsonl \
   --allow-status proposed quarantined \
   --no-require-no-skill-regressions \
@@ -701,9 +701,9 @@ Post-four-instance scorer audit:
 - status: `no_ready_official_scorer`
 - ready targets: `0`
 - local: blocked by `4.56 GiB` free disk, no Docker, and missing `swebench`
-- Mac4: blocked by `12.45 GiB` free disk and missing `swebench`
-- Mac5: reachable, but blocked by `16.04 GiB` free disk, no Docker, and missing `swebench`
-- cloud-vm: unreachable over SSH
+- Compute machine: blocked by `12.45 GiB` free disk and missing `swebench`
+- Trainer: reachable, but blocked by `16.04 GiB` free disk, no Docker, and missing `swebench`
+- cloud-host: unreachable over SSH
 - official harness run: `false`
 - performance claim allowed: `false`
 
@@ -739,9 +739,9 @@ Checked scorer audit result:
 - status: `no_ready_official_scorer`
 - ready targets: `0`
 - local: blocked by disk, Docker, and missing `swebench`
-- Mac4: blocked by disk and missing `swebench`
-- Mac5: blocked by disk, Docker, and missing `swebench`
-- cloud-vm: unreachable
+- Compute machine: blocked by disk and missing `swebench`
+- Trainer: blocked by disk, Docker, and missing `swebench`
+- cloud-host: unreachable
 - Modal CLI / sb-cli: unavailable
 - public report redacts cloud account/project identifiers
 
@@ -826,25 +826,25 @@ python3 scripts/generate_executable_candidates_mlx_vlm.py \
   --model-path ~/Desktop/tml-gemma4-models/gemma-4-E2B-it-qat-4bit \
   --model-label mlx-community/gemma-4-E2B-it-qat-4bit \
   --condition gemma4_e2b_qat_base \
-  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
+  --output examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
   --raw-dir output/private-generation-raw-gemma4-e2b-qat-base-2026-06-10 \
-  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --report benchmarks/executable-candidate-generation-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.json \
   --max-tokens 2048 \
   --temperature 0.0 \
   --repair-attempts 2
 
 cargo run --bin materialize-executable-bench -- \
   --tasks examples/evaluation/executable-taskset-python-stdlib-heldout-v0.jsonl \
-  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
-  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl
+  --candidates examples/evaluation/executable-candidates-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
+  --output examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl
 
 cargo run --bin executable-task-bench -- \
-  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.jsonl \
-  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-mac5-2026-06-10.json \
+  --input examples/evaluation/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.jsonl \
+  --output benchmarks/executable-task-mlx-gemma4-e2b-qat-base-trainer-2026-06-10.json \
   --require-real
 ```
 
-Checked Mac5 base-model result with `mlx-community/gemma-4-E2B-it-qat-4bit` through `mlx-vlm`:
+Checked the trainer base-model result with `mlx-community/gemma-4-E2B-it-qat-4bit` through `mlx-vlm`:
 
 - executable held-out task pass rate: `gemma4_e2b_qat_base` 3/6
 - pass rate: 50.0%
@@ -853,7 +853,7 @@ Checked Mac5 base-model result with `mlx-community/gemma-4-E2B-it-qat-4bit` thro
 - synthetic rows: 0/6
 - hidden tests sent to model: false
 
-The same gate with `mlx-community/gemma-4-12B-it-qat-4bit` loaded successfully on Mac5 and was run with `--max-tokens 4096`:
+The same gate with `mlx-community/gemma-4-12B-it-qat-4bit` loaded successfully on the trainer and was run with `--max-tokens 4096`:
 
 - executable held-out task pass rate: `gemma4_12b_qat_base` 5/6
 - pass rate: 83.33%
@@ -899,7 +899,7 @@ This is best treated as a systems and artifact paper first:
 
 **Trajectory Memory Ledger: Schema-Normalized Experience Replay for Self-Improving Coding Agents**
 
-The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Mac5 adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, a focused E4B chat overlay router reached 57/60 with zero regressions, and a public-only anticipatory repair planner reached 60/60 by admitting the three remaining shared-failure repairs after public checks. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router/planner repair pipeline. It has proven router-level repair lift on the 60-task executable gate, and it can now generate same-model base/planner real-repo patches for a one-instance SWE-bench-style smoke. It has not yet proven SWE-bench-style real-repo issue-resolution lift or broad adapter-level downstream coding-agent performance lift, because the generated patches have not been scored by official harness reports.
+The Rust daemon makes the artifact reproducible. The held-out KARL V7 benchmark adds a real model-quality result over coding-agent contexts, and the non-synthetic executable reports add real model-output task-completion measurements. The training-lift gate has now been run through multiple Trainer adapter tiers. The first Gemma 3 1B/256-token adapter result was negative at 0/6 for all conditions. The six-task Gemma 4 E2B/512-row/4096-token adapter result was positive for reward-selected data: `reward_selected` reached 5/6 versus `random` at 3/6 and `full_ledger` at 2/6. The larger 60-task replication did not confirm adapter lift: E2B base reached 50/60, E4B base reached 49/60, and the E2B reward-selected adapter reached 46/60. A narrow skillgraph math router reached 51/60 with zero regressions, a task-level repair router reached 55/60 with zero regressions, a focused E4B chat overlay router reached 57/60 with zero regressions, and a public-only anticipatory repair planner reached 60/60 by admitting the three remaining shared-failure repairs after public checks. The current honest claim is that TML has a working reproducible evaluation, harness-skill extraction, and surgical router/planner repair pipeline. It has proven router-level repair lift on the 60-task executable gate, and it can now generate same-model base/planner real-repo patches for a one-instance SWE-bench-style smoke. It has not yet proven SWE-bench-style real-repo issue-resolution lift or broad adapter-level downstream coding-agent performance lift, because the generated patches have not been scored by official harness reports.
 
 ## License
 

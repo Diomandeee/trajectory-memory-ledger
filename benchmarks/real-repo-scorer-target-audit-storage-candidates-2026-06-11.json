@@ -171,7 +171,7 @@
         }
       ],
       "swebench_importable": false,
-      "target": "mac4"
+      "target": "compute"
     },
     {
       "architecture": "arm64",
@@ -227,15 +227,15 @@
         }
       ],
       "swebench_importable": false,
-      "target": "mac5"
+      "target": "trainer"
     },
     {
       "blockers": [
         "ssh unreachable"
       ],
-      "error": "ssh: connect to host 100.114.92.88 port 22: Operation timed out",
+      "error": "ssh: connect to host <private-host> port 22: Operation timed out",
       "status": "unreachable",
-      "target": "cloud-vm"
+      "target": "cloud-host"
     },
     {
       "architecture": "arm64",
@@ -291,7 +291,7 @@
         }
       ],
       "swebench_importable": false,
-      "target": "mac2"
+      "target": "studio"
     }
   ],
   "schema": "trajectory-memory-ledger.real_repo_scorer_target_audit.v1",
